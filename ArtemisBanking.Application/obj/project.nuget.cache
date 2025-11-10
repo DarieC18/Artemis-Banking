@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "RWPdnGzbJIE=",
+  "dgSpecHash": "WKEDTG5CtPU=",
   "success": true,
   "projectFilePath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\la\\.nuget\\packages\\automapper\\14.0.0\\automapper.14.0.0.nupkg.sha512",
+    "C:\\Users\\la\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\la\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
+    "C:\\Users\\la\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

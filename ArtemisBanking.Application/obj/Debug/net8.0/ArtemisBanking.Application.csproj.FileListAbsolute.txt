@@ -1,0 +1,13 @@
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\bin\Debug\net8.0\ArtemisBanking.Application.deps.json
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\bin\Debug\net8.0\ArtemisBanking.Application.dll
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\bin\Debug\net8.0\ArtemisBanking.Application.pdb
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.csproj.AssemblyReference.cache
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.AssemblyInfoInputs.cache
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.AssemblyInfo.cs
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.csproj.CoreCompileInputs.cache
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.sourcelink.json
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.dll
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\refint\ArtemisBanking.Application.dll
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ArtemisBanking.Application.pdb
+C:\Users\la\Desktop\Programacion\Itla\Programacion 3\ArtemisBanking\ArtemisBanking.Application\obj\Debug\net8.0\ref\ArtemisBanking.Application.dll
