@@ -1,0 +1,67 @@
+﻿@model ArtemisBanking.Application.ViewModels.TransactionBeneficiaryViewModel
+
+@{
+    ViewData["Title"] = "Transferencia a beneficiario";
+}
+
+<h2 class="mb-4">Transferencia a beneficiario</h2>
+
+<form asp-action="Beneficiario" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Beneficiario -->
+    <div class="mb-3">
+        <label asp-for="BeneficiaryId" class="form-label"></label>
+        <select asp-for="BeneficiaryId" class="form-select">
+            <option value="">-- Seleccione un beneficiario --</option>
+            @if (Model.BeneficiariosDisponibles != null)
+            {
+                foreach (var b in Model.BeneficiariosDisponibles)
+                {
+                    <option value="@b.Id">
+                        @b.NumeroCuentaBeneficiario
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="BeneficiaryId" class="text-danger"></span>
+    </div>
+
+    <!-- Cuenta origen -->
+    <div class="mb-3">
+        <label asp-for="CuentaOrigen" class="form-label"></label>
+        <select asp-for="CuentaOrigen" class="form-select">
+            <option value="">-- Seleccione una cuenta --</option>
+            @if (Model.CuentasDisponibles != null)
+            {
+                foreach (var cuenta in Model.CuentasDisponibles)
+                {
+                    <option value="@cuenta.NumeroCuenta">
+                        @cuenta.NumeroCuenta
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
+    </div>
+
+    <!-- Monto -->
+    <div class="mb-3">
+        <label asp-for="Monto" class="form-label"></label>
+        <input asp-for="Monto" class="form-control" />
+        <span asp-validation-for="Monto" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Transferir
+    </button>
+    <a asp-controller="Cliente" asp-action="Index" class="btn btn-secondary ms-2">
+        Cancelar
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

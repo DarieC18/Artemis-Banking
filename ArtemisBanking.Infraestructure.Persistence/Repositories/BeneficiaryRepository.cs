@@ -17,7 +17,6 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
         {
             return await _context.Beneficiaries
                 .Where(b => b.UserId == userId)
-                .OrderByDescending(b => b.FechaCreacion)
                 .ToListAsync();
         }
 
@@ -36,7 +35,7 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
 
         public async Task AddAsync(Beneficiary beneficiary)
         {
-            await _context.Beneficiaries.AddAsync(beneficiary);
+            _context.Beneficiaries.Add(beneficiary);
             await _context.SaveChangesAsync();
         }
 

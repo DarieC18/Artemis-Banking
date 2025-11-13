@@ -11,7 +11,10 @@ namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
             CreateMap<Beneficiary, BeneficiaryDTO>()
                 .ForMember(d => d.NombreCompleto,
                     opt => opt.MapFrom(s =>
-                        (s.NombreBeneficiario + " " + s.ApellidoBeneficiario).Trim()));
+                        $"{s.NombreBeneficiario} {s.ApellidoBeneficiario}".Trim()));
+
+            CreateMap<CreateBeneficiaryDTO, Beneficiary>()
+                .ForMember(d => d.FechaCreacion, opt => opt.Ignore());
         }
     }
 }

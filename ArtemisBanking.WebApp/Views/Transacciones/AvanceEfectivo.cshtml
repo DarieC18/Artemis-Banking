@@ -1,0 +1,67 @@
+﻿@model ArtemisBanking.Application.ViewModels.CashAdvanceViewModel
+
+@{
+    ViewData["Title"] = "Avance de efectivo";
+}
+
+<h2 class="mb-4">Avance de efectivo</h2>
+
+<form asp-action="AvanceEfectivo" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Tarjeta origen -->
+    <div class="mb-3">
+        <label asp-for="CreditCardId" class="form-label"></label>
+        <select asp-for="CreditCardId" class="form-select">
+            <option value="">-- Seleccione una tarjeta --</option>
+            @if (Model.TarjetasDisponibles != null)
+            {
+                foreach (var tarjeta in Model.TarjetasDisponibles)
+                {
+                    <option value="@tarjeta.Id">
+                        Tarjeta #@tarjeta.Id
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CreditCardId" class="text-danger"></span>
+    </div>
+
+    <!-- Cuenta destino -->
+    <div class="mb-3">
+        <label asp-for="CuentaDestino" class="form-label"></label>
+        <select asp-for="CuentaDestino" class="form-select">
+            <option value="">-- Seleccione una cuenta destino --</option>
+            @if (Model.CuentasDisponibles != null)
+            {
+                foreach (var cuenta in Model.CuentasDisponibles)
+                {
+                    <option value="@cuenta.NumeroCuenta">
+                        @cuenta.NumeroCuenta
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CuentaDestino" class="text-danger"></span>
+    </div>
+
+    <!-- Monto -->
+    <div class="mb-3">
+        <label asp-for="Monto" class="form-label"></label>
+        <input asp-for="Monto" class="form-control" />
+        <span asp-validation-for="Monto" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Realizar avance
+    </button>
+    <a asp-controller="Cliente" asp-action="Index" class="btn btn-secondary ms-2">
+        Cancelar
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
