@@ -1,0 +1,101 @@
+﻿@model ArtemisBanking.Application.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Inicio Cliente";
+}
+
+<h2>Panel del cliente</h2>
+
+<hr />
+
+<h3>Cuentas de ahorro</h3>
+@if (Model.CuentasDeAhorro != null && Model.CuentasDeAhorro.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número de cuenta</th>
+                <th>Balance</th>
+                <th>¿Principal?</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model.CuentasDeAhorro)
+            {
+                <tr>
+                    <td>@c.NumeroCuenta</td>
+                    <td>@c.Balance.ToString("C")</td>
+                    <td>@(c.EsPrincipal ? "Sí" : "No")</td>
+                    <td>@c.TipoCuenta</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No tienes cuentas de ahorro registradas.</p>
+}
+
+<hr />
+
+<h3>Préstamos</h3>
+@if (Model.Prestamos != null && Model.Prestamos.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Monto capital</th>
+                <th>Monto pendiente</th>
+                <th>Tasa interés</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.Prestamos)
+            {
+                <tr>
+                    <td>@p.NumeroPrestamo</td>
+                    <td>@p.MontoCapital.ToString("C")</td>
+                    <td>@p.MontoPendiente.ToString("C")</td>
+                    <td>@p.TasaInteres %</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No tienes préstamos activos.</p>
+}
+
+<hr />
+
+<h3>Tarjetas de crédito</h3>
+@if (Model.TarjetasDeCredito != null && Model.TarjetasDeCredito.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Límite</th>
+                <th>Deuda actual</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.TarjetasDeCredito)
+            {
+                <tr>
+                    <td>@t.NumeroTarjeta</td>
+                    <td>@t.LimiteCredito.ToString("C")</td>
+                    <td>@t.DeudaActual.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No tienes tarjetas de crédito activas.</p>
+}
