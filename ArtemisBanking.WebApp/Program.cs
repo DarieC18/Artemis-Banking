@@ -1,10 +1,8 @@
 using ArtemisBanking.Infrastructure.Shared;
 using ArtemisBanking.Infraestructure.Identity;
-using ArtemisBanking.Infraestructure.Identity.Entities;
 using ArtemisBanking.Infraestructure.Identity.Mappings;
-using ArtemisBanking.Infraestructure.Identity.Seeds;
 using ArtemisBanking.WebApp.Mappings;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +15,7 @@ builder.Services.AddSingleton(TimeProvider.System);
 
 var app = builder.Build();
 
-await SeedIdentityAsync(app);
+await app.SeedIdentityAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -41,14 +39,4 @@ app.MapControllerRoute(
 
 app.Run();
 
-static async Task SeedIdentityAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
 
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await DefaultRoles.SeedAsync(roleManager);
-
-    var userManager = services.GetRequiredService<UserManager<AppUser>>();
-    await DefaultUsers.SeedAsync(userManager);
-}

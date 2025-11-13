@@ -8,6 +8,7 @@ namespace ArtemisBanking.Application.Interfaces
         Task SignOutAsync();
         Task<ServiceResultDTO> RequestPasswordResetAsync(ForgotPasswordDTO forgotPasswordDto);
         Task<ServiceResultDTO> ResetPasswordAsync(ResetPasswordDTO resetPasswordDto);
+        Task<ServiceResultDTO> ResetPasswordByIdAsync(ResetPasswordByIdDTO resetPasswordDto);
         Task<ServiceResultDTO> ConfirmAccountAsync(string token);
         Task<IList<string>> GetUserRolesAsync(string userId);
     }

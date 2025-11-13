@@ -214,6 +214,82 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
             }
         }
 
+        public async Task<ServiceResultDTO> ResetPasswordByIdAsync(ResetPasswordByIdDTO resetPasswordDto)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(resetPasswordDto.UserId);
+
+                if (user == null)
+                {
+                    return new ServiceResultDTO
+                    {
+                        Success = false,
+                        Message = "Usuario no encontrado"
+                    };
+                }
+
+                if (string.IsNullOrEmpty(user.ResetPasswordToken) || user.ResetPasswordToken != resetPasswordDto.Token)
+                {
+                    return new ServiceResultDTO
+                    {
+                        Success = false,
+                        Message = "Token inválido o expirado"
+                    };
+                }
+
+                if (user.ResetPasswordTokenExpiry == null || user.ResetPasswordTokenExpiry < DateTime.Now)
+                {
+                    return new ServiceResultDTO
+                    {
+                        Success = false,
+                        Message = "Token inválido o expirado"
+                    };
+                }
+
+                var removePasswordResult = await _userManager.RemovePasswordAsync(user);
+                if (!removePasswordResult.Succeeded)
+                {
+                    return new ServiceResultDTO
+                    {
+                        Success = false,
+                        Message = "Error al cambiar contraseña"
+                    };
+                }
+
+                var addPasswordResult = await _userManager.AddPasswordAsync(user, resetPasswordDto.Password);
+                if (!addPasswordResult.Succeeded)
+                {
+                    var errors = string.Join(", ", addPasswordResult.Errors.Select(e => e.Description));
+                    return new ServiceResultDTO
+                    {
+                        Success = false,
+                        Message = $"Error al establecer nueva contraseña: {errors}"
+                    };
+                }
+
+                user.ResetPasswordToken = null;
+                user.ResetPasswordTokenExpiry = null;
+                user.IsActive = true;
+
+                await _userManager.UpdateAsync(user);
+
+                return new ServiceResultDTO
+                {
+                    Success = true,
+                    Message = "Contraseña restablecida exitosamente. Tu cuenta ha sido reactivada"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResultDTO
+                {
+                    Success = false,
+                    Message = $"Error al restablecer contraseña: {ex.Message}"
+                };
+            }
+        }
+
         public async Task<ServiceResultDTO> ConfirmAccountAsync(string token)
         {
             try

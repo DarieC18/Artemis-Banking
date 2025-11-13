@@ -1,17 +1,18 @@
 using ArtemisBanking.Application.Interfaces;
 using ArtemisBanking.Infraestructure.Identity.Context;
 using ArtemisBanking.Infraestructure.Identity.Entities;
+using ArtemisBanking.Infraestructure.Identity.Seeds;
 using ArtemisBanking.Infraestructure.Identity.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ArtemisBanking.Domain.Settings;
 
 namespace ArtemisBanking.Infraestructure.Identity
 {
@@ -19,13 +20,14 @@ namespace ArtemisBanking.Infraestructure.Identity
     {
         public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // Configuracion de la base de datos
+            #region Database
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
+                    configuration.GetConnectionString("IdentityConnection"),
                     b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
+            #endregion
 
-            // Configuracion de Identity
+            #region Identity
             var identityBuilder = services.AddIdentityCore<AppUser>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -46,8 +48,9 @@ namespace ArtemisBanking.Infraestructure.Identity
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
             identityBuilder.AddRoleManager<RoleManager<IdentityRole>>();
             identityBuilder.AddDefaultTokenProviders();
+            #endregion
 
-            // Configuración de autenticación con cookies
+            #region Cookie Authentication (WebApp)
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -64,19 +67,66 @@ namespace ArtemisBanking.Infraestructure.Identity
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
             });
+            #endregion
 
-            // Configuracion de autorizacion
+            #region Authorization
             services.AddAuthorizationCore(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrador"));
                 options.AddPolicy("RequireCajeroRole", policy => policy.RequireRole("Cajero"));
                 options.AddPolicy("RequireClienteRole", policy => policy.RequireRole("Cliente"));
             });
+            #endregion
 
-            // Registro de servicios
+            #region Services
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountServiceApi, AccountServiceApi>();
+            
 
             return services;
+        }
+        #endregion
+
+        public static IServiceCollection AddIdentityInfrastructureForApi(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddIdentityInfrastructure(configuration);
+
+            var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>() ?? new JwtSettings();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+                };
+            });
+
+            return services;
+        }
+
+        public static async Task SeedIdentityAsync(this IHost host)
+        {
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            await DefaultRoles.SeedAsync(roleManager);
+
+            var userManager = services.GetRequiredService<UserManager<AppUser>>();
+            await DefaultUsers.SeedAsync(userManager);
         }
     }
 }

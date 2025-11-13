@@ -1,4 +1,5 @@
 using ArtemisBanking.Application.Interfaces;
+using ArtemisBanking.Domain.Settings;
 using ArtemisBanking.Infrastructure.Shared.Services;
 using ArtemisBanking.Infrastructure.Shared.Settings;
 using Microsoft.Extensions.Configuration;
@@ -10,8 +11,10 @@ namespace ArtemisBanking.Infrastructure.Shared
     {
         public static IServiceCollection AddSharedInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            IServiceCollection serviceCollection = services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
-            services.AddScoped<IEmailService, EmailService>();
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton(TimeProvider.System);
             return services;
         }
     }
