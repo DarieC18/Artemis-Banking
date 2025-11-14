@@ -5,6 +5,7 @@ using System.Security.Claims;
 
 namespace ArtemisBanking.WebApp.Controllers
 {
+    [Authorize(Roles = "Cliente")]
     public class ClienteController : Controller
     {
         private readonly IClienteHomeService _clienteHomeService;
@@ -19,7 +20,7 @@ namespace ArtemisBanking.WebApp.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
-            {
+        {
                 return RedirectToAction("Account");
             }
 
