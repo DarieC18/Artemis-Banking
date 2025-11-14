@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ArtemisBanking.Application\ArtemisBanking.Application.csproj" />
+    <ProjectReference Include="..\ArtemisBanking.Infraestructure.Identity\ArtemisBanking.Infraestructure.Identity.csproj" />
     <ProjectReference Include="..\ArtemisBanking.Infraestructure.Persistence\ArtemisBanking.Infraestructure.Persistence.csproj" />
   </ItemGroup>
 

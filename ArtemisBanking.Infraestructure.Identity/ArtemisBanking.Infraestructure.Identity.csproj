@@ -29,4 +29,9 @@
     <PackageReference Include="MimeKit" Version="4.13.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ArtemisBanking.Application\ArtemisBanking.Application.csproj" />
+    <ProjectReference Include="..\ArtemisBanking.Domain\ArtemisBanking.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
