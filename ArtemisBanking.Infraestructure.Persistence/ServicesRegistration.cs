@@ -11,7 +11,7 @@ namespace ArtemisBanking.Infrastructure.Persistence
         public static void AddPersistenceLayerIoc(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ArtemisBankingDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("Default")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             // Repos
             services.AddScoped<ISavingsAccountRepository, SavingsAccountRepository>();

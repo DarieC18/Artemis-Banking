@@ -25,7 +25,8 @@ project.assets.json
 project.nuget.cache
 
 
-appsettings.Development.json
+ArtemisBanking.Api/.gitignore
+ArtemisBanking.WebApp/.gitignore
 
 # ASP.NET
 wwwroot/lib/

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Panel Administrador | Artemis Banking</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="bg-light">
+    <header class="mb-4 shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Admin" asp-action="Dashboard">Artemis Banking</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="adminNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminUsers" asp-action="Index">Gestión de usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminLoans" asp-action="Index">Gestión de préstamos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminCreditCards" asp-action="Index">Gestión de tarjetas de crédito</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminSavings" asp-action="Index">Gestión de cuentas de ahorro</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" asp-controller="Account" asp-action="Logout" method="post" asp-antiforgery="true">
+                        <button type="submit" class="btn btn-outline-light">Cerrar sesión</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container pb-5">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
