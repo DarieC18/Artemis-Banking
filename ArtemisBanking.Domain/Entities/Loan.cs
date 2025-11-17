@@ -15,5 +15,7 @@
         public string UserId { get; set; }
         public string AdminUserId { get; set; }
         public virtual ICollection<LoanPaymentSchedule> TablaAmortizacion { get; set; }
+            = new List<LoanPaymentSchedule>();
+
     }
 }

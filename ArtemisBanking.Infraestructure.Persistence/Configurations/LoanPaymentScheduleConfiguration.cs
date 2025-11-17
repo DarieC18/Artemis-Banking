@@ -29,6 +29,9 @@ namespace ArtemisBanking.Infrastructure.Persistence.Configurations
 
             builder.Property(ps => ps.Atrasada)
                    .IsRequired();
+
+            builder.HasIndex(ps => new { ps.LoanId, ps.NumeroCuota });
+
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ArtemisBanking.Infrastructure.Persistence.Configurations
 
             builder.Property(c => c.FechaExpiracion)
                    .IsRequired()
-                   .HasMaxLength(10); // ej: MM/AA o MM/AAAA
+                   .HasMaxLength(10);
 
             builder.Property(c => c.CVCHash)
                    .IsRequired();
@@ -44,6 +44,11 @@ namespace ArtemisBanking.Infrastructure.Persistence.Configurations
             builder.HasMany(c => c.Consumos)
                    .WithOne(cc => cc.CreditCard)
                    .HasForeignKey(cc => cc.CreditCardId);
+
+            builder.HasIndex(c => c.NumeroTarjeta)
+                   .IsUnique();
+
+            builder.HasIndex(c => c.UserId);
         }
     }
 }

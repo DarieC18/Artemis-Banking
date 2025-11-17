@@ -1,4 +1,6 @@
-﻿namespace ArtemisBanking.Domain.Entities
+﻿using ArtemisBanking.Domain.Enums;
+
+namespace ArtemisBanking.Domain.Entities
 {
     public class Transaction
     {
@@ -11,5 +13,8 @@
         public string Origen { get; set; }
         public string Estado { get; set; }
         public virtual SavingsAccount SavingsAccount { get; set; }
+        public TransactionOperationType OperationType { get; set; } = TransactionOperationType.Desconocida;
+        public string OperatedByUserId { get; set; } = default!;
+
     }
 }

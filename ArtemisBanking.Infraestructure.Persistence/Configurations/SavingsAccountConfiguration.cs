@@ -34,6 +34,10 @@ namespace ArtemisBanking.Infrastructure.Persistence.Configurations
             builder.HasMany(sa => sa.Transactions)
                    .WithOne(t => t.SavingsAccount)
                    .HasForeignKey(t => t.SavingsAccountId);
+
+            builder.HasIndex(sa => sa.NumeroCuenta)
+                   .IsUnique();
+
         }
     }
 }
