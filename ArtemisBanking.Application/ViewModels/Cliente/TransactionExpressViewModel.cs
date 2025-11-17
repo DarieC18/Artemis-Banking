@@ -1,7 +1,7 @@
 ﻿using ArtemisBanking.Application.Dtos.SavingsAccount;
 using System.ComponentModel.DataAnnotations;
 
-namespace ArtemisBanking.Application.ViewModels
+namespace ArtemisBanking.Application.ViewModels.Cliente
 {
     public class TransactionExpressViewModel
     {

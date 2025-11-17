@@ -1,101 +1,214 @@
-﻿@model ArtemisBanking.Application.ViewModels.HomeViewModel
+﻿@model ArtemisBanking.Application.ViewModels.Cliente.HomeViewModel
 
 @{
-    ViewData["Title"] = "Inicio Cliente";
+    ViewData["Title"] = "Inicio cliente";
+
+    var totalAhorros = Model.CuentasDeAhorro?.Sum(c => c.Balance) ?? 0m;
+    var totalDeudaPrestamos = Model.Prestamos?.Sum(p => p.MontoPendiente) ?? 0m;
+    var totalCreditoDisponible = Model.TarjetasDeCredito?.Sum(t => t.LimiteCredito - t.DeudaActual) ?? 0m;
+
+    var cuentasOrdenadas = (Model.CuentasDeAhorro ?? Enumerable.Empty<dynamic>())
+        .OrderByDescending(c => c.EsPrincipal)
+        .ThenByDescending(c => c.Balance);
 }
 
-<h2>Panel del cliente</h2>
+<div class="container-fluid">
 
-<hr />
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-1">Panel del cliente</h2>
+            <p class="text-muted mb-0">
+                Consulta el resumen de tus productos financieros y accede a las operaciones disponibles.
+            </p>
+        </div>
+    </div>
 
-<h3>Cuentas de ahorro</h3>
-@if (Model.CuentasDeAhorro != null && Model.CuentasDeAhorro.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Número de cuenta</th>
-                <th>Balance</th>
-                <th>¿Principal?</th>
-                <th>Tipo</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var c in Model.CuentasDeAhorro)
-            {
-                <tr>
-                    <td>@c.NumeroCuenta</td>
-                    <td>@c.Balance.ToString("C")</td>
-                    <td>@(c.EsPrincipal ? "Sí" : "No")</td>
-                    <td>@c.TipoCuenta</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No tienes cuentas de ahorro registradas.</p>
-}
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted mb-1">Saldo total en cuentas de ahorro</h6>
+                    <h3 class="card-title">@totalAhorros.ToString("C")</h3>
+                    <p class="small text-muted mb-0">Suma de todas tus cuentas de ahorro activas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted mb-1">Deuda pendiente en préstamos</h6>
+                    <h3 class="card-title text-danger">@totalDeudaPrestamos.ToString("C")</h3>
+                    <p class="small text-muted mb-0">Monto pendiente de capital de tus préstamos activos.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted mb-1">Crédito disponible en tarjetas</h6>
+                    <h3 class="card-title text-success">@totalCreditoDisponible.ToString("C")</h3>
+                    <p class="small text-muted mb-0">Límite disponible en tus tarjetas de crédito activas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<hr />
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Cuentas de ahorro</h5>
+                </div>
+                <div class="card-body">
+                    @if (cuentasOrdenadas.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Número de cuenta</th>
+                                        <th class="text-end">Balance actual</th>
+                                        <th>Tipo de cuenta</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var c in cuentasOrdenadas)
+                                    {
+                                        var tipo = c.EsPrincipal ? "Principal" : "Secundaria";
+                                        <tr class="@(c.EsPrincipal ? "table-primary" : "")">
+                                            <td>@c.NumeroCuenta</td>
+                                            <td class="text-end">@c.Balance.ToString("C")</td>
+                                            <td>@tipo</td>
+                                            <td class="text-center">
+                                                <a asp-controller="Cliente"
+                                                   asp-action="DetalleCuenta"
+                                                   asp-route-id="@c.Id"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    Ver detalles
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="mb-0 text-muted">No tienes cuentas de ahorro activas.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h3>Préstamos</h3>
-@if (Model.Prestamos != null && Model.Prestamos.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Número</th>
-                <th>Monto capital</th>
-                <th>Monto pendiente</th>
-                <th>Tasa interés</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in Model.Prestamos)
-            {
-                <tr>
-                    <td>@p.NumeroPrestamo</td>
-                    <td>@p.MontoCapital.ToString("C")</td>
-                    <td>@p.MontoPendiente.ToString("C")</td>
-                    <td>@p.TasaInteres %</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No tienes préstamos activos.</p>
-}
+    @if (Model.Prestamos != null && Model.Prestamos.Any())
+    {
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Préstamos activos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Número préstamo</th>
+                                        <th class="text-end">Capital total</th>
+                                        <th class="text-end">Cuotas totales</th>
+                                        <th class="text-end">Cuotas pagadas</th>
+                                        <th class="text-end">Monto pendiente</th>
+                                        <th class="text-end">Tasa interés</th>
+                                        <th class="text-end">Plazo (meses)</th>
+                                        <th class="text-center">Estado</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var p in Model.Prestamos)
+                                    {
+                                        var estado = p.EstadoPago;
+                                        var estadoClass = p.EstadoPago == "Al dia"
+                                        ? "badge bg-success"
+                                        : "badge bg-danger";
 
-<hr />
+                                        <tr>
+                                            <td>@p.NumeroPrestamo</td>
+                                            <td class="text-end">@p.MontoCapital.ToString("C")</td>
+                                            <td class="text-end">@p.CuotasTotales</td>
+                                            <td class="text-end">@p.CuotasPagadas</td>
+                                            <td class="text-end">@p.MontoPendiente.ToString("C")</td>
+                                            <td class="text-end">@($"{p.TasaInteres} %")</td>
+                                            <td class="text-end">@p.PlazoMeses</td>
+                                            <td class="text-center">
+                                                <span class="@estadoClass">@estado</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <a asp-controller="Cliente"
+                                                   asp-action="DetallePrestamo"
+                                                   asp-route-id="@p.Id"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    Ver detalles
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
-<h3>Tarjetas de crédito</h3>
-@if (Model.TarjetasDeCredito != null && Model.TarjetasDeCredito.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Número</th>
-                <th>Límite</th>
-                <th>Deuda actual</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var t in Model.TarjetasDeCredito)
-            {
-                <tr>
-                    <td>@t.NumeroTarjeta</td>
-                    <td>@t.LimiteCredito.ToString("C")</td>
-                    <td>@t.DeudaActual.ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No tienes tarjetas de crédito activas.</p>
-}
+    @if (Model.TarjetasDeCredito != null && Model.TarjetasDeCredito.Any())
+    {
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Tarjetas de crédito</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Número tarjeta</th>
+                                        <th class="text-end">Límite</th>
+                                        <th class="text-end">Monto adeudado</th>
+                                        <th class="text-center">Expira</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var t in Model.TarjetasDeCredito)
+                                    {
+                                        <tr>
+                                            <td>@t.NumeroTarjeta</td>
+                                            <td class="text-end">@t.LimiteCredito.ToString("C")</td>
+                                            <td class="text-end">@t.DeudaActual.ToString("C")</td>
+                                            <td class="text-center">@t.FechaExpiracion</td>
+                                            <td class="text-center">
+                                                <a asp-controller="Cliente"
+                                                   asp-action="DetalleTarjeta"
+                                                   asp-route-id="@t.Id"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    Ver detalles
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

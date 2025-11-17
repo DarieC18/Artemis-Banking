@@ -3,7 +3,7 @@ using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Dtos.SavingsAccount;
 using ArtemisBanking.Application.Interfaces.Repositories;
 using ArtemisBanking.Application.Interfaces.Services;
-using ArtemisBanking.Application.ViewModels;
+using ArtemisBanking.Application.ViewModels.Cliente;
 using AutoMapper;
 
 namespace ArtemisBanking.Application.Services

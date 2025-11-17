@@ -15,6 +15,7 @@ namespace ArtemisBanking.Application
             services.AddScoped<IClienteHomeService, ClienteHomeService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IBeneficiaryService, BeneficiaryService>();
+            services.AddScoped<IClienteProductoService, ClienteProductoService>();
         }
     }
 }

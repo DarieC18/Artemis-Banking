@@ -1,7 +1,7 @@
 ﻿using ArtemisBanking.Application.Dtos.Beneficiary;
 using ArtemisBanking.Application.Interfaces.Repositories;
 using ArtemisBanking.Application.Interfaces.Services;
-using ArtemisBanking.Application.ViewModels;
+using ArtemisBanking.Application.ViewModels.Cliente;
 using ArtemisBanking.Domain.Entities;
 using AutoMapper;
 

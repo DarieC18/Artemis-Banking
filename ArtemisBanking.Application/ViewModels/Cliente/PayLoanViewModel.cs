@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ArtemisBanking.Application.Dtos.CreditCard;
+using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Dtos.SavingsAccount;
 
-namespace ArtemisBanking.Application.ViewModels
+namespace ArtemisBanking.Application.ViewModels.Cliente
 {
-    public class PayCreditCardViewModel
+    public class PayLoanViewModel
     {
-        [Required(ErrorMessage = "Debe seleccionar una tarjeta de crédito")]
-        [Display(Name = "Tarjeta de crédito")]
-        public int CreditCardId { get; set; }
+        [Required(ErrorMessage = "Debe seleccionar un préstamo")]
+        [Display(Name = "Préstamo")]
+        public int LoanId { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar una cuenta de origen")]
         [Display(Name = "Cuenta de origen")]
@@ -19,7 +19,7 @@ namespace ArtemisBanking.Application.ViewModels
         [Display(Name = "Monto a pagar")]
         public decimal Monto { get; set; }
 
-        public List<CreditCardDTO> TarjetasDisponibles { get; set; }
+        public List<LoanDTO> PrestamosDisponibles { get; set; }
         public List<SavingsAccountDTO> CuentasDisponibles { get; set; }
     }
 }

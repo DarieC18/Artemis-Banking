@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ArtemisBanking.Application.ViewModels
+namespace ArtemisBanking.Application.ViewModels.Cliente
 {
     public class AddBeneficiaryViewModel
     {

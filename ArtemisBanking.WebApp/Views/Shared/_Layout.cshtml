@@ -1,4 +1,28 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var brandController = "Account";
+    var brandAction = "Login";
+
+    if (User.Identity?.IsAuthenticated == true)
+    {
+        if (User.IsInRole("Cliente"))
+        {
+            brandController = "Cliente";
+            brandAction = "Index";
+        }
+        else if (User.IsInRole("Cajero"))
+        {
+            brandController = "Cajero";
+            brandAction = "Home";
+        }
+        else if (User.IsInRole("Administrador"))
+        {
+            brandController = "Admin";
+            brandAction = "Dashboard";
+        }
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,24 +36,196 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ArtemisBanking.WebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <a class="navbar-brand" href="@Url.Action(brandAction, brandController)">
+                    ArtemisBank
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            @* ======================= CLIENTE ======================= *@
+                            if (User.IsInRole("Cliente"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Cliente" asp-action="Index">
+                                        Home
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="transaccionesDropdown"
+                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Transacciones
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="transaccionesDropdown">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Transacciones" asp-action="Express">
+                                                Express
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Transacciones" asp-action="PagarTarjeta">
+                                                Tarjeta de crédito
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Transacciones" asp-action="PagarPrestamo">
+                                                Préstamo
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Transacciones" asp-action="Beneficiario">
+                                                Beneficiarios
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Beneficiarios" asp-action="Index">
+                                        Beneficiarios
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Transacciones" asp-action="AvanceEfectivo">
+                                        Avance de efectivo
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Transacciones" asp-action="EntreCuentas">
+                                        Transferencia
+                                    </a>
+                                </li>
+                            }
+                            @* ======================= CAJERO ======================= *@
+                            else if (User.IsInRole("Cajero"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Cajero" asp-action="Home">
+                                        Home
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="operacionesCajeroDropdown"
+                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Operaciones
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="operacionesCajeroDropdown">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Cajero" asp-action="Depositos">
+                                                Depósitos
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Cajero" asp-action="Retiros">
+                                                Retiros
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Cajero" asp-action="PagosPrestamos">
+                                                Pagos de préstamos
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Cajero" asp-action="PagosTarjetas">
+                                                Pagos de tarjeta
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @* ======================= ADMINISTRADOR ======================= *@
+                            else if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Admin" asp-action="Dashboard">
+                                        Dashboard
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Admin" asp-action="Usuarios">
+                                        Usuarios
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Admin" asp-action="Roles">
+                                        Roles
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Admin" asp-action="Configuracion">
+                                        Configuración
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            @* Usuario no autenticado: menú básico *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Account" asp-action="Login">
+                                    Iniciar sesión
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <!-- Sección derecha: usuario + logout -->
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item d-flex align-items-center me-2">
+                                <span class="navbar-text">
+                                    @User.Identity.Name
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout"
+                                      method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="nav-link btn btn-link text-dark text-decoration-none">
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -38,9 +234,10 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - ArtemisBanking.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - ArtemisBanking.WebApp
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

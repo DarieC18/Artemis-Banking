@@ -1,5 +1,5 @@
 ﻿using ArtemisBanking.Application.Dtos.Beneficiary;
-using ArtemisBanking.Application.ViewModels;
+using ArtemisBanking.Application.ViewModels.Cliente;
 
 namespace ArtemisBanking.Application.Interfaces.Services
 {

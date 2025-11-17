@@ -11,7 +11,7 @@ namespace ArtemisBanking.Infrastructure.Persistence
         public static void AddPersistenceLayerIoc(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ArtemisBankingDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("Default")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             // Repos
             services.AddScoped<ISavingsAccountRepository, SavingsAccountRepository>();
@@ -20,6 +20,10 @@ namespace ArtemisBanking.Infrastructure.Persistence
             services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<ILoanPaymentScheduleRepository, LoanPaymentScheduleRepository>();
+            services.AddScoped<ISavingsAccountReadRepository, SavingsAccountReadRepository>();
+            services.AddScoped<ILoanReadRepository, LoanReadRepository>();
+            services.AddScoped<ICreditCardReadRepository, CreditCardReadRepository>();
+
         }
     }
 }

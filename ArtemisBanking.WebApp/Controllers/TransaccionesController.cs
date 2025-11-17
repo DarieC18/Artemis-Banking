@@ -1,7 +1,7 @@
 ﻿using ArtemisBanking.Application.Dtos.CreditCard;
 using ArtemisBanking.Application.Dtos.Transaction;
 using ArtemisBanking.Application.Interfaces.Services;
-using ArtemisBanking.Application.ViewModels;
+using ArtemisBanking.Application.ViewModels.Cliente;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

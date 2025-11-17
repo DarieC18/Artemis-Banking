@@ -12,12 +12,12 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var adminUser = new AppUser
             {
                 UserName = "admin",
-                Email = "bpjoelito034@gmail.com",
+                Email = "admin@artemisbanking.com",
                 EmailConfirmed = false,
                 Cedula = "00100000001",
                 Nombre = "Admin",
                 Apellido = "Sistema",
-                IsActive = false,
+                IsActive = true,
                 FechaCreacion = DateTime.Now
             };
 
@@ -58,12 +58,12 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var clienteUser = new AppUser
             {
                 UserName = "cliente1",
-                Email = "bpjoelito034@gmail.com",
+                Email = "cliente1@artemisbanking.com",
                 EmailConfirmed = false,
                 Cedula = "00300000003",
                 Nombre = "cliente",
                 Apellido = "ej",
-                IsActive = false,
+                IsActive = true,
                 FechaCreacion = DateTime.Now
             };
 

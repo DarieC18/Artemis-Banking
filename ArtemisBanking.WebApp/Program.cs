@@ -1,10 +1,10 @@
-using ArtemisBanking.Infrastructure.Shared;
+using ArtemisBanking.Application;
 using ArtemisBanking.Infraestructure.Identity;
 using ArtemisBanking.Infraestructure.Identity.Mappings;
-using ArtemisBanking.WebApp.Mappings;
-using Microsoft.AspNetCore.Builder;
-using ArtemisBanking.Application;
 using ArtemisBanking.Infrastructure.Persistence;
+using ArtemisBanking.Infrastructure.Shared;
+using ArtemisBanking.WebApp.Mappings;
+using ArtemisBanking.WebApp.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +22,7 @@ builder.Services.AddPersistenceLayerIoc(builder.Configuration);
 var app = builder.Build();
 
 await app.SeedIdentityAsync();
+await app.SeedBankingDataAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

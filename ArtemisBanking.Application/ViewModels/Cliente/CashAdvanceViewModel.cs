@@ -2,7 +2,7 @@
 using ArtemisBanking.Application.Dtos.CreditCard;
 using ArtemisBanking.Application.Dtos.SavingsAccount;
 
-namespace ArtemisBanking.Application.ViewModels
+namespace ArtemisBanking.Application.ViewModels.Cliente
 {
     public class CashAdvanceViewModel
     {

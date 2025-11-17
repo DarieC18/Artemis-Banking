@@ -1,0 +1,67 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cliente.DetalleTarjetaViewModel
+
+@{
+    ViewData["Title"] = "Detalle de tarjeta de crédito";
+}
+
+<div class="container mt-3">
+
+    <h3>Detalle de tarjeta @Model.NumeroTarjeta</h3>
+    <p class="text-muted">Últimos 4 dígitos: @Model.Ultimos4Digitos</p>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <p><strong>Límite de crédito:</strong> @Model.LimiteCredito.ToString("C")</p>
+            <p><strong>Deuda actual:</strong> @Model.DeudaActual.ToString("C")</p>
+            <p><strong>Crédito disponible:</strong> @Model.CreditoDisponible.ToString("C")</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Fecha de expiración:</strong> @Model.FechaExpiracion</p>
+            <p><strong>Fecha de creación:</strong> @Model.FechaCreacion.ToString("dd/MM/yyyy")</p>
+        </div>
+    </div>
+
+    <hr />
+
+    <h5>Consumos de la tarjeta</h5>
+
+    @if (Model.Consumos.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Fecha del consumo</th>
+                        <th class="text-end">Monto consumido</th>
+                        <th>Comercio</th>
+                        <th class="text-center">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Consumos)
+                    {
+                        <tr>
+                            <td>@c.FechaConsumo.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-end">@c.Monto.ToString("C")</td>
+                            <td>@c.Comercio</td>
+                            <td class="text-center">
+                                <span class="badge @(c.Estado == "APROBADO" ? "bg-danger" : "bg-success")">
+                                    @c.Estado
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No se han registrado consumos para esta tarjeta.</p>
+    }
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
+    </div>
+
+</div>

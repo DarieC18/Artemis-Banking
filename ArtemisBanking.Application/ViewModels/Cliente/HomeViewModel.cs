@@ -2,7 +2,7 @@
 using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Dtos.CreditCard;
 
-namespace ArtemisBanking.Application.ViewModels
+namespace ArtemisBanking.Application.ViewModels.Cliente
 {
     public class HomeViewModel
     {
