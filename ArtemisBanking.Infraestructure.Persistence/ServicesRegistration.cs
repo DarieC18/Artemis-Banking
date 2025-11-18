@@ -17,6 +17,7 @@ namespace ArtemisBanking.Infrastructure.Persistence
             services.AddScoped<ISavingsAccountRepository, SavingsAccountRepository>();
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+            services.AddScoped<ICreditCardConsumptionRepository, CreditCardConsumptionRepository>();
             services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<ILoanPaymentScheduleRepository, LoanPaymentScheduleRepository>();

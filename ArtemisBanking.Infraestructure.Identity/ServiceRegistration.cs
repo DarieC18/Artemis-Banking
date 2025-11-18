@@ -1,4 +1,5 @@
 using ArtemisBanking.Application.Interfaces;
+using ArtemisBanking.Application.Interfaces.Identity;
 using ArtemisBanking.Infraestructure.Identity.Context;
 using ArtemisBanking.Infraestructure.Identity.Entities;
 using ArtemisBanking.Infraestructure.Identity.Seeds;
@@ -81,6 +82,7 @@ namespace ArtemisBanking.Infraestructure.Identity
             #region Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountServiceApi, AccountServiceApi>();
+            services.AddScoped<IIdentityUserManager, IdentityUserManager>();
             
 
             return services;

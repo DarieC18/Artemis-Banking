@@ -2,7 +2,7 @@
 using ArtemisBanking.Domain.Entities;
 using AutoMapper;
 
-namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
+namespace ArtemisBanking.Application.Mappings.EntitiesAndDtos
 {
     public class TransactionProfile : Profile
     {

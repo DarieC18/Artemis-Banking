@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Cancelar Tarjeta de Crédito";
+    var ultimos4Digitos = ViewBag.Ultimos4Digitos as string;
+    var id = (int)ViewBag.Id;
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">⚠️ Confirmación de cancelación</h1>
+</section>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <h4>¿Está seguro que desea cancelar la tarjeta [@ultimos4Digitos]?</h4>
+            <p class="text-muted">Esta acción no se puede deshacer.</p>
+        </div>
+
+        <form method="post" asp-action="Cancel" asp-route-id="@id">
+            @Html.AntiForgeryToken()
+            
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</section>

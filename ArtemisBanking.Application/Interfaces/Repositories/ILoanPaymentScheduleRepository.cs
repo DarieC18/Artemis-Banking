@@ -6,5 +6,6 @@ namespace ArtemisBanking.Application.Interfaces.Repositories
     {
         Task<List<LoanPaymentSchedule>> GetByLoanIdAsync(int loanId);
         Task UpdateRangeAsync(List<LoanPaymentSchedule> cuotas);
+        Task AddRangeAsync(List<LoanPaymentSchedule> cuotas);
     }
 }

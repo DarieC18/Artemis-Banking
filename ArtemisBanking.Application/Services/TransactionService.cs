@@ -34,10 +34,10 @@ namespace ArtemisBanking.Application.Services
         {
             var origen = await _cuentas.GetByAccountNumberAsync(dto.CuentaOrigen);
             if (origen == null || origen.UserId != userId)
-                throw new Exception("La cuenta de origen no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de origen no existe o no pertenece al usuario");
 
             if (origen.Balance < dto.Monto)
-                throw new Exception("Fondos insuficientes.");
+                throw new Exception("Fondos insuficientes");
 
             var destino = await _cuentas.GetByAccountNumberAsync(dto.CuentaDestino);
 
@@ -68,14 +68,14 @@ namespace ArtemisBanking.Application.Services
         {
             var origen = await _cuentas.GetByAccountNumberAsync(dto.CuentaOrigen);
             if (origen == null || origen.UserId != userId)
-                throw new Exception("La cuenta de origen no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de origen no existe o no pertenece al usuario");
 
             if (origen.Balance < dto.Monto)
-                throw new Exception("Fondos insuficientes.");
+                throw new Exception("Fondos insuficientes");
 
             var beneficiario = await _beneficiarios.GetByIdAsync(dto.BeneficiaryId);
             if (beneficiario == null)
-                throw new Exception("Beneficiario no encontrado.");
+                throw new Exception("Beneficiario no encontrado");
 
             origen.Balance -= dto.Monto;
             await _cuentas.UpdateAsync(origen);
@@ -98,17 +98,17 @@ namespace ArtemisBanking.Application.Services
         {
             var origen = await _cuentas.GetByAccountNumberAsync(dto.CuentaOrigen);
             if (origen == null || origen.UserId != userId)
-                throw new Exception("La cuenta de origen no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de origen no existe o no pertenece al usuario");
 
             var destino = await _cuentas.GetByAccountNumberAsync(dto.CuentaDestino);
             if (destino == null || destino.UserId != userId)
-                throw new Exception("La cuenta de destino no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de destino no existe o no pertenece al usuario");
 
             if (origen.Id == destino.Id)
-                throw new Exception("La cuenta de origen y destino no pueden ser la misma.");
+                throw new Exception("La cuenta de origen y destino no pueden ser la misma");
 
             if (origen.Balance < dto.Monto)
-                throw new Exception("Fondos insuficientes.");
+                throw new Exception("Fondos insuficientes");
 
             origen.Balance -= dto.Monto;
             destino.Balance += dto.Monto;
@@ -134,14 +134,14 @@ namespace ArtemisBanking.Application.Services
         {
             var origen = await _cuentas.GetByAccountNumberAsync(dto.CuentaOrigen);
             if (origen == null || origen.UserId != userId)
-                throw new Exception("La cuenta de origen no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de origen no existe o no pertenece al usuario");
 
             if (origen.Balance < dto.Monto)
-                throw new Exception("Fondos insuficientes.");
+                throw new Exception("Fondos insuficientes");
 
             var prestamo = await _prestamos.GetByIdWithScheduleAsync(dto.LoanId);
             if (prestamo == null)
-                throw new Exception("Préstamo no encontrado.");
+                throw new Exception("Préstamo no encontrado");
 
             origen.Balance -= dto.Monto;
             await _cuentas.UpdateAsync(origen);
@@ -164,22 +164,22 @@ namespace ArtemisBanking.Application.Services
         {
             var origen = await _cuentas.GetByAccountNumberAsync(dto.CuentaOrigen);
             if (origen == null || origen.UserId != userId)
-                throw new Exception("La cuenta de origen no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de origen no existe o no pertenece al usuario");
 
             if (origen.Balance < dto.Monto)
-                throw new Exception("Fondos insuficientes.");
+                throw new Exception("Fondos insuficientes");
 
             var tarjeta = await _tarjetas.GetByIdAsync(dto.CreditCardId);
             if (tarjeta == null || tarjeta.UserId != userId)
-                throw new Exception("Tarjeta no encontrada o no pertenece al usuario.");
+                throw new Exception("Tarjeta no encontrada o no pertenece al usuario");
 
             if (!tarjeta.IsActive)
-                throw new Exception("La tarjeta no está activa.");
+                throw new Exception("La tarjeta no está activa");
 
             origen.Balance -= dto.Monto;
             await _cuentas.UpdateAsync(origen);
 
-            // Restar deuda de tarjeta
+            // Resta la6 deuda de tarjeta
             tarjeta.DeudaActual -= dto.Monto;
             if (tarjeta.DeudaActual < 0)
                 tarjeta.DeudaActual = 0;
@@ -204,18 +204,18 @@ namespace ArtemisBanking.Application.Services
         {
             var destino = await _cuentas.GetByAccountNumberAsync(dto.CuentaDestino);
             if (destino == null || destino.UserId != userId)
-                throw new Exception("La cuenta de destino no existe o no pertenece al usuario.");
+                throw new Exception("La cuenta de destino no existe o no pertenece al usuario");
 
             var tarjeta = await _tarjetas.GetByIdAsync(dto.CreditCardId);
             if (tarjeta == null || tarjeta.UserId != userId)
-                throw new Exception("Tarjeta no encontrada o no pertenece al usuario.");
+                throw new Exception("Tarjeta no encontrada o no pertenece al usuario");
 
             if (!tarjeta.IsActive)
-                throw new Exception("La tarjeta no está activa.");
+                throw new Exception("La tarjeta no está activa");
 
             var disponible = tarjeta.LimiteCredito - tarjeta.DeudaActual;
             if (dto.Monto > disponible)
-                throw new Exception("Crédito insuficiente para realizar el avance.");
+                throw new Exception("Crédito insuficiente para realizar el avance");
 
             tarjeta.DeudaActual += dto.Monto;
             await _tarjetas.UpdateAsync(tarjeta);

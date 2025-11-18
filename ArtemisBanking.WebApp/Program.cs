@@ -12,12 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
-builder.Services.AddAutoMapper(typeof(AppUserMappingProfile).Assembly, typeof(AccountWebMappingProfile).Assembly);
-builder.Services.AddSingleton(TimeProvider.System);
-
-//IoC
-builder.Services.AddApplicationLayerIoc(builder.Configuration);
 builder.Services.AddPersistenceLayerIoc(builder.Configuration);
+builder.Services.AddApplicationLayerIoc(builder.Configuration);
+
+// Registrar AutoMapper para los perfiles de la WebApp e Identity
+builder.Services.AddAutoMapper(
+    typeof(AccountWebMappingProfile).Assembly,
+    typeof(AppUserMappingProfile).Assembly);
 
 var app = builder.Build();
 
@@ -44,5 +45,3 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();
-
-

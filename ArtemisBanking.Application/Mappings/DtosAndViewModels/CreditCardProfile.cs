@@ -1,5 +1,5 @@
 ﻿using ArtemisBanking.Application.Dtos.CreditCard;
-using ArtemisBanking.Domain.Entities;
+using ArtemisBanking.Application.ViewModels;
 using AutoMapper;
 
 namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
@@ -8,11 +8,13 @@ namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
     {
         public CreditCardProfile()
         {
-            CreateMap<CreditCard, CreditCardDTO>();
+            CreateMap<CreditCardListItemDTO, CreditCardListItemViewModel>();
 
-            CreateMap<CreditCard, CreditCardDetailDTO>();
+            CreateMap<ClientForCreditCardDTO, ClientForCreditCardViewModel>();
 
-            CreateMap<CreditCardConsumption, CreditCardConsumptionDTO>();
+            CreateMap<AssignCreditCardViewModel, AssignCreditCardDTO>();
+
+            CreateMap<UpdateCreditCardLimitViewModel, UpdateCreditCardLimitDTO>();
         }
     }
 }

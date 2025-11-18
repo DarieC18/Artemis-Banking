@@ -8,5 +8,10 @@ namespace ArtemisBanking.Application.Interfaces.Repositories
         Task<CreditCard?> GetByIdAsync(int id);
         Task<CreditCard?> GetByNumberAsync(string cardNumber);
         Task UpdateAsync(CreditCard card);
+        Task<List<CreditCard>> GetAllAsync(string? estadoFilter = null, string? cedulaFilter = null);
+        Task<List<CreditCard>> GetByCedulaAsync(string cedula);
+        Task<CreditCard> AddAsync(CreditCard card);
+        Task<bool> ExistsByNumberAsync(string cardNumber);
+        Task<decimal> GetAverageDebtAsync();
     }
 }

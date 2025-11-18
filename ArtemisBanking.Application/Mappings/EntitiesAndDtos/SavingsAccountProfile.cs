@@ -2,7 +2,7 @@
 using ArtemisBanking.Domain.Entities;
 using AutoMapper;
 
-namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
+namespace ArtemisBanking.Application.Mappings.EntitiesAndDtos
 {
     public class SavingsAccountProfile : Profile
     {
@@ -32,6 +32,8 @@ namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
                 // AutoMapper ya sabe usar el TransactionProfile para cada item
                 .ForMember(d => d.Transacciones,
                     opt => opt.MapFrom(s => s.Transactions));
+
+            CreateMap<CreateSavingsAccountDTO, SavingsAccount>();
         }
     }
 }

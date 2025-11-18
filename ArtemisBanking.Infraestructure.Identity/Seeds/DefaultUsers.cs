@@ -12,7 +12,7 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var adminUser = new AppUser
             {
                 UserName = "admin",
-                Email = "bpjoelito034@gmail.com",
+                Email = "admin@artemisbanking.com",
                 EmailConfirmed = true,
                 Cedula = "00100000001",
                 Nombre = "Admin",

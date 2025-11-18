@@ -37,5 +37,11 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
             _context.SavingsAccounts.Update(account);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddAsync(SavingsAccount account, CancellationToken cancellationToken = default)
+        {
+            await _context.SavingsAccounts.AddAsync(account, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

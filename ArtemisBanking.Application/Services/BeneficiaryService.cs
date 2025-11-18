@@ -32,17 +32,17 @@ namespace ArtemisBanking.Application.Services
         public async Task AddBeneficiaryAsync(string userId, AddBeneficiaryViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.NumeroCuentaBeneficiario))
-                throw new ArgumentException("El número de cuenta del beneficiario es obligatorio.");
+                throw new ArgumentException("El número de cuenta del beneficiario es obligatorio");
 
             var cuenta = await _savingsAccountRepository.GetByAccountNumberAsync(model.NumeroCuentaBeneficiario);
             if (cuenta == null || !cuenta.IsActive)
-                throw new InvalidOperationException("La cuenta de beneficiario no existe o está inactiva.");
+                throw new InvalidOperationException("La cuenta de beneficiario no existe o está inactiva");
 
             var existente = await _beneficiaryRepository
                 .GetByUserAndAccountAsync(userId, model.NumeroCuentaBeneficiario);
 
             if (existente != null)
-                throw new InvalidOperationException("Este beneficiario ya está registrado.");
+                throw new InvalidOperationException("Este beneficiario ya está registrado");
 
             var nuevo = new Beneficiary
             {
@@ -61,7 +61,7 @@ namespace ArtemisBanking.Application.Services
             var entity = await _beneficiaryRepository.GetByIdAsync(beneficiaryId);
 
             if (entity == null || entity.UserId != userId)
-                throw new InvalidOperationException("Beneficiario no encontrado o no pertenece al usuario.");
+                throw new InvalidOperationException("Beneficiario no encontrado o no pertenece al usuario");
 
             await _beneficiaryRepository.DeleteAsync(entity);
         }

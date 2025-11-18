@@ -1,0 +1,92 @@
+@model ArtemisBanking.Application.Dtos.Loan.LoanDetailDTO
+@{
+    ViewData["Title"] = "Detalle del Préstamo";
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">Detalle del Préstamo</h1>
+</section>
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="text-primary mb-3">Información General</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Número de préstamo:</strong> @Model.NumeroPrestamo</p>
+                <p><strong>Monto capital:</strong> RD$ @Model.MontoCapital.ToString("N2")</p>
+                <p><strong>Cuotas totales:</strong> @Model.CuotasTotales</p>
+                <p><strong>Cuotas pagadas:</strong> @Model.CuotasPagadas</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Monto pendiente:</strong> RD$ @Model.MontoPendiente.ToString("N2")</p>
+                <p><strong>Tasa de interés:</strong> @Model.TasaInteres.ToString("N2")%</p>
+                <p><strong>Plazo (meses):</strong> @Model.PlazoMeses</p>
+                <p><strong>Estado:</strong> 
+                    @if (Model.EstadoPago == "En mora")
+                    {
+                        <span class="badge bg-danger">@Model.EstadoPago</span>
+                    }
+                    else if (Model.EstadoPago == "Completado")
+                    {
+                        <span class="badge bg-secondary">@Model.EstadoPago</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">@Model.EstadoPago</span>
+                    }
+                </p>
+                <p><strong>Fecha de creación:</strong> @Model.FechaCreacion.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model.TablaAmortizacion != null && Model.TablaAmortizacion.Any())
+{
+    <section class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h5 class="text-primary mb-3">Tabla de Amortización</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Número de cuota</th>
+                            <th>Valor de cuota</th>
+                            <th>Fecha de pago</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cuota in Model.TablaAmortizacion)
+                        {
+                            <tr>
+                                <td>@cuota.NumeroCuota</td>
+                                <td>RD$ @cuota.ValorCuota.ToString("N2")</td>
+                                <td>@cuota.FechaPago.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (cuota.Pagada)
+                                    {
+                                        <span class="badge bg-success">Pagada</span>
+                                    }
+                                    else if (cuota.Atrasada)
+                                    {
+                                        <span class="badge bg-danger">Atrasada</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Pendiente</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+}
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+</div>
+

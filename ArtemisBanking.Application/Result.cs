@@ -1,4 +1,6 @@
-﻿namespace ArtemisBanking.Application
+﻿using System.Collections.Generic;
+
+namespace ArtemisBanking.Application.Common
 {
     public class Result
     {

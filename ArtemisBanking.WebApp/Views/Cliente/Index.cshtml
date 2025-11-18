@@ -25,7 +25,7 @@
             {
                 <tr>
                     <td>@c.NumeroCuenta</td>
-                    <td>@c.Balance.ToString("C")</td>
+                    <td>RD$ @c.Balance.ToString("N2")</td>
                     <td>@(c.EsPrincipal ? "Sí" : "No")</td>
                     <td>@c.TipoCuenta</td>
                 </tr>
@@ -57,8 +57,8 @@ else
             {
                 <tr>
                     <td>@p.NumeroPrestamo</td>
-                    <td>@p.MontoCapital.ToString("C")</td>
-                    <td>@p.MontoPendiente.ToString("C")</td>
+                    <td>RD$ @p.MontoCapital.ToString("N2")</td>
+                    <td>RD$ @p.MontoPendiente.ToString("N2")</td>
                     <td>@p.TasaInteres %</td>
                 </tr>
             }
@@ -88,8 +88,8 @@ else
             {
                 <tr>
                     <td>@t.NumeroTarjeta</td>
-                    <td>@t.LimiteCredito.ToString("C")</td>
-                    <td>@t.DeudaActual.ToString("C")</td>
+                    <td>RD$ @t.LimiteCredito.ToString("N2")</td>
+                    <td>RD$ @t.DeudaActual.ToString("N2")</td>
                 </tr>
             }
         </tbody>
