@@ -12,7 +12,7 @@
         else if (User.IsInRole("Cajero"))
         {
             brandController = "Cajero";
-            brandAction = "Home";
+            brandAction = "Index";
         }
         else if (User.IsInRole("Administrador"))
         {
@@ -119,7 +119,7 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark"
-                                       asp-controller="Cajero" asp-action="Home">
+                                       asp-controller="Cajero" asp-action="Index">
                                         Home
                                     </a>
                                 </li>
@@ -130,33 +130,46 @@
                                         Operaciones
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="operacionesCajeroDropdown">
+
                                         <li>
                                             <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="Depositos">
+                                               asp-controller="Cajero" asp-action="Deposito">
                                                 Depósitos
                                             </a>
                                         </li>
+
                                         <li>
                                             <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="Retiros">
+                                               asp-controller="Cajero" asp-action="Retiro">
                                                 Retiros
                                             </a>
                                         </li>
+
                                         <li>
                                             <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="PagosPrestamos">
+                                               asp-controller="Cajero" asp-action="PagoPrestamo">
                                                 Pagos de préstamos
                                             </a>
                                         </li>
+
                                         <li>
                                             <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="PagosTarjetas">
+                                               asp-controller="Cajero" asp-action="PagoTarjeta">
                                                 Pagos de tarjeta
                                             </a>
                                         </li>
+
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Cajero" asp-action="TransferenciaTerceros">
+                                                Transferencias a terceros
+                                            </a>
+                                        </li>
+
                                     </ul>
                                 </li>
                             }
+
                             @* ======================= ADMINISTRADOR ======================= *@
                             else if (User.IsInRole("Administrador"))
                             {

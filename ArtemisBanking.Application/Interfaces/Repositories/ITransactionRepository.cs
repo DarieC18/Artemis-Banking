@@ -6,5 +6,10 @@ namespace ArtemisBanking.Application.Interfaces.Repositories
     {
         Task AddAsync(Transaction transaction);
         Task<List<Transaction>> GetByAccountNumberAsync(string accountNumber);
+        Task<List<Transaction>> GetByOperatorAndDateRangeAsync(
+            string operatedByUserId,
+            DateTime from,
+            DateTime to);
+
     }
 }

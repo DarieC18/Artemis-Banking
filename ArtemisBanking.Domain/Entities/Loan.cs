@@ -7,6 +7,7 @@
         public decimal MontoCapital { get; set; }
         public int CuotasTotales { get; set; }
         public int CuotasPagadas { get; set; }
+        public string EstadoPago { get; set; } = "Al día";
         public decimal MontoPendiente { get; set; }
         public decimal TasaInteres { get; set; }
         public int PlazoMeses { get; set; }

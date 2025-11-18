@@ -1,18 +1,19 @@
 using ArtemisBanking.Application.Interfaces;
+using ArtemisBanking.Application.Interfaces.Services;
+using ArtemisBanking.Domain.Settings;
 using ArtemisBanking.Infraestructure.Identity.Context;
 using ArtemisBanking.Infraestructure.Identity.Entities;
 using ArtemisBanking.Infraestructure.Identity.Seeds;
 using ArtemisBanking.Infraestructure.Identity.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ArtemisBanking.Domain.Settings;
 
 namespace ArtemisBanking.Infraestructure.Identity
 {
@@ -81,7 +82,7 @@ namespace ArtemisBanking.Infraestructure.Identity
             #region Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountServiceApi, AccountServiceApi>();
-            
+            services.AddScoped<IUserInfoService, UserInfoService>();
 
             return services;
         }

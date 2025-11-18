@@ -1,24 +1,44 @@
-﻿@using ArtemisBanking.Application.ViewModels.Cliente
-@model AddBeneficiaryViewModel
+﻿@model ArtemisBanking.Application.ViewModels.Cajero.PagoPrestamoFormViewModel
 
 @{
-    ViewData["Title"] = "Agregar Beneficiario";
+    ViewData["Title"] = "Pago de Préstamo";
 }
 
-<h2 class="mt-3">Agregar Beneficiario</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">Pago de Préstamo</h2>
 
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (!string.IsNullOrWhiteSpace(Model?.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
 
-    <div class="mb-3">
-        <label asp-for="NumeroCuentaBeneficiario" class="form-label"></label>
-        <input asp-for="NumeroCuentaBeneficiario" class="form-control" />
-        <span asp-validation-for="NumeroCuentaBeneficiario" class="text-danger"></span>
-    </div>
+    <form asp-action="PagoPrestamo" method="post">
+        @Html.AntiForgeryToken()
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Volver</a>
-</form>
+        <div class="mb-3">
+            <label asp-for="CuentaOrigen" class="form-label fw-bold">Cuenta Origen</label>
+            <input asp-for="CuentaOrigen" class="form-control" placeholder="Ej: 2024000101" />
+            <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LoanId" class="form-label fw-bold">ID del Préstamo</label>
+            <input asp-for="LoanId" class="form-control" placeholder="Ej: 17" />
+            <span asp-validation-for="LoanId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Monto" class="form-label fw-bold">Monto a Pagar</label>
+            <input asp-for="Monto" class="form-control" placeholder="Ej: 3500" />
+            <span asp-validation-for="Monto" class="text-danger"></span>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <button type="submit" class="btn btn-primary">Continuar</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

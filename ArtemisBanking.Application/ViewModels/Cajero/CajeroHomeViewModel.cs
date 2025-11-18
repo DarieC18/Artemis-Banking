@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ArtemisBanking.Application.ViewModels.Cajero
+﻿namespace ArtemisBanking.Application.ViewModels.Cajero
 {
-    internal class CajeroHomeViewModel
+    public class CajeroHomeViewModel
     {
+        public int TotalTransaccionesHoy { get; set; }
+        public int TotalPagosHoy { get; set; }
+        public int TotalDepositosHoy { get; set; }
+        public int TotalRetirosHoy { get; set; }
     }
 }

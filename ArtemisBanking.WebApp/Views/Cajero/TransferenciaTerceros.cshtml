@@ -1,0 +1,40 @@
+@model CashierThirdPartyTransferViewModel
+
+@{
+    ViewData["Title"] = "Transferencia a cuentas de terceros";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+
+<form asp-action="TransferenciaTerceros" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="CuentaOrigen" class="form-label"></label>
+        <input asp-for="CuentaOrigen" class="form-control" />
+        <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CuentaDestino" class="form-label"></label>
+        <input asp-for="CuentaDestino" class="form-control" />
+        <span asp-validation-for="CuentaDestino" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Monto" class="form-label"></label>
+        <input asp-for="Monto" class="form-control" />
+        <span asp-validation-for="Monto" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Continuar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

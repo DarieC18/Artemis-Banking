@@ -1,0 +1,33 @@
+@model CashierThirdPartyTransferConfirmViewModel
+
+@{
+    ViewData["Title"] = "Confirmar transferencia a terceros";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+
+<div class="alert alert-warning">
+    <p><strong>Cuenta origen:</strong> @Model.CuentaOrigen</p>
+    <p><strong>Cuenta destino:</strong> @Model.CuentaDestino</p>
+    <p><strong>Titular destino:</strong> @Model.TitularDestino</p>
+    <p><strong>Monto:</strong> @Model.Monto.ToString("C")</p>
+    <p>¿Desea confirmar esta operación?</p>
+</div>
+
+<form asp-action="ConfirmarTransferenciaTerceros" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="CuentaOrigen" />
+    <input type="hidden" asp-for="CuentaDestino" />
+    <input type="hidden" asp-for="TitularDestino" />
+    <input type="hidden" asp-for="Monto" />
+
+    <button type="submit" class="btn btn-success">Confirmar</button>
+</form>
+
+<form asp-action="CancelarTransferenciaTerceros" method="post" class="mt-2">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-secondary">Cancelar</button>
+</form>

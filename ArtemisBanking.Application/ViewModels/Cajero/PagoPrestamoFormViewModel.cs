@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ArtemisBanking.Application.ViewModels.Cajero
 {
-    internal class PagoPrestamoFormViewModel
+    public class PagoPrestamoFormViewModel
     {
+        [Required(ErrorMessage = "La cuenta origen es requerida.")]
+        [Display(Name = "Cuenta origen")]
+        public string CuentaOrigen { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El préstamo es requerido.")]
+        [Display(Name = "Id del préstamo")]
+        public int LoanId { get; set; }
+
+        [Required(ErrorMessage = "El monto a pagar es requerido.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que cero.")]
+        [Display(Name = "Monto a pagar")]
+        public decimal Monto { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

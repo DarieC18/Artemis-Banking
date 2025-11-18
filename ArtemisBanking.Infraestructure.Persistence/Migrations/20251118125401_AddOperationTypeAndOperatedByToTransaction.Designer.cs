@@ -4,6 +4,7 @@ using ArtemisBanking.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 {
     [DbContext(typeof(ArtemisBankingDbContext))]
-    partial class ArtemisBankingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251118125401_AddOperationTypeAndOperatedByToTransaction")]
+    partial class AddOperationTypeAndOperatedByToTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
