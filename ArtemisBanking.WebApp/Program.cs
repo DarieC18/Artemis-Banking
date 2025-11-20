@@ -4,6 +4,7 @@ using ArtemisBanking.Infraestructure.Identity.Mappings;
 using ArtemisBanking.Infrastructure.Persistence;
 using ArtemisBanking.Infrastructure.Shared;
 using ArtemisBanking.WebApp.Mappings;
+//using ArtemisBanking.WebApp.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,7 @@ builder.Services.AddPersistenceLayerIoc(builder.Configuration);
 var app = builder.Build();
 
 await app.SeedIdentityAsync();
-//await app.SeedBankingDataAsync(); Seeder para TESTING
+//await app.SeedBankingDataAsync(); //Seeder para TESTING
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

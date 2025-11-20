@@ -238,7 +238,7 @@ namespace ArtemisBanking.Application.Services
                 FechaTransaccion = now,
                 Tipo = "DÉBITO",
                 Origen = dto.CuentaOrigen,
-                Beneficiario = $"BeneficiarioId:{beneficiario.Id}",
+                Beneficiario = beneficiario.NumeroCuentaBeneficiario,
                 Estado = "APROBADA",
                 OperatedByUserId = userId
             };
@@ -250,7 +250,7 @@ namespace ArtemisBanking.Application.Services
                 FechaTransaccion = now,
                 Tipo = "CRÉDITO",
                 Origen = dto.CuentaOrigen,
-                Beneficiario = $"BeneficiarioId:{beneficiario.Id}",
+                Beneficiario = beneficiario.NumeroCuentaBeneficiario,
                 Estado = "APROBADA",
                 OperatedByUserId = userId
             };

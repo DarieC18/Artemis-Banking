@@ -1,6 +1,8 @@
 ﻿using ArtemisBanking.Application.DTOs.Common;
 using ArtemisBanking.Application.DTOs.Hermes;
 using ArtemisBanking.Application.Interfaces.Services;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,8 +10,11 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace ArtemisBanking.Api.Controllers
 {
     [ApiController]
-    [Route("pay")]
-    [Authorize(Roles = "Administrador,Comercio")]
+    [ApiVersion("1.0")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Roles = "Administrador,Comercio")]
+    [Route("api/v{version:apiVersion}/pay")]
     public class HermesPayController : ControllerBase
     {
         private readonly IHermesPayService _hermes;
@@ -18,6 +23,7 @@ namespace ArtemisBanking.Api.Controllers
         {
             _hermes = hermes;
         }
+
         [HttpGet("get-transactions/{commerceId:int?}")]
         [SwaggerOperation(
             Summary = "Obtener transacciones de un comercio",
@@ -29,7 +35,7 @@ namespace ArtemisBanking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetTransactions(
-            int? commerceId,
+            [FromRoute] int? commerceId,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
@@ -81,7 +87,7 @@ namespace ArtemisBanking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ProcessPayment(
-            int? commerceId,
+            [FromRoute] int? commerceId,
             [FromBody] ProcessPaymentRequestDto request)
         {
             int finalCommerceId;

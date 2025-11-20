@@ -82,7 +82,7 @@ namespace ArtemisBanking.WebApp.Seed
                     LimiteCredito = 20000m,
                     DeudaActual = 3500m,
                     FechaExpiracion = "12/29",
-                    CVCHash = "hashed-cvc-123",
+                    CVCHash = "669",
                     IsActive = true,
                     FechaCreacion = DateTime.UtcNow,
                     Consumos = new List<CreditCardConsumption>()
@@ -134,7 +134,7 @@ namespace ArtemisBanking.WebApp.Seed
                     CuotasPagadas = 0,
                     EstadoPago = "Al día",
                     MontoPendiente = 50000m,
-                    TasaInteres = 0.18m,
+                    TasaInteres = 18,
                     PlazoMeses = 12,
                     IsActive = true,
                     FechaCreacion = DateTime.UtcNow
@@ -146,24 +146,40 @@ namespace ArtemisBanking.WebApp.Seed
                 // ============================================================
                 // 4.1 Tabla de amortización dummy CORREGIDA
                 // ============================================================
-                decimal cuotaMensual = Math.Round(loan.MontoCapital / loan.CuotasTotales, 2);
+
+                decimal capital = loan.MontoCapital;
+                decimal tasaMensual = (loan.TasaInteres / 100m) / 12m;
+                int n = loan.CuotasTotales;
+
+                decimal cuota;
+
+                if (tasaMensual == 0)
+                {
+                    cuota = Math.Round(capital / n, 2, MidpointRounding.AwayFromZero);
+                }
+                else
+                {
+                    var factor = (decimal)Math.Pow((double)(1 + tasaMensual), -n);
+                    cuota = capital * tasaMensual / (1 - factor);
+                    cuota = Math.Round(cuota, 2, MidpointRounding.AwayFromZero);
+                }
 
                 decimal totalPendiente = 0m;
 
-                for (int i = 1; i <= loan.CuotasTotales; i++)
+                for (int i = 1; i <= n; i++)
                 {
                     var schedule = new LoanPaymentSchedule
                     {
                         LoanId = loan.Id,
                         NumeroCuota = i,
-                        ValorCuota = cuotaMensual,
-                        SaldoPendiente = cuotaMensual,
+                        ValorCuota = cuota,
+                        SaldoPendiente = cuota,
                         FechaPago = DateTime.UtcNow.AddMonths(i),
                         Pagada = false,
                         Atrasada = false
                     };
 
-                    totalPendiente += cuotaMensual;
+                    totalPendiente += cuota;
 
                     context.LoanPaymentSchedules.Add(schedule);
                 }
