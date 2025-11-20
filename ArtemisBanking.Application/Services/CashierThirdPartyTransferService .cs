@@ -131,19 +131,48 @@ namespace ArtemisBanking.Application.Services
                 To = emailSource,
                 Subject = $"Transacción realizada a la cuenta {maskDst4}",
                 Body =
-                    $"""
-                    Hola {sourceUser?.Nombre},
+            $@"
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-                    Se ha realizado una transferencia desde su cuenta.
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Notificación de transferencia enviada
+                      </h2>
 
-                    Monto: {dto.Amount:C}
-                    Cuenta destino: ****{maskDst4}
-                    Fecha: {now:dd/MM/yyyy HH:mm}
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola <strong>{sourceUser?.Nombre}</strong>,
+                      </p>
 
-                    Si no reconoce esta operación, contacte al banco de inmediato.
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        Se ha realizado una transferencia desde su cuenta.
+                      </p>
 
-                    ArtemisBanking
-                    """
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Monto:</strong> {dto.Amount:C}<br/>
+                        <strong>Cuenta destino:</strong> ****{maskDst4}<br/>
+                        <strong>Fecha:</strong> {now:dd/MM/yyyy HH:mm}
+                      </p>
+
+                      <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                  border-left: 4px solid #ffa726; font-size: 14px;"">
+                        Si no reconoce esta operación, contacte al banco de inmediato.
+                      </div>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            "
             });
 
             await _emailService.SendAsync(new EmailRequestDto
@@ -151,17 +180,43 @@ namespace ArtemisBanking.Application.Services
                 To = emailDestination,
                 Subject = $"Transacción recibida desde la cuenta {maskSrc4}",
                 Body =
-                    $"""
-                    Hola {destinationUser?.Nombre},
+            $@"
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-                    Ha recibido una transferencia.
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Notificación de transferencia recibida
+                      </h2>
 
-                    Monto: {dto.Amount:C}
-                    Cuenta origen: ****{maskSrc4}
-                    Fecha: {now:dd/MM/yyyy HH:mm}
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola <strong>{destinationUser?.Nombre}</strong>,
+                      </p>
 
-                    ArtemisBanking
-                    """
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        Ha recibido una transferencia.
+                      </p>
+
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Monto:</strong> {dto.Amount:C}<br/>
+                        <strong>Cuenta origen:</strong> ****{maskSrc4}<br/>
+                        <strong>Fecha:</strong> {now:dd/MM/yyyy HH:mm}
+                      </p>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            "
             });
 
             var result = new CashierThirdPartyTransferResultDTO

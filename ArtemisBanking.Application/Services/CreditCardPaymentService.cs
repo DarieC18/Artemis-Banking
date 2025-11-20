@@ -164,23 +164,55 @@ namespace ArtemisBanking.Application.Services
             };
 
             var subject = $"Pago realizado a la tarjeta {resultDto.CardNumberMasked}";
-            var body = $"""
-                Hola,
 
-                Se ha realizado un pago a su tarjeta de crédito.
+            var body = $@"
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-                Monto pagado: {realPaymentAmount:C}
-                Tarjeta: {resultDto.CardNumberMasked}
-                Cuenta origen: {MaskAccountNumber(sourceAccount.NumeroCuenta)}
-                Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Notificación de pago de tarjeta de crédito
+                      </h2>
 
-                Deuda restante de la tarjeta: {creditCard.DeudaActual:C}
-                Nuevo balance de la cuenta de origen: {sourceAccount.Balance:C}
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola,
+                      </p>
 
-                Si usted no reconoce esta operación, contacte al banco de inmediato.
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        Se ha realizado un pago a su tarjeta de crédito.
+                      </p>
 
-                ArtemisBanking
-                """;
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Monto pagado:</strong> {realPaymentAmount:C}<br/>
+                        <strong>Tarjeta:</strong> {resultDto.CardNumberMasked}<br/>
+                        <strong>Cuenta origen:</strong> {MaskAccountNumber(sourceAccount.NumeroCuenta)}<br/>
+                        <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                      </p>
+
+                      <p style=""margin-top: 25px; font-size: 15px;"">
+                        <strong>Deuda restante de la tarjeta:</strong> {creditCard.DeudaActual:C}<br/>
+                        <strong>Nuevo balance de la cuenta de origen:</strong> {sourceAccount.Balance:C}
+                      </p>
+
+                      <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                  border-left: 4px solid #ffa726; font-size: 14px;"">
+                        Si usted no reconoce esta operación, contacte al banco de inmediato.
+                      </div>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            ";
 
             var emailRequest = new EmailRequestDto
             {

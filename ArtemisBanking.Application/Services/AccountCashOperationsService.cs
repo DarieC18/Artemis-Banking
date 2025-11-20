@@ -106,19 +106,49 @@ namespace ArtemisBanking.Application.Services
             };
 
             var subject = $"Depósito realizado a la cuenta {MaskAccountNumber(account.NumeroCuenta)}";
-            var body = $"""
-                Hola,
 
-                Se ha realizado un depósito a su cuenta de ahorro.
+            var body = $@"
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-                Monto: {command.Amount:C}
-                Cuenta: {account.NumeroCuenta}
-                Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Notificación de depósito recibido
+                      </h2>
 
-                Si usted no reconoce esta operación, contacte al banco de inmediato.
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola,
+                      </p>
 
-                ArtemisBanking
-                """;
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        Se ha realizado un depósito a su cuenta de ahorro.
+                      </p>
+
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Monto:</strong> {command.Amount:C}<br/>
+                        <strong>Cuenta:</strong> {account.NumeroCuenta}<br/>
+                        <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                      </p>
+
+                      <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                  border-left: 4px solid #ffa726; font-size: 14px;"">
+                        Si usted no reconoce esta operación, contacte al banco de inmediato.
+                      </div>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            ";
 
             var emailRequest = new EmailRequestDto
             {
@@ -225,19 +255,49 @@ namespace ArtemisBanking.Application.Services
             };
 
             var subject = $"Retiro realizado de la cuenta {MaskAccountNumber(account.NumeroCuenta)}";
-            var body = $"""
-                Hola,
 
-                Se ha realizado un retiro desde su cuenta de ahorro.
+            var body = $@"
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-                Monto: {command.Amount:C}
-                Cuenta: {account.NumeroCuenta}
-                Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Notificación de retiro realizado
+                      </h2>
 
-                Si usted no reconoce esta operación, contacte al banco de inmediato.
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola,
+                      </p>
 
-                ArtemisBanking
-                """;
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        Se ha realizado un retiro desde su cuenta de ahorro.
+                      </p>
+
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Monto:</strong> {command.Amount:C}<br/>
+                        <strong>Cuenta:</strong> {account.NumeroCuenta}<br/>
+                        <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                      </p>
+
+                      <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                  border-left: 4px solid #ffa726; font-size: 14px;"">
+                        Si usted no reconoce esta operación, contacte al banco de inmediato.
+                      </div>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            ";
 
             var emailRequest = new EmailRequestDto
             {

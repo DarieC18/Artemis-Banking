@@ -126,20 +126,45 @@ namespace ArtemisBanking.Application.Services
                 var destLast4 = GetLast4(dto.CuentaDestino);
 
                 var subject = $"Transacción realizada a la cuenta {destLast4}";
-                var body = $"""
-                    Hola {originOwner.Nombre} {originOwner.Apellido},
 
-                    Se ha realizado una transacción desde tu cuenta {MaskAccountNumber(dto.CuentaOrigen)}
-                    hacia la cuenta terminada en {destLast4}.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f7f7f7; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""max-width: 600px; margin: auto; background: white; border-radius: 10px; padding: 25px; border: 1px solid #e6e6e6;"">
+                      <tr>
+                        <td>
 
-                    Monto enviado: {dto.Monto:C}
-                    Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #4a4a4a; margin-bottom: 10px;"">
+                            Notificación de transacción
+                          </h2>
 
-                    Si no reconoces esta operación, contacta al banco de inmediato.
+                          <p>Hola <strong>{originOwner.Nombre} {originOwner.Apellido}</strong>,</p>
 
-                    ArtemisBanking
-                    """;
+                          <p>
+                            Se ha realizado una transacción desde tu cuenta
+                            <strong>{MaskAccountNumber(dto.CuentaOrigen)}</strong> hacia la cuenta terminada en
+                            <strong>{destLast4}</strong>.
+                          </p>
 
+                          <p style=""margin-top: 20px;"">
+                            <strong>Monto enviado:</strong> {dto.Monto:C}<br/>
+                            <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <div style=""margin: 25px 0; padding: 15px; background-color: #fff4e5; border-left: 4px solid #ffa726;"">
+                            Si no reconoces esta operación, contacta al banco de inmediato.
+                          </div>
+
+                          <p style=""color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
                 await _emailService.SendAsync(new EmailRequestDto
                 {
                     To = originOwner.Email,
@@ -156,16 +181,42 @@ namespace ArtemisBanking.Application.Services
                     var originLast4 = GetLast4(dto.CuentaOrigen);
 
                     var subject = $"Transacción enviada desde la cuenta {originLast4}";
-                    var body = $"""
-                        Hola {destOwner.Nombre} {destOwner.Apellido},
 
-                        Has recibido una transacción desde la cuenta terminada en {originLast4}.
+                    var body = $@"
+                    <html>
+                      <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                        <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 25px; border: 1px solid #e0e0e0;"">
+                          <tr>
+                            <td>
 
-                        Monto recibido: {dto.Monto:C}
-                        Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                              <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                                Notificación de transacción recibida
+                              </h2>
 
-                        ArtemisBanking
-                        """;
+                              <p style=""font-size: 15px; margin-bottom: 10px;"">
+                                Hola <strong>{destOwner.Nombre} {destOwner.Apellido}</strong>,
+                              </p>
+
+                              <p style=""font-size: 15px; line-height: 1.5;"">
+                                Has recibido una transacción desde la cuenta terminada en  
+                                <strong>{originLast4}</strong>.
+                              </p>
+
+                              <p style=""margin-top: 20px; font-size: 15px;"">
+                                <strong>Monto recibido:</strong> {dto.Monto:C}<br/>
+                                <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                              </p>
+
+                              <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                                ArtemisBanking © {DateTime.Now.Year}
+                              </p>
+
+                            </td>
+                          </tr>
+                        </table>
+                      </body>
+                    </html>
+                    ";
 
                     await _emailService.SendAsync(new EmailRequestDto
                     {
@@ -271,19 +322,47 @@ namespace ArtemisBanking.Application.Services
             if (!string.IsNullOrWhiteSpace(originOwner?.Email))
             {
                 var subject = $"Transacción realizada a la cuenta {destLast4}";
-                var body = $"""
-                    Hola {originOwner.Nombre} {originOwner.Apellido},
 
-                    Se ha realizado una transferencia a un beneficiario desde tu cuenta {MaskAccountNumber(dto.CuentaOrigen)}.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                    Cuenta destino del beneficiario: ****{destLast4}
-                    Monto enviado: {dto.Monto:C}
-                    Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de transferencia enviada
+                          </h2>
 
-                    Si no reconoces esta operación, contacta al banco de inmediato.
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola <strong>{originOwner.Nombre} {originOwner.Apellido}</strong>,
+                          </p>
 
-                    ArtemisBanking
-                    """;
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            Se ha realizado una transferencia a un beneficiario desde tu cuenta  
+                            <strong>{MaskAccountNumber(dto.CuentaOrigen)}</strong>.
+                          </p>
+
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Cuenta destino del beneficiario:</strong> ****{destLast4}<br/>
+                            <strong>Monto enviado:</strong> {dto.Monto:C}<br/>
+                            <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5; border-left: 4px solid #ffa726; font-size: 14px;"">
+                            Si no reconoces esta operación, contacta al banco de inmediato.
+                          </div>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 await _emailService.SendAsync(new EmailRequestDto
                 {
@@ -296,16 +375,42 @@ namespace ArtemisBanking.Application.Services
             if (beneficiaryUser != null && !string.IsNullOrWhiteSpace(beneficiaryUser.Email))
             {
                 var subject = $"Transacción enviada desde la cuenta {originLast4}";
-                var body = $"""
-                    Hola {beneficiaryUser.Nombre} {beneficiaryUser.Apellido},
 
-                    Has recibido una transferencia desde la cuenta terminada en {originLast4}.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                    Monto recibido: {dto.Monto:C}
-                    Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de transferencia recibida
+                          </h2>
 
-                    ArtemisBanking
-                    """;
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola <strong>{beneficiaryUser.Nombre} {beneficiaryUser.Apellido}</strong>,
+                          </p>
+
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            Has recibido una transferencia desde la cuenta terminada en  
+                            <strong>{originLast4}</strong>.
+                          </p>
+
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Monto recibido:</strong> {dto.Monto:C}<br/>
+                            <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 await _emailService.SendAsync(new EmailRequestDto
                 {
@@ -506,19 +611,50 @@ namespace ArtemisBanking.Application.Services
             if (!string.IsNullOrWhiteSpace(owner?.Email))
             {
                 var subject = $"Pago realizado al préstamo {loanNumber}";
-                var body = $"""
-                    Hola {owner.Nombre} {owner.Apellido},
 
-                    Se ha realizado un pago a tu préstamo {loanNumber}.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" 
+                           style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; 
+                                  padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                    Monto pagado: {montoAplicado:C}
-                    Cuenta de débito (últimos 4 dígitos): {originLast4}
-                    Fecha y hora de la transacción: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de pago de préstamo
+                          </h2>
 
-                    Si no reconoces esta operación, contacta al banco de inmediato.
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola <strong>{owner.Nombre} {owner.Apellido}</strong>,
+                          </p>
 
-                    ArtemisBanking
-                    """;
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            Se ha realizado un pago a tu préstamo  
+                            <strong>{loanNumber}</strong>.
+                          </p>
+
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Monto pagado:</strong> {montoAplicado:C}<br/>
+                            <strong>Cuenta de débito :</strong> {originLast4}<br/>
+                            <strong>Fecha y hora de la transacción:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5; 
+                                      border-left: 4px solid #ffa726; font-size: 14px;"">
+                            Si no reconoces esta operación, contacta al banco de inmediato.
+                          </div>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 await _emailService.SendAsync(new EmailRequestDto
                 {
@@ -607,19 +743,50 @@ namespace ArtemisBanking.Application.Services
             if (!string.IsNullOrWhiteSpace(owner?.Email))
             {
                 var subject = $"Pago realizado a la tarjeta {cardLast4}";
-                var body = $"""
-                    Hola {owner.Nombre} {owner.Apellido},
 
-                    Se ha realizado un pago a tu tarjeta de crédito terminada en {cardLast4}.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" 
+                           style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; 
+                                  padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                    Monto pagado: {montoAPagar:C}
-                    Cuenta débito (últimos 4 dígitos): {originLast4}
-                    Fecha y hora de la transacción: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de pago de tarjeta de crédito
+                          </h2>
 
-                    Si no reconoces esta operación, contacta al banco de inmediato.
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola <strong>{owner.Nombre} {owner.Apellido}</strong>,
+                          </p>
 
-                    ArtemisBanking
-                    """;
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            Se ha realizado un pago a tu tarjeta de crédito terminada en  
+                            <strong>{cardLast4}</strong>.
+                          </p>
+
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Monto pagado:</strong> {montoAPagar:C}<br/>
+                            <strong>Cuenta débito :</strong> {originLast4}<br/>
+                            <strong>Fecha y hora de la transacción:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5; 
+                                      border-left: 4px solid #ffa726; font-size: 14px;"">
+                            Si no reconoces esta operación, contacta al banco de inmediato.
+                          </div>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 await _emailService.SendAsync(new EmailRequestDto
                 {
@@ -704,19 +871,50 @@ namespace ArtemisBanking.Application.Services
             if (!string.IsNullOrWhiteSpace(owner?.Email))
             {
                 var subject = $"Avance de efectivo desde la tarjeta {cardLast4}";
-                var body = $"""
-                    Hola {owner.Nombre} {owner.Apellido},
 
-                    Se ha realizado un avance de efectivo desde tu tarjeta de crédito terminada en {cardLast4}.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" 
+                           style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; 
+                                  padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                    Monto del avance: {dto.Monto:C}
-                    Cuenta de depósito (últimos 4 dígitos): {accountLast4}
-                    Fecha y hora de la transacción: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de avance de efectivo
+                          </h2>
 
-                    Si no reconoces esta operación, contacta al banco de inmediato.
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola <strong>{owner.Nombre} {owner.Apellido}</strong>,
+                          </p>
 
-                    ArtemisBanking
-                    """;
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            Se ha realizado un avance de efectivo desde tu tarjeta de crédito terminada en  
+                            <strong>{cardLast4}</strong>.
+                          </p>
+
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Monto del avance:</strong> {dto.Monto:C}<br/>
+                            <strong>Cuenta de depósito:</strong> {accountLast4}<br/>
+                            <strong>Fecha y hora de la transacción:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5; 
+                                      border-left: 4px solid #ffa726; font-size: 14px;"">
+                            Si no reconoces esta operación, contacta al banco de inmediato.
+                          </div>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 await _emailService.SendAsync(new EmailRequestDto
                 {

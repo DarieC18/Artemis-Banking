@@ -67,9 +67,6 @@ namespace ArtemisBanking.Application.Services
             var (cuotasAfectadas, montoAplicado, cambio) =
                 CalcularAplicacionPago(loan.TablaAmortizacion, request.Monto);
 
-            if (!cuotasAfectadas.Any())
-                return Result<PayLoanPreviewDTO>.Fail("El monto indicado no alcanza para cubrir ninguna cuota completa.");
-
             var loanUser = await _userInfoService.GetUserBasicInfoByIdAsync(loan.UserId);
             var holderFullName = loanUser is null
                 ? "Cliente"
@@ -179,9 +176,6 @@ namespace ArtemisBanking.Application.Services
                 }
             }
 
-            if (montoAplicado <= 0 || !cuotasAfectadas.Any())
-                return Result<PayLoanResultDTO>.Fail("El monto indicado no aplica a ninguna cuota pendiente.");
-
             var cambio = command.Monto - montoAplicado;
 
             loan.MontoPendiente = Math.Max(0, loan.MontoPendiente - montoAplicado);
@@ -234,22 +228,54 @@ namespace ArtemisBanking.Application.Services
             if (!string.IsNullOrWhiteSpace(email))
             {
                 var subject = $"Pago realizado al préstamo {loan.NumeroPrestamo}";
-                var body = $"""
-                    Hola,
 
-                    Se ha registrado un pago a su préstamo.
+                var body = $@"
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                           style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                                  padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                    Monto pagado: {montoAplicado:C}
-                    Préstamo: {loan.NumeroPrestamo}
-                    Cuenta de origen: {MaskAccountNumber(account.NumeroCuenta)}
-                    Fecha y hora: {now:dd/MM/yyyy HH:mm}
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de pago de préstamo
+                          </h2>
 
-                    Deuda pendiente luego de este pago: {loan.MontoPendiente:C}
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola,
+                          </p>
 
-                    Si usted no reconoce esta operación, contacte al banco de inmediato.
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            Se ha registrado un pago a su préstamo.
+                          </p>
 
-                    ArtemisBanking
-                    """;
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Monto pagado:</strong> {montoAplicado:C}<br/>
+                            <strong>Préstamo:</strong> {loan.NumeroPrestamo}<br/>
+                            <strong>Cuenta de origen:</strong> {MaskAccountNumber(account.NumeroCuenta)}<br/>
+                            <strong>Fecha y hora:</strong> {now:dd/MM/yyyy HH:mm}
+                          </p>
+
+                          <p style=""margin-top: 25px; font-size: 15px;"">
+                            <strong>Deuda pendiente luego de este pago:</strong> {loan.MontoPendiente:C}
+                          </p>
+
+                          <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                      border-left: 4px solid #ffa726; font-size: 14px;"">
+                            Si usted no reconoce esta operación, contacte al banco de inmediato.
+                          </div>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 var emailRequest = new EmailRequestDto
                 {
