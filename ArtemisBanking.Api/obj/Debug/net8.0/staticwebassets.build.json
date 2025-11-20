@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "A7JF3+Qi6qgSTASmjh0MxCgV9GI5RLQB/tw38XIMKp4=",
+  "Source": "ArtemisBanking.Api",
+  "BasePath": "_content/ArtemisBanking.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
