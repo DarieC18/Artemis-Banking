@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtemisBank.CuotasJob", "Ar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{2D94A379-5B61-4186-BDF9-4A540ADF01BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtemisBanking.Integration.Tests", "ArtemisBanking.Integration.Tests\ArtemisBanking.Integration.Tests.csproj", "{E7D96A45-87A7-42F7-8D4C-D49711178D9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtemisBanking.Integration.Tests", "ArtemisBanking.Integration.Tests\ArtemisBanking.Integration.Tests.csproj", "{E7D96A45-87A7-42F7-8D4C-D49711178D9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
