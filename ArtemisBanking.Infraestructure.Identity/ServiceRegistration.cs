@@ -83,6 +83,7 @@ namespace ArtemisBanking.Infraestructure.Identity
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountServiceApi, AccountServiceApi>();
             services.AddScoped<IUserInfoService, UserInfoService>();
+            services.AddScoped<IUserManagementServiceApi, UserManagementServiceApi>();
 
             return services;
         }

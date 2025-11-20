@@ -26,7 +26,7 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
                 var user = await userManager.FindByNameAsync(adminUser.UserName);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(adminUser, "  ");
+                    await userManager.CreateAsync(adminUser, "Admin123!");
                     await userManager.AddToRoleAsync(adminUser, Roles.Administrador.ToString());
                 }
             }
