@@ -1,0 +1,65 @@
+@model ArtemisBanking.Application.ViewModels.Cajero.CajeroHomeViewModel
+
+@{
+    ViewData["Title"] = "Panel Cajero";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="container mt-4">
+
+    <h1 class="mb-3">Panel del Cajero</h1>
+    <p class="text-muted">
+        Bienvenido. Use el menú superior para navegar por las operaciones del módulo Cajero.
+    </p>
+
+    <h4 class="mt-4 mb-3">Indicadores del día</h4>
+
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h6 class="card-subtitle mb-2 text-muted">Total de transacciones</h6>
+                    <h3 class="card-title mb-0">@Model.TotalTransaccionesHoy</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h6 class="card-subtitle mb-2 text-muted">Pagos (TC y préstamos)</h6>
+                    <h3 class="card-title mb-0">@Model.TotalPagosHoy</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h6 class="card-subtitle mb-2 text-muted">Depósitos</h6>
+                    <h3 class="card-title mb-0">@Model.TotalDepositosHoy</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h6 class="card-subtitle mb-2 text-muted">Retiros</h6>
+                    <h3 class="card-title mb-0">@Model.TotalRetirosHoy</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

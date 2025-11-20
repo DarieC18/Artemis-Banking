@@ -1,0 +1,76 @@
+﻿@using ArtemisBanking.Application.ViewModels.Cliente
+@model PayLoanViewModel
+
+@{
+    ViewData["Title"] = "Pago de préstamo";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<h2 class="mb-4">Pago de préstamo</h2>
+
+<form asp-action="PagarPrestamo" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="LoanId" class="form-label"></label>
+        <select asp-for="LoanId" class="form-select">
+            <option value="">-- Seleccione un préstamo --</option>
+            @if (Model.PrestamosDisponibles != null)
+            {
+                foreach (var prestamo in Model.PrestamosDisponibles)
+                {
+                    <option value="@prestamo.Id">
+                        Préstamo #@prestamo.Id
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="LoanId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CuentaOrigen" class="form-label"></label>
+        <select asp-for="CuentaOrigen" class="form-select">
+            <option value="">-- Seleccione una cuenta de origen --</option>
+            @if (Model.CuentasDisponibles != null)
+            {
+                foreach (var cuenta in Model.CuentasDisponibles)
+                {
+                    <option value="@cuenta.NumeroCuenta">
+                        @cuenta.NumeroCuenta
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Monto" class="form-label"></label>
+        <input asp-for="Monto" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Monto" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Pagar préstamo
+    </button>
+    <a asp-controller="Cliente" asp-action="Index" class="btn btn-secondary ms-2">
+        Cancelar
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

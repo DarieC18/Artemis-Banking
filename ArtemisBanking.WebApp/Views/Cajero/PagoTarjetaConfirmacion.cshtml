@@ -1,0 +1,54 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cajero.PagoTarjetaConfirmViewModel
+
+@{
+    ViewData["Title"] = "Confirmar pago de tarjeta de crédito";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<h2>Confirmar pago de tarjeta de crédito</h2>
+
+<hr />
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Resumen de la operación</h5>
+        <p><strong>Tarjeta:</strong> @Model.NumeroTarjetaEnmascarada</p>
+        <p><strong>Titular:</strong> @Model.TitularTarjeta</p>
+
+        <p><strong>Monto solicitado:</strong> @Model.MontoSolicitado.ToString("N2")</p>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                @Model.ErrorMessage
+            </div>
+        }
+    </div>
+</div>
+
+<form asp-action="ConfirmarPagoTarjeta" method="post" class="mt-3">
+    @Html.AntiForgeryToken()
+
+    <input asp-for="CuentaOrigen" type="hidden" />
+    <input asp-for="CuentaOrigenEnmascarada" type="hidden" />
+    <input asp-for="BalanceActualCuentaOrigen" type="hidden" />
+    <input asp-for="CreditCardId" type="hidden" />
+    <input asp-for="NumeroTarjetaEnmascarada" type="hidden" />
+    <input asp-for="TitularTarjeta" type="hidden" />
+    <input asp-for="DeudaActual" type="hidden" />
+    <input asp-for="MontoSolicitado" type="hidden" />
+    <input asp-for="MontoAplicadoReal" type="hidden" />
+
+    <button type="submit" class="btn btn-success">Confirmar pago</button>
+    <a asp-action="PagoTarjeta" class="btn btn-secondary">Volver</a>
+</form>

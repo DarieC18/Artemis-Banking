@@ -1,0 +1,43 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cliente.ConfirmTransactionExpressViewModel
+
+@{
+    ViewData["Title"] = "Confirmar transferencia express";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<h2 class="mb-4">Confirmar transferencia express</h2>
+
+<div class="alert alert-info">
+    <p><strong>Cuenta origen:</strong> @Model.CuentaOrigen</p>
+    <p><strong>Cuenta destino:</strong> @Model.CuentaDestino</p>
+    <p><strong>Titular de la cuenta destino:</strong> @Model.NombreTitularDestino</p>
+    <p><strong>Monto a transferir:</strong> @Model.Monto.ToString("C")</p>
+</div>
+
+<p>¿Desea confirmar esta transferencia express?</p>
+
+<form asp-action="ConfirmExpress" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="CuentaOrigen" />
+    <input type="hidden" asp-for="CuentaDestino" />
+    <input type="hidden" asp-for="Monto" />
+    <input type="hidden" asp-for="NombreTitularDestino" />
+
+    <button type="submit" class="btn btn-success">Confirmar</button>
+    <a asp-action="Express" class="btn btn-secondary ms-2">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
