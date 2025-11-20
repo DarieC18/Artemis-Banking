@@ -10,9 +10,17 @@
             <h1 class="display-6 fw-semibold text-primary">@accountLabel</h1>
             <p class="text-muted mb-0">Historial de transacciones y estado actual.</p>
         </div>
-        <a asp-action="Index" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver al listado
-        </a>
+        <div class="d-flex gap-2">
+            @if (Model.Estado == "ACTIVA" && !Model.EsPrincipal)
+            {
+                <a asp-action="Cancel" asp-route-id="@ViewBag.AccountId" class="btn btn-outline-danger">
+                    <i class="bi bi-x-circle"></i> Cancelar cuenta
+                </a>
+            }
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        </div>
     </div>
 </section>
 

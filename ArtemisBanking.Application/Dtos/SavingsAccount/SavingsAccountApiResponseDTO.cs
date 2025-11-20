@@ -1,10 +1,10 @@
 namespace ArtemisBanking.Application.Dtos.SavingsAccount
 {
-    // DTO para respuesta de GET /api/savings-account según especificación
+    // DTO para respuesta de GET /api/savings-account 
     public class SavingsAccountApiListItemDTO
     {
         public string Id { get; set; } = string.Empty;
-        public string NumeroCuenta { get; set; } = string.Empty; // 9 dígitos
+        public string NumeroCuenta { get; set; } = string.Empty; // 9 digitos
         public string ClienteNombre { get; set; } = string.Empty;
         public string ClienteApellido { get; set; } = string.Empty;
         public decimal Balance { get; set; }
@@ -18,14 +18,14 @@ namespace ArtemisBanking.Application.Dtos.SavingsAccount
         public int TotalPages { get; set; }
     }
 
-    // DTO para POST /api/savings-account según especificación
+    // DTO para POST /api/savings-account
     public class SavingsAccountApiCreateRequestDTO
     {
         public string ClienteId { get; set; } = string.Empty;
         public decimal BalanceInicial { get; set; } // puede ser 0
     }
 
-    // DTO para GET /api/savings-account/{accountNumber}/transactions según especificación
+    // DTO para GET /api/savings-account/{accountNumber}/transactions 
     public class SavingsAccountApiTransactionsResponseDTO
     {
         public string NumeroCuenta { get; set; } = string.Empty;
@@ -37,9 +37,9 @@ namespace ArtemisBanking.Application.Dtos.SavingsAccount
     {
         public DateTime Fecha { get; set; }
         public decimal Monto { get; set; }
-        public string Tipo { get; set; } = string.Empty; // DÉBITO | CRÉDITO
-        public string Beneficiario { get; set; } = string.Empty; // cuenta destino / últimos 4 dígitos TC / número préstamo / 'RETIRO'
-        public string Origen { get; set; } = string.Empty; // cuenta origen / últimos 4 dígitos TC / número préstamo / 'DEPÓSITO'
+        public string Tipo { get; set; } = string.Empty; // DEBITO | CREDITO
+        public string Beneficiario { get; set; } = string.Empty; // cuenta destino / ultimos 4 dígitos TC / numero préstamo / 'RETIRO'
+        public string Origen { get; set; } = string.Empty; // cuenta origen / ultimos 4 díigitos TC / numero prestamo / 'DEPSITO'
         public string Estado { get; set; } = string.Empty; // APROBADA | RECHAZADA
     }
 }

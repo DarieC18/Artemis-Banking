@@ -94,11 +94,14 @@
                                         <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <button type="button" 
-                                                class="btn btn-sm @(user.IsActive ? "btn-outline-warning" : "btn-outline-success")"
-                                                onclick="toggleUserStatus('@user.Id', @user.IsActive.ToString().ToLower())">
-                                            @(user.IsActive ? "Inactivar" : "Activar")
-                                        </button>
+                                        <form asp-action="ToggleStatus" method="post" style="display: inline;" onsubmit="return confirm('¿Está seguro que desea @(user.IsActive ? "inactivar" : "activar") este usuario?');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <input type="hidden" name="activate" value="@(!user.IsActive).ToString().ToLower()" />
+                                            <button type="submit" class="btn btn-sm @(user.IsActive ? "btn-outline-warning" : "btn-outline-success")">
+                                                @(user.IsActive ? "Inactivar" : "Activar")
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -165,38 +168,4 @@
     </div>
 </section>
 
-@section Scripts {
-    <script>
-        function toggleUserStatus(userId, isActive) {
-            const action = isActive ? 'inactivar' : 'activar';
-            if (!confirm(`¿Está seguro que desea ${action} este usuario?`)) {
-                return;
-            }
-
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '@Url.Action("ToggleStatus")';
-            
-            const tokenInput = document.createElement('input');
-            tokenInput.type = 'hidden';
-            tokenInput.name = '__RequestVerificationToken';
-            form.appendChild(tokenInput);
-            
-            const idInput = document.createElement('input');
-            idInput.type = 'hidden';
-            idInput.name = 'id';
-            idInput.value = userId;
-            form.appendChild(idInput);
-            
-            const activateInput = document.createElement('input');
-            activateInput.type = 'hidden';
-            activateInput.name = 'activate';
-            activateInput.value = !isActive;
-            form.appendChild(activateInput);
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-    </script>
-}
 

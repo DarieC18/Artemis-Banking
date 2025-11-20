@@ -2,13 +2,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using ArtemisBanking.Api.Extensions;
 using ArtemisBanking.Application;
-using ArtemisBanking.Domain.Settings;
 using ArtemisBanking.Infrastructure.Persistence;
 using ArtemisBanking.Infrastructure.Shared;
 using ArtemisBanking.Infraestructure.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using ArtemisBanking.Application.Mappings.EntitiesAndDtos;
 using ArtemisBanking.Application.Mappings.API;
 

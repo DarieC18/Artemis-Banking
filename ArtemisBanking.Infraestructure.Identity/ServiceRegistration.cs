@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ArtemisBanking.Domain.Settings;
+using Microsoft.Extensions.Logging;
 
 namespace ArtemisBanking.Infraestructure.Identity
 {

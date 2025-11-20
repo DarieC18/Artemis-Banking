@@ -1,3 +1,4 @@
+using System;
 using ArtemisBanking.Application.Common;
 using ArtemisBanking.Application.Dtos.CreditCard;
 using ArtemisBanking.Application.DTOs.Email;
@@ -150,7 +151,7 @@ namespace ArtemisBanking.Application.Services
         {
             var allUsers = await _identityUserManager.GetAllAsync(cancellationToken);
             var clientes = allUsers
-                .Where(u => u.Roles.Contains("Cliente") && u.IsActive)
+                .Where(u => u.Roles.Any(r => r.Equals("Cliente", StringComparison.OrdinalIgnoreCase)) && u.IsActive)
                 .ToList();
 
             var eligibleClients = new List<ClientForCreditCardDTO>();

@@ -8,6 +8,7 @@ using ArtemisBanking.Application.Common;
 using ArtemisBanking.Application.Dtos.Identity;
 using ArtemisBanking.Application.Interfaces.Identity;
 using ArtemisBanking.Infraestructure.Identity.Entities;
+using ArtemisBanking.Infraestructure.Identity.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,15 +18,18 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IdentityContext _context;
         private readonly IMapper _mapper;
 
         public IdentityUserManager(
             UserManager<AppUser> userManager,
             RoleManager<IdentityRole> roleManager,
+            IdentityContext context,
             IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
             _mapper = mapper;
         }
 
@@ -148,20 +152,22 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
 
         public async Task<Result> SetActiveStateAsync(string userId, bool isActive, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
             if (user == null)
             {
                 return Result.Fail("Usuario no encontrado.");
             }
 
             user.IsActive = isActive;
-            var updateResult = await _userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded)
+            _context.Entry(user).Property(u => u.IsActive).IsModified = true;
+            var saved = await _context.SaveChangesAsync(cancellationToken);
+            
+            if (saved > 0)
             {
-                return BuildFailure(updateResult);
+                return Result.Ok();
             }
-
-            return Result.Ok();
+            
+            return Result.Fail("No se pudo guardar el cambio de estado.");
         }
 
         public async Task<Result<string>> GenerateEmailConfirmationTokenAsync(string userId, CancellationToken cancellationToken = default)
