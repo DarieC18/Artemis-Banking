@@ -1,15 +1,26 @@
-﻿@model ArtemisBanking.Application.ViewModels.PayLoanViewModel
+﻿@using ArtemisBanking.Application.ViewModels.Cliente
+@model PayLoanViewModel
 
 @{
     ViewData["Title"] = "Pago de préstamo";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <h2 class="mb-4">Pago de préstamo</h2>
 
 <form asp-action="PagarPrestamo" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <!-- Préstamo -->
     <div class="mb-3">
         <label asp-for="LoanId" class="form-label"></label>
         <select asp-for="LoanId" class="form-select">
@@ -27,7 +38,6 @@
         <span asp-validation-for="LoanId" class="text-danger"></span>
     </div>
 
-    <!-- Cuenta origen -->
     <div class="mb-3">
         <label asp-for="CuentaOrigen" class="form-label"></label>
         <select asp-for="CuentaOrigen" class="form-select">
@@ -45,10 +55,9 @@
         <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
     </div>
 
-    <!-- Monto -->
     <div class="mb-3">
         <label asp-for="Monto" class="form-label"></label>
-        <input asp-for="Monto" class="form-control" />
+        <input asp-for="Monto" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Monto" class="text-danger"></span>
     </div>
 

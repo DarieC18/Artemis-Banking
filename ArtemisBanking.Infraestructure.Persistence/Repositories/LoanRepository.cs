@@ -27,7 +27,12 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
                 .Include(l => l.TablaAmortizacion)
                 .FirstOrDefaultAsync(l => l.Id == loanId);
         }
-
+        public async Task<Loan?> GetByNumberWithScheduleAsync(string loanNumber)
+        {
+            return await _context.Loans
+                .Include(l => l.TablaAmortizacion)
+                .FirstOrDefaultAsync(l => l.NumeroPrestamo == loanNumber);
+        }
         public async Task UpdateAsync(Loan loan)
         {
             _context.Loans.Update(loan);

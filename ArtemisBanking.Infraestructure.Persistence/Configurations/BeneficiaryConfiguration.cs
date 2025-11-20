@@ -27,6 +27,9 @@ namespace ArtemisBanking.Infrastructure.Persistence.Configurations
 
             builder.Property(b => b.FechaCreacion)
                    .IsRequired();
+
+            builder.HasIndex(b => new { b.UserId, b.NumeroCuentaBeneficiario })
+                   .IsUnique();
         }
     }
 }

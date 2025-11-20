@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ArtemisBanking.Application.ViewModels;
+using ArtemisBanking.Application.ViewModels.Cliente;
 
 namespace ArtemisBanking.Application.Interfaces.Services
 {

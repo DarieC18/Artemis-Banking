@@ -28,6 +28,18 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Transaction>> GetByOperatorAndDateRangeAsync(
+        string operatedByUserId,
+        DateTime from,
+        DateTime to)
+        {
+            return await _context.Transactions
+                .Where(t => t.OperatedByUserId == operatedByUserId &&
+                            t.FechaTransaccion >= from &&
+                            t.FechaTransaccion < to)
+                .ToListAsync();
+        }
+
         public async Task<int> GetTotalCountAsync()
         {
             return await _context.Transactions.CountAsync();

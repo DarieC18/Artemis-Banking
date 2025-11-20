@@ -50,11 +50,49 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId", "NumeroCuentaBeneficiario")
+                        .IsUnique();
+
                     b.ToTable("Beneficiaries", (string)null);
+                });
+
+            modelBuilder.Entity("ArtemisBanking.Domain.Entities.Commerce", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("LogoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Commerces", (string)null);
                 });
 
             modelBuilder.Entity("ArtemisBanking.Domain.Entities.CreditCard", b =>
@@ -97,9 +135,14 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NumeroTarjeta")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("CreditCards", (string)null);
                 });
@@ -119,6 +162,9 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 
                     b.Property<int>("CreditCardId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("EsAvanceEfectivo")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Estado")
                         .IsRequired()
@@ -155,6 +201,10 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 
                     b.Property<int>("CuotasTotales")
                         .HasColumnType("int");
+
+                    b.Property<string>("EstadoPago")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -219,7 +269,7 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LoanId");
+                    b.HasIndex("LoanId", "NumeroCuota");
 
                     b.ToTable("LoanPaymentSchedules", (string)null);
                 });
@@ -255,6 +305,9 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NumeroCuenta")
+                        .IsUnique();
+
                     b.ToTable("SavingsAccounts", (string)null);
                 });
 
@@ -282,6 +335,16 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("OperatedByUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OperationType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<string>("Origen")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -298,6 +361,8 @@ namespace ArtemisBanking.Infraestructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SavingsAccountId");
+
+                    b.HasIndex("OperatedByUserId", "FechaTransaccion");
 
                     b.ToTable("Transactions", (string)null);
                 });

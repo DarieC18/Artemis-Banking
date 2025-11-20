@@ -1,11 +1,13 @@
-using System.Text;
-using System.Text.Json.Serialization;
 using ArtemisBanking.Api.Extensions;
+using ArtemisBanking.Application;
+using ArtemisBanking.Infraestructure.Identity;
+using ArtemisBanking.Infrastructure.Persistence;
 using ArtemisBanking.Application;
 using ArtemisBanking.Infrastructure.Persistence;
 using ArtemisBanking.Infrastructure.Shared;
 using ArtemisBanking.Infraestructure.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 using ArtemisBanking.Application.Mappings.EntitiesAndDtos;
 using ArtemisBanking.Application.Mappings.API;
 
@@ -43,6 +45,8 @@ builder.Services.AddAutoMapper(
     typeof(CreditCardApiProfile).Assembly,
     typeof(SavingsAccountApiProfile).Assembly);
 
+builder.Services.AddApplicationLayerIoc(builder.Configuration);
+builder.Services.AddPersistenceLayerIoc(builder.Configuration);
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

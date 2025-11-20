@@ -25,6 +25,10 @@ namespace ArtemisBanking.Infrastructure.Persistence.Configurations
             builder.Property(cc => cc.Estado)
                    .IsRequired()
                    .HasMaxLength(20);
+
+            builder.Property(cc => cc.EsAvanceEfectivo)
+                   .IsRequired();
+
         }
     }
 }

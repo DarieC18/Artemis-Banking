@@ -23,7 +23,6 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
         {
             return await _context.CreditCardConsumptions
                 .Where(c => c.CreditCardId == creditCardId)
-                .OrderByDescending(c => c.FechaConsumo)
                 .ToListAsync();
         }
     }

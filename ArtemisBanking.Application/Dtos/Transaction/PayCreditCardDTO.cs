@@ -6,5 +6,6 @@
         public string CuentaOrigen { get; set; }
         public decimal Monto { get; set; }
         public string UserId { get; set; }
+        public string CardNumber { get; set; }
     }
 }

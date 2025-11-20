@@ -13,6 +13,7 @@ namespace ArtemisBanking.Infrastructure.Shared
         {
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            //services.AddTransient<IEmailService, FakeEmailService>(); //Testing, cambiar a EmailService
             services.AddTransient<IEmailService, EmailService>();
             services.AddSingleton(TimeProvider.System);
             return services;
