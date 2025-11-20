@@ -12,8 +12,8 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var adminUser = new AppUser
             {
                 UserName = "admin",
-                Email = "admin@artemisbanking.com",
-                EmailConfirmed = false,
+                Email = "darielcapellan@gmail.com",
+                EmailConfirmed = true,
                 Cedula = "00100000001",
                 Nombre = "Admin",
                 Apellido = "Sistema",
@@ -35,7 +35,7 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var cajeroUser = new AppUser
             {
                 UserName = "cajero",
-                Email = "cajero@artemisbanking.com",
+                Email = "darielcapellaps4@gmail.com",
                 EmailConfirmed = true,
                 Cedula = "00200000002",
                 Nombre = "Juan",
@@ -58,8 +58,8 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var clienteUser = new AppUser
             {
                 UserName = "cliente1",
-                Email = "cliente1@artemisbanking.com",
-                EmailConfirmed = false,
+                Email = "darielduverge1432@gmail.com",
+                EmailConfirmed = true,
                 Cedula = "00300000003",
                 Nombre = "cliente",
                 Apellido = "ej",
