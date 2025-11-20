@@ -230,7 +230,7 @@ namespace ArtemisBanking.WebApp.Controllers
                 return RedirectToAction("Home", "Cajero");
             
             if (User.IsInRole("Cliente"))
-                return RedirectToAction("Home", "Cliente");
+                return RedirectToAction("Index", "Cliente");
             
             return RedirectToAction("Index", "Home");
         }

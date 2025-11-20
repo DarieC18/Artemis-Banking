@@ -1,0 +1,61 @@
+@model ArtemisBanking.Application.ViewModels.UpdateCreditCardLimitViewModel
+@{
+    ViewData["Title"] = "Editar Tarjeta de Crédito";
+    var ultimos4Digitos = ViewBag.Ultimos4Digitos as string;
+    var deudaActual = (decimal?)ViewBag.DeudaActual;
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">Editar tarjeta **** **** **** @ultimos4Digitos</h1>
+</section>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form method="post" asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-4">
+                <h5 class="text-muted">Límite de crédito actual: <strong>RD$ @Model.LimiteCredito.ToString("N2")</strong></h5>
+                @if (deudaActual.HasValue)
+                {
+                    <p class="text-muted small">Deuda actual: RD$ @deudaActual.Value.ToString("N2")</p>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LimiteCredito" class="form-label">Nuevo límite de crédito:</label>
+                <div class="input-group">
+                    <input asp-for="LimiteCredito" class="form-control" type="number" step="0.01" min="0.01" required />
+                    <span class="input-group-text">RD$</span>
+                </div>
+                <span asp-validation-for="LimiteCredito" class="text-danger"></span>
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</section>

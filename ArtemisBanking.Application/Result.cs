@@ -1,4 +1,4 @@
-﻿namespace ArtemisBanking.Application
+﻿namespace ArtemisBanking.Application.Common
 {
     public class Result
     {

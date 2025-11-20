@@ -1,5 +1,5 @@
 ﻿using ArtemisBanking.Application.Dtos.Loan;
-using ArtemisBanking.Domain.Entities;
+using ArtemisBanking.Application.ViewModels;
 using AutoMapper;
 
 namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
@@ -8,11 +8,13 @@ namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
     {
         public LoanProfile()
         {
-            CreateMap<Loan, LoanDTO>();
-
-            CreateMap<LoanPaymentSchedule, LoanPaymentScheduleDTO>();
-
-            CreateMap<Loan, LoanDetailDTO>();
+            CreateMap<LoanListItemDTO, LoanListItemViewModel>().ReverseMap();
+            CreateMap<ClientForLoanDTO, ClientForLoanViewModel>().ReverseMap();
+            CreateMap<AssignLoanDTO, AssignLoanViewModel>().ReverseMap();
+            CreateMap<UpdateLoanDTO, UpdateLoanViewModel>().ReverseMap();
+            
+            // Mapeos para API
+            CreateMap<AssignLoanRequestDTO, AssignLoanDTO>();
         }
     }
 }

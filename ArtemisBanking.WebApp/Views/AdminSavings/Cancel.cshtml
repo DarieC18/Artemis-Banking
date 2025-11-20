@@ -1,0 +1,24 @@
+@model ArtemisBanking.Application.Dtos.SavingsAccount.SavingsAccountDetailDTO
+@{
+    ViewData["Title"] = "Cancelar cuenta secundaria";
+}
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body text-center py-5">
+        <div class="mb-4">
+            <span class="display-5 text-warning"><i class="bi bi-exclamation-triangle"></i></span>
+            <h2 class="fw-semibold mt-3">Confirmación de cancelación</h2>
+            <p class="text-muted mb-0">¿Está seguro que desea cancelar la cuenta @Model.NumeroCuenta?</p>
+            <small class="text-muted">Si la cuenta tiene fondos, se transferirán automáticamente a la cuenta principal del cliente.</small>
+        </div>
+
+        <form asp-action="Cancel" method="post">
+            <input type="hidden" name="id" value="@ViewBag.AccountId" />
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                <a asp-action="Index" class="btn btn-outline-secondary w-100 w-md-auto">Cancelar</a>
+                <button type="submit" class="btn btn-danger w-100 w-md-auto">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</section>
+

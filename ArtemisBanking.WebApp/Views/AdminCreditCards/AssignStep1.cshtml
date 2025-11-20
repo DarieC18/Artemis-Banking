@@ -1,0 +1,107 @@
+@model List<ArtemisBanking.Application.ViewModels.ClientForCreditCardViewModel>
+@{
+    ViewData["Title"] = "Asignar Tarjeta de Crédito - Paso 1";
+    var averageDebt = (decimal)ViewBag.AverageDebt;
+    var cedulaFilter = ViewBag.CedulaFilter as string;
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">Asignar Tarjeta de Crédito - Paso 1: Selección de Cliente</h1>
+    <p class="lead text-muted">Seleccione el cliente al que desea asignar una tarjeta de crédito.</p>
+</section>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="text-primary">Deuda promedio del sistema: <strong>RD$ @averageDebt.ToString("N2")</strong></h5>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="AssignStep1" class="mb-3" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label for="cedulaSearch" class="form-label">Buscar por cédula:</label>
+                    <input type="text" name="cedulaFilter" id="cedulaSearch" class="form-control" value="@cedulaFilter" placeholder="Buscar por cédula..." />
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<form method="post" asp-action="AssignStep1" id="clientForm">
+    @Html.AntiForgeryToken()
+    
+    <section class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Cédula</th>
+                            <th>Nombre y apellido</th>
+                            <th>Correo electrónico</th>
+                            <th>Monto total de deuda acumulada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var client in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="userId" value="@client.UserId" required />
+                                    </td>
+                                    <td>@client.Cedula</td>
+                                    <td>@client.Nombre @client.Apellido</td>
+                                    <td>@client.Email</td>
+                                    <td>RD$ @client.DeudaTotal.ToString("N2")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No hay clientes elegibles disponibles.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div class="mt-4 d-flex justify-content-between">
+        <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
+        <button type="submit" class="btn btn-primary">Siguiente paso</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            const selected = document.querySelector('input[name="userId"]:checked');
+            if (!selected) {
+                e.preventDefault();
+                alert('Debe seleccionar un cliente.');
+            }
+        });
+    </script>
+}

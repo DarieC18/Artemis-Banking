@@ -1,0 +1,78 @@
+@model ArtemisBanking.Application.Dtos.CreditCard.CreditCardDetailDTO
+@{
+    ViewData["Title"] = "Detalles de Tarjeta de Crédito";
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">Consumos de la tarjeta **** **** **** @Model.Ultimos4Digitos</h1>
+</section>
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Límite de crédito:</strong> RD$ @Model.LimiteCredito.ToString("N2")
+            </div>
+            <div class="col-md-3">
+                <strong>Deuda actual:</strong> RD$ @Model.DeudaActual.ToString("N2")
+            </div>
+            <div class="col-md-3">
+                <strong>Crédito disponible:</strong> RD$ @Model.CreditoDisponible.ToString("N2")
+            </div>
+            <div class="col-md-3">
+                <strong>Fecha de expiración:</strong> @Model.FechaExpiracion
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h5 class="mb-3">Historial de Consumos</h5>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Comercio</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Consumos != null && Model.Consumos.Any())
+                    {
+                        @foreach (var consumo in Model.Consumos)
+                        {
+                            <tr>
+                                <td>@consumo.FechaConsumo.ToString("dd/MM/yyyy")</td>
+                                <td>RD$ @consumo.Monto.ToString("N2")</td>
+                                <td>@consumo.Comercio</td>
+                                <td>
+                                    @if (consumo.Estado == "APROBADO")
+                                    {
+                                        <span class="badge bg-success">✅ APROBADO</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">❌ RECHAZADO</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No hay consumos registrados para esta tarjeta.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
+        </div>
+    </div>
+</section>

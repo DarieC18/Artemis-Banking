@@ -1,0 +1,100 @@
+@model ArtemisBanking.Application.ViewModels.CreateAdminUserViewModel
+@{
+    ViewData["Title"] = "Crear Usuario";
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">Crear Usuario</h1>
+</section>
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Apellido" class="form-label">Apellido <span class="text-danger">*</span></label>
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Cedula" class="form-label">Cédula <span class="text-danger">*</span></label>
+                    <input asp-for="Cedula" class="form-control" />
+                    <span asp-validation-for="Cedula" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">Correo electrónico <span class="text-danger">*</span></label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="UserName" class="form-label">Usuario <span class="text-danger">*</span></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Role" class="form-label">Tipo de usuario <span class="text-danger">*</span></label>
+                    <select asp-for="Role" class="form-select" id="roleSelect">
+                        <option value="">Seleccione un tipo</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Cajero">Cajero</option>
+                        <option value="Cliente">Cliente</option>
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Password" class="form-label">Contraseña <span class="text-danger">*</span></label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirmar contraseña <span class="text-danger">*</span></label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6" id="montoInicialContainer" style="display: none;">
+                    <label asp-for="MontoInicial" class="form-label">Monto inicial</label>
+                    <input asp-for="MontoInicial" type="number" step="0.01" min="0" class="form-control" value="0" />
+                    <span asp-validation-for="MontoInicial" class="text-danger"></span>
+                    <small class="form-text text-muted">Puede ser 0</small>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            const montoContainer = document.getElementById('montoInicialContainer');
+            if (this.value === 'Cliente') {
+                montoContainer.style.display = 'block';
+            } else {
+                montoContainer.style.display = 'none';
+            }
+        });
+    </script>
+}
+

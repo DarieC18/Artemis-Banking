@@ -1,6 +1,7 @@
 using ArtemisBanking.Application.Interfaces;
 using ArtemisBanking.Application.Interfaces.Services;
 using ArtemisBanking.Domain.Settings;
+using ArtemisBanking.Application.Interfaces.Identity;
 using ArtemisBanking.Infraestructure.Identity.Context;
 using ArtemisBanking.Infraestructure.Identity.Entities;
 using ArtemisBanking.Infraestructure.Identity.Seeds;
@@ -14,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ArtemisBanking.Domain.Settings;
+using Microsoft.Extensions.Logging;
 
 namespace ArtemisBanking.Infraestructure.Identity
 {
@@ -84,6 +87,8 @@ namespace ArtemisBanking.Infraestructure.Identity
             services.AddScoped<IAccountServiceApi, AccountServiceApi>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IUserManagementServiceApi, UserManagementServiceApi>();
+            services.AddScoped<IIdentityUserManager, IdentityUserManager>();
+            
 
             return services;
         }

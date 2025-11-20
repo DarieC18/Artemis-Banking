@@ -1,0 +1,182 @@
+@model List<ArtemisBanking.Application.ViewModels.LoanListItemViewModel>
+@{
+    ViewData["Title"] = "Gestión de Préstamos";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var statusFilter = ViewBag.StatusFilter as string;
+    var cedulaFilter = ViewBag.CedulaFilter as string;
+}
+
+<section class="mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="display-5 fw-semibold text-primary">Gestión de Préstamos</h1>
+        <a asp-action="AssignStep1" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Asignar Préstamo
+        </a>
+    </div>
+</section>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="Index" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="cedulaFilter" class="form-label">Buscar por cédula:</label>
+                <input type="text" name="cedulaFilter" id="cedulaFilter" class="form-control" value="@cedulaFilter" placeholder="Ingrese cédula" />
+            </div>
+            <div class="col-md-3">
+                <label for="statusFilter" class="form-label">Filtrar por estado:</label>
+                <select name="statusFilter" id="statusFilter" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="Activos" selected="@(statusFilter == "Activos")">Activos</option>
+                    <option value="Completados" selected="@(statusFilter == "Completados")">Completados</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
+            </div>
+            @if (!string.IsNullOrEmpty(cedulaFilter))
+            {
+                <div class="col-md-2">
+                    <a asp-action="Index" asp-route-statusFilter="@statusFilter" class="btn btn-outline-secondary w-100">Limpiar</a>
+                </div>
+            }
+        </form>
+    </div>
+</section>
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Número de préstamo</th>
+                        <th>Cliente</th>
+                        <th>Monto capital</th>
+                        <th>Cuotas totales</th>
+                        <th>Cuotas pagadas</th>
+                        <th>Monto pendiente</th>
+                        <th>Tasa interés</th>
+                        <th>Plazo (meses)</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var loan in Model)
+                        {
+                            <tr>
+                                <td>@loan.NumeroPrestamo</td>
+                                <td>@loan.ClienteNombre @loan.ClienteApellido</td>
+                                <td>RD$ @loan.MontoCapital.ToString("N2")</td>
+                                <td>@loan.CuotasTotales</td>
+                                <td>@loan.CuotasPagadas</td>
+                                <td>RD$ @loan.MontoPendiente.ToString("N2")</td>
+                                <td>@loan.TasaInteres.ToString("N2")%</td>
+                                <td>@loan.PlazoMeses</td>
+                                <td>
+                                    @if (loan.EstadoPago == "En mora")
+                                    {
+                                        <span class="badge bg-danger">@loan.EstadoPago</span>
+                                    }
+                                    else if (loan.EstadoPago == "Completado")
+                                    {
+                                        <span class="badge bg-secondary">@loan.EstadoPago</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">@loan.EstadoPago</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Detail" asp-route-id="@loan.Id" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-eye"></i> Ver detalle
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@loan.Id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil"></i> Editar
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10" class="text-center text-muted">No se encontraron préstamos.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <nav aria-label="Navegación de páginas">
+                <ul class="pagination justify-content-center">
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-statusFilter="@statusFilter" asp-route-cedulaFilter="@cedulaFilter">Anterior</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">Anterior</span>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link">@i</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-statusFilter="@statusFilter" asp-route-cedulaFilter="@cedulaFilter">@i</a>
+                            </li>
+                        }
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-statusFilter="@statusFilter" asp-route-cedulaFilter="@cedulaFilter">Siguiente</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">Siguiente</span>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</section>
+

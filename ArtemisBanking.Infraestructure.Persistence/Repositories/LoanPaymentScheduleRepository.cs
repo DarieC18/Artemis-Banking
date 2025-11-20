@@ -26,5 +26,11 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
             _context.LoanPaymentSchedules.UpdateRange(cuotas);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddRangeAsync(List<LoanPaymentSchedule> cuotas)
+        {
+            await _context.LoanPaymentSchedules.AddRangeAsync(cuotas);
+            await _context.SaveChangesAsync();
+        }
     }
 }

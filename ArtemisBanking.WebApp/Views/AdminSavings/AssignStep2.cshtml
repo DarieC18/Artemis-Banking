@@ -1,0 +1,58 @@
+@model ArtemisBanking.Application.ViewModels.AssignSavingsAccountViewModel
+@{
+    ViewData["Title"] = "Asignar cuenta - Paso 2";
+    var client = ViewBag.Client as ArtemisBanking.Application.ViewModels.ClientForSavingsAccountViewModel;
+}
+
+<section class="mb-4">
+    <h1 class="display-6 fw-semibold text-primary">Paso 2 · Configurar cuenta secundaria</h1>
+    <p class="text-muted mb-0">Define los datos iniciales de la cuenta para @($"{client?.Nombre} {client?.Apellido}")</p>
+</section>
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="mb-4">
+            <h5 class="fw-semibold mb-1">Cliente seleccionado</h5>
+            <p class="mb-0 text-muted">@client?.Nombre @client?.Apellido · Cédula: @client?.Cedula · Email: @client?.Email</p>
+        </div>
+
+        <form asp-action="AssignStep2" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UserId" />
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="mb-3">
+                <label asp-for="BalanceInicial" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">RD$</span>
+                    <input asp-for="BalanceInicial" class="form-control" type="number" step="0.01" min="0" value="@(Model.BalanceInicial)" placeholder="0.00" />
+                </div>
+                <span class="form-text text-muted">El balance inicial puede ser cero (0). Si no ingresa un valor, se usará 0.</span>
+                <span asp-validation-for="BalanceInicial" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+                <a asp-action="AssignStep1" class="btn btn-outline-secondary w-100 w-md-auto">
+                    <i class="bi bi-arrow-left"></i> Volver atrás
+                </a>
+                <button type="submit" class="btn btn-primary w-100 w-md-auto">
+                    <i class="bi bi-check-circle"></i> Asignar cuenta
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<partial name="_ValidationScriptsPartial" />
+

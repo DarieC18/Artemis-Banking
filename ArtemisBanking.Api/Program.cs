@@ -2,9 +2,14 @@ using ArtemisBanking.Api.Extensions;
 using ArtemisBanking.Application;
 using ArtemisBanking.Infraestructure.Identity;
 using ArtemisBanking.Infrastructure.Persistence;
+using ArtemisBanking.Application;
+using ArtemisBanking.Infrastructure.Persistence;
 using ArtemisBanking.Infrastructure.Shared;
+using ArtemisBanking.Infraestructure.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using ArtemisBanking.Application.Mappings.EntitiesAndDtos;
+using ArtemisBanking.Application.Mappings.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,17 +35,21 @@ builder.Services.AddSession();
 
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddIdentityInfrastructureForApi(builder.Configuration);
+builder.Services.AddPersistenceLayerIoc(builder.Configuration);
+builder.Services.AddApplicationLayerIoc(builder.Configuration);
 builder.Services.AddAutoMapper(
     typeof(ArtemisBanking.Infraestructure.Identity.Mappings.AppUserMappingProfile).Assembly,
-    typeof(ArtemisBanking.Application.Mappings.DtosAndViewModels.AccountMappingProfile).Assembly);
+    typeof(ArtemisBanking.Application.Mappings.DtosAndViewModels.AdminUserProfile).Assembly,
+    typeof(SavingsAccountProfile).Assembly,
+    typeof(ArtemisBanking.Application.Mappings.DtosAndViewModels.LoanApiProfile).Assembly,
+    typeof(CreditCardApiProfile).Assembly,
+    typeof(SavingsAccountApiProfile).Assembly);
 
 builder.Services.AddApplicationLayerIoc(builder.Configuration);
 builder.Services.AddPersistenceLayerIoc(builder.Configuration);
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
-await app.SeedIdentityAsync();
 
 // Configuración de Swagger
 if (app.Environment.IsDevelopment())
@@ -52,6 +61,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Asegurarse de que todos los servicios estén configurados antes de sembrar datos
+await app.SeedIdentityAsync();
+
 app.UseHealthChecks("/health");
 
 app.MapControllers();

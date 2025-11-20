@@ -1,0 +1,81 @@
+@model ArtemisBanking.Application.ViewModels.AssignLoanViewModel
+@{
+    ViewData["Title"] = "Asignar Préstamo - Paso 2";
+    var client = ViewBag.Client as ArtemisBanking.Application.ViewModels.ClientForLoanViewModel;
+    var averageDebt = (decimal)ViewBag.AverageDebt;
+    var currentDebt = (decimal)ViewBag.CurrentDebt;
+    var needsWarning = ViewBag.NeedsWarning as bool? ?? false;
+    var warningMessage = ViewBag.WarningMessage as string;
+}
+
+<section class="mb-4">
+    <h1 class="display-5 fw-semibold text-primary">Asignar Préstamo - Paso 2: Configuración</h1>
+    <p class="lead text-muted">Configure los detalles del préstamo para @(client?.Nombre) @(client?.Apellido)</p>
+</section>
+
+@if (needsWarning && !string.IsNullOrEmpty(warningMessage))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Advertencia:</strong> @warningMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="text-primary">Información del cliente</h5>
+        <p><strong>Nombre:</strong> @client?.Nombre @client?.Apellido</p>
+        <p><strong>Cédula:</strong> @client?.Cedula</p>
+        <p><strong>Correo:</strong> @client?.Email</p>
+        <p><strong>Deuda actual:</strong> RD$ @currentDebt.ToString("N2")</p>
+        <p><strong>Promedio del sistema:</strong> RD$ @averageDebt.ToString("N2")</p>
+    </div>
+</section>
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form asp-action="@(needsWarning ? "ConfirmAssign" : "AssignStep2")" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="UserId" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="PlazoMeses" class="form-label">Plazo del préstamo (meses) <span class="text-danger">*</span></label>
+                    <select asp-for="PlazoMeses" class="form-select" required>
+                        <option value="">Seleccione un plazo</option>
+                        @for (int i = 6; i <= 60; i += 6)
+                        {
+                            <option value="@i">@i meses</option>
+                        }
+                    </select>
+                    <span asp-validation-for="PlazoMeses" class="text-danger"></span>
+                    <small class="form-text text-muted">Solo múltiplos de 6 meses (mínimo 6, máximo 60)</small>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="MontoCapital" class="form-label">Monto a prestar <span class="text-danger">*</span></label>
+                    <input asp-for="MontoCapital" type="number" step="0.01" min="0.01" class="form-control" required />
+                    <span asp-validation-for="MontoCapital" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="TasaInteres" class="form-label">Tasa de interés anual (%) <span class="text-danger">*</span></label>
+                    <input asp-for="TasaInteres" type="number" step="0.01" min="0" max="100" class="form-control" required />
+                    <span asp-validation-for="TasaInteres" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a asp-action="AssignStep1" class="btn btn-secondary">Volver atrás</a>
+                <button type="submit" class="btn btn-primary">@(needsWarning ? "Confirmar y asignar" : "Asignar préstamo")</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

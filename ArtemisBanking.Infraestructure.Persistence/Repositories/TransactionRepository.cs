@@ -39,5 +39,32 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
                             t.FechaTransaccion < to)
                 .ToListAsync();
         }
+
+        public async Task<int> GetTotalCountAsync()
+        {
+            return await _context.Transactions.CountAsync();
+        }
+
+        public async Task<int> GetTodayCountAsync(DateTime today, DateTime todayEnd)
+        {
+            return await _context.Transactions
+                .Where(t => t.FechaTransaccion >= today && t.FechaTransaccion < todayEnd)
+                .CountAsync();
+        }
+
+        public async Task<int> GetTodayPaymentsCountAsync(DateTime today, DateTime todayEnd)
+        {
+            return await _context.Transactions
+                .Where(t => t.FechaTransaccion >= today && t.FechaTransaccion < todayEnd &&
+                           (t.Tipo == "Pago de préstamo" || t.Tipo == "Pago de tarjeta"))
+                .CountAsync();
+        }
+
+        public async Task<int> GetTotalPaymentsCountAsync()
+        {
+            return await _context.Transactions
+                .Where(t => t.Tipo == "Pago de préstamo" || t.Tipo == "Pago de tarjeta")
+                .CountAsync();
+        }
     }
 }
