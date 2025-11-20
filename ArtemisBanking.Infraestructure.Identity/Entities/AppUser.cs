@@ -11,5 +11,6 @@ namespace ArtemisBanking.Infraestructure.Identity.Entities
         public DateTime FechaCreacion { get; set; }
         public string? ResetPasswordToken { get; set; }
         public DateTime? ResetPasswordTokenExpiry { get; set; }
+        public int? CommerceId { get; set; }
     }
 }

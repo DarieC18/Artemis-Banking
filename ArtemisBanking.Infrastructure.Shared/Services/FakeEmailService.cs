@@ -24,5 +24,12 @@ namespace ArtemisBanking.Infrastructure.Shared.Services
             Console.WriteLine($"[FAKE EMAIL] Reset de contraseña a {email}");
             return Task.CompletedTask;
         }
+
+        public Task SendAccountConfirmationTokenPlainAsync(string email, string userName, string token)
+        {
+            // Simular envio de token de confirmacion de cuenta en texto plano
+            Console.WriteLine($"[FAKE EMAIL] Token de confirmación a {email}: {token}");
+            return Task.CompletedTask;
+        }
     }
 }

@@ -1,6 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using ArtemisBanking.Application.DTOs.Account;
 using ArtemisBanking.Application.DTOs.Email;
 using ArtemisBanking.Application.Interfaces;
@@ -9,6 +6,9 @@ using ArtemisBanking.Infraestructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ArtemisBanking.Infraestructure.Identity.Services
 {
@@ -278,6 +278,11 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
                 new(ClaimTypes.NameIdentifier, user.Id ?? string.Empty),
                 new(ClaimTypes.Name, user.UserName ?? string.Empty)
             };
+
+            if (user.CommerceId.HasValue)
+            {
+                claims.Add(new Claim("commerceId", user.CommerceId.Value.ToString()));
+            }
 
             foreach (var role in roles)
             {

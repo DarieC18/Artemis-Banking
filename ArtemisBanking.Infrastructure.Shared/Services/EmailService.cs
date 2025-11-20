@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ArtemisBanking.Application.DTOs.Email;
 using ArtemisBanking.Application.Interfaces;
 using ArtemisBanking.Infrastructure.Shared.Settings;
@@ -9,6 +6,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Text;
 
 namespace ArtemisBanking.Infrastructure.Shared.Services
 {
@@ -145,7 +143,7 @@ namespace ArtemisBanking.Infrastructure.Shared.Services
 
         private string GenerateConfirmationLink(string token)
         {
-            var baseUrl = _mailSettings.WebAppBaseUrl?.TrimEnd('/') 
+            var baseUrl = _mailSettings.WebAppBaseUrl?.TrimEnd('/')
                           ?? _mailSettings.ClientAppUrl?.TrimEnd('/')
                           ?? "http://localhost:5221";
             return $"{baseUrl}/Account/Activate?token={Uri.EscapeDataString(token)}";
@@ -156,5 +154,29 @@ namespace ArtemisBanking.Infrastructure.Shared.Services
             var baseUrl = _mailSettings.ClientAppUrl?.TrimEnd('/') ?? "https://localhost:5001";
             return $"{baseUrl}/Account/ResetPassword?token={Uri.EscapeDataString(token)}&userName={Uri.EscapeDataString(userName)}";
         }
+        public Task SendAccountConfirmationTokenPlainAsync(string email, string userName, string token)
+        {
+            var subject = "Token de activación de tu cuenta - ArtemisBanking";
+
+            var body = new StringBuilder()
+                .AppendLine($"Hola {userName}!")
+                .AppendLine()
+                .AppendLine("Tu cuenta en ArtemisBanking ha sido creada correctamente.")
+                .AppendLine("Para activarla, copia el siguiente token y pegalo en la pantalla de activacin de la app:")
+                .AppendLine()
+                .AppendLine("TOKEN DE ACTIVACIÓN:")
+                .AppendLine(token)
+                .AppendLine()
+                .AppendLine("Si tu no solicitaste esta cuenta, puedes ignorar este correo.")
+                .ToString();
+
+            return SendAsync(new EmailRequestDto
+            {
+                To = email,
+                Subject = subject,
+                Body = body
+            });
+        }
+
     }
 }

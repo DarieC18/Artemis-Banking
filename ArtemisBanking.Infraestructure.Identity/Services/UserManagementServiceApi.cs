@@ -1,6 +1,7 @@
 ﻿using ArtemisBanking.Application;
 using ArtemisBanking.Application.DTOs.Common;
 using ArtemisBanking.Application.DTOs.Users;
+using ArtemisBanking.Application.Interfaces;
 using ArtemisBanking.Application.Interfaces.Persistence;
 using ArtemisBanking.Application.Interfaces.Repositories;
 using ArtemisBanking.Application.Interfaces.Services;
@@ -17,14 +18,18 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
         private readonly ISavingsAccountRepository _savingsRepo;
         private readonly IGenericRepository<SavingsAccount> _accounts;
         private readonly IGenericRepository<Commerce> _commerceRepo;
-
-
-        public UserManagementServiceApi(UserManager<AppUser> userManager, ISavingsAccountRepository savingsRepo, IGenericRepository<SavingsAccount> accounts, IGenericRepository<Commerce> commerceRepo)
+        private readonly IEmailService _emailService;
+        public UserManagementServiceApi(UserManager<AppUser> userManager,
+               ISavingsAccountRepository savingsRepo,
+               IGenericRepository<SavingsAccount> accounts,
+               IGenericRepository<Commerce> commerceRepo,
+               IEmailService emailService)
         {
             _userManager = userManager;
             _savingsRepo = savingsRepo;
             _accounts = accounts;
             _commerceRepo = commerceRepo;
+            _emailService = emailService;
         }
 
         private async Task<UserListApiDto> MapToListDtoAsync(AppUser user)
@@ -210,7 +215,6 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
 
         public async Task<Result<string>> CreateAsync(CreateUserApiDto dto)
         {
-
             if (dto.Contrasena != dto.ConfirmarContrasena)
                 return Result<string>.Fail("Las contraseñas no coinciden.");
 
@@ -283,12 +287,25 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
                 await _accounts.AddAsync(cuenta);
             }
 
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            if (!string.IsNullOrWhiteSpace(user.Email))
+            {
+                var userNameToShow = !string.IsNullOrWhiteSpace(user.Nombre)
+                    ? $"{user.Nombre} {user.Apellido}".Trim()
+                    : user.UserName ?? string.Empty;
+
+                await _emailService.SendAccountConfirmationTokenPlainAsync(
+                    user.Email,
+                    userNameToShow,
+                    token);
+            }
+
             return Result<string>.Ok("Usuario creado satisfactoriamente.");
         }
 
         public async Task<Result<string>> CreateCommerceUserAsync(int commerceId, CreateCommerceUserApiDto dto)
         {
-
             if (dto.Contrasena != dto.ConfirmarContrasena)
                 return Result<string>.Fail("Las contraseñas no coinciden.");
 
@@ -310,13 +327,18 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
             if (existingCedula != null)
                 return Result<string>.Fail("La cédula ya está registrada.");
 
-
             var commerce = await _commerceRepo.GetById(commerceId);
             if (commerce == null)
                 return Result<string>.Fail("Comercio no encontrado.");
 
             if (!commerce.IsActive)
                 return Result<string>.Fail("El comercio no está activo.");
+
+            var existingCommerceUser = await _userManager.Users
+                .FirstOrDefaultAsync(u => u.CommerceId == commerceId);
+
+            if (existingCommerceUser is not null)
+                return Result<string>.Fail("El comercio ya tiene un usuario asociado. Cada comercio solo puede tener un usuario.");
 
             var user = new AppUser
             {
@@ -326,6 +348,7 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
                 Nombre = dto.Nombre,
                 Apellido = dto.Apellido,
                 IsActive = true,
+                CommerceId = commerceId,
                 FechaCreacion = DateTime.UtcNow
             };
 
@@ -335,6 +358,7 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
                 return Result<string>.Fail(createResult.Errors.Select(e => e.Description).ToList());
 
             var roleResult = await _userManager.AddToRoleAsync(user, "Comercio");
+
             if (!roleResult.Succeeded)
                 return Result<string>.Fail(roleResult.Errors.Select(e => e.Description).ToList());
 
@@ -352,6 +376,20 @@ namespace ArtemisBanking.Infraestructure.Identity.Services
             };
 
             await _accounts.AddAsync(cuenta);
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            if (!string.IsNullOrWhiteSpace(user.Email))
+            {
+                var userNameToShow = !string.IsNullOrWhiteSpace(user.Nombre)
+                    ? $"{user.Nombre} {user.Apellido}".Trim()
+                    : user.UserName ?? string.Empty;
+
+                await _emailService.SendAccountConfirmationTokenPlainAsync(
+                    user.Email,
+                    userNameToShow,
+                    token);
+            }
 
             return Result<string>.Ok("Usuario de comercio creado satisfactoriamente.");
         }
