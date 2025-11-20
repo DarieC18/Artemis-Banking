@@ -11,16 +11,19 @@ namespace ArtemisBanking.Application.Services
     {
         private readonly IBeneficiaryRepository _beneficiaryRepository;
         private readonly ISavingsAccountRepository _savingsAccountRepository;
+        private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
 
         public BeneficiaryService(
             IBeneficiaryRepository beneficiaryRepository,
             ISavingsAccountRepository savingsAccountRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IUserInfoService userInfoService)
         {
             _beneficiaryRepository = beneficiaryRepository;
             _savingsAccountRepository = savingsAccountRepository;
             _mapper = mapper;
+            _userInfoService = userInfoService;
         }
 
         public async Task<List<BeneficiaryDTO>> GetBeneficiariesAsync(string userId)
@@ -44,15 +47,18 @@ namespace ArtemisBanking.Application.Services
             if (existente != null)
                 throw new InvalidOperationException("Este beneficiario ya está registrado.");
 
+            var userInfo = await _userInfoService.GetUserBasicInfoByIdAsync(cuenta.UserId);
+            var nombre = userInfo?.Nombre?.Trim() ?? string.Empty;
+            var apellido = userInfo?.Apellido?.Trim() ?? string.Empty;
+
             var nuevo = new Beneficiary
             {
                 UserId = userId,
                 NumeroCuentaBeneficiario = model.NumeroCuentaBeneficiario,
-                NombreBeneficiario = string.Empty,
-                ApellidoBeneficiario = string.Empty,
+                NombreBeneficiario = nombre,
+                ApellidoBeneficiario = apellido,
                 FechaCreacion = DateTime.UtcNow
             };
-
             await _beneficiaryRepository.AddAsync(nuevo);
         }
 

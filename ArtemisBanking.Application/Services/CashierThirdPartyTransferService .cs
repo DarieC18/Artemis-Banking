@@ -175,7 +175,6 @@ namespace ArtemisBanking.Application.Services
             return Result<CashierThirdPartyTransferResultDTO>.Ok(result);
         }
 
-        // Helpers
         private static string Mask(string account)
         {
             if (account.Length < 4) return account;

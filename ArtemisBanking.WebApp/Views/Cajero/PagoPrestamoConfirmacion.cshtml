@@ -3,6 +3,17 @@
 @{
     ViewData["Title"] = "Confirmación de Pago de Préstamo";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <div class="container mt-4">
 
@@ -18,21 +29,14 @@
             <dl class="row mb-0">
                 <dt class="col-sm-4">Cuenta Origen</dt>
                 <dd class="col-sm-8">
-                    @Model.CuentaOrigenEnmascarada
                     <small class="text-muted">(@Model.CuentaOrigen)</small>
                 </dd>
-
-                <dt class="col-sm-4">Balance Actual</dt>
-                <dd class="col-sm-8">@Model.BalanceActualCuentaOrigen.ToString("C")</dd>
 
                 <dt class="col-sm-4">Número de Préstamo</dt>
                 <dd class="col-sm-8">@Model.NumeroPrestamo</dd>
 
                 <dt class="col-sm-4">Titular del Préstamo</dt>
                 <dd class="col-sm-8">@Model.TitularPrestamo</dd>
-
-                <dt class="col-sm-4">Deuda Pendiente Actual</dt>
-                <dd class="col-sm-8">@Model.DeudaPendienteActual.ToString("C")</dd>
 
                 <dt class="col-sm-4">Monto a Aplicar</dt>
                 <dd class="col-sm-8 fw-bold">@Model.MontoSolicitado.ToString("C")</dd>

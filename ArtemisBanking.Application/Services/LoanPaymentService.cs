@@ -51,10 +51,12 @@ namespace ArtemisBanking.Application.Services
             if (account.Balance < request.Monto)
                 return Result<PayLoanPreviewDTO>.Fail("Fondos insuficientes en la cuenta de origen.");
 
-            var loan = await _loanRepository.GetByIdWithScheduleAsync(request.LoanId);
+            var loan = await _loanRepository.GetByNumberWithScheduleAsync(request.LoanNumber);
 
             if (loan is null)
                 return Result<PayLoanPreviewDTO>.Fail("El préstamo no existe.");
+            request.LoanId = loan.Id;
+
 
             if (!loan.IsActive)
                 return Result<PayLoanPreviewDTO>.Fail("El préstamo no está activo.");
@@ -75,12 +77,15 @@ namespace ArtemisBanking.Application.Services
 
             var preview = new PayLoanPreviewDTO
             {
+                InternalLoanId = loan.Id,
                 SourceAccountNumber = account.NumeroCuenta,
                 SourceAccountMasked = MaskAccountNumber(account.NumeroCuenta),
                 SourceCurrentBalance = account.Balance,
+
                 LoanNumber = loan.NumeroPrestamo,
                 LoanHolderFullName = holderFullName,
                 TotalDebtRemaining = loan.MontoPendiente,
+
                 RequestedAmount = request.Monto,
                 InstallmentsToAffect = cuotasAfectadas
                     .OrderBy(c => c.NumeroCuota)
@@ -128,18 +133,56 @@ namespace ArtemisBanking.Application.Services
             if (loan.MontoPendiente <= 0)
                 return Result<PayLoanResultDTO>.Fail("El préstamo no tiene deuda pendiente.");
 
-            var (cuotasAfectadas, montoAplicado, cambio) =
-                CalcularAplicacionPago(loan.TablaAmortizacion, command.Monto);
+            var cuotasPendientes = loan.TablaAmortizacion
+                .Where(c => !c.Pagada)
+                .OrderBy(c => c.NumeroCuota)
+                .ToList();
 
-            if (!cuotasAfectadas.Any())
-                return Result<PayLoanResultDTO>.Fail("El monto indicado no alcanza para cubrir ninguna cuota completa.");
+            if (!cuotasPendientes.Any())
+                return Result<PayLoanResultDTO>.Fail("El préstamo no tiene cuotas pendientes por pagar.");
 
-            foreach (var cuota in cuotasAfectadas)
+            decimal montoDisponible = command.Monto;
+            decimal montoAplicado = 0m;
+            var cuotasAfectadas = new List<LoanPaymentSchedule>();
+
+            foreach (var cuota in cuotasPendientes)
             {
-                cuota.Pagada = true;
-                cuota.Atrasada = false;
-                cuota.SaldoPendiente = 0m;
+                if (montoDisponible <= 0)
+                    break;
+
+                var saldoCuota = cuota.SaldoPendiente > 0 ? cuota.SaldoPendiente : cuota.ValorCuota;
+
+                if (saldoCuota <= 0)
+                    continue;
+
+                if (montoDisponible >= saldoCuota)
+                {
+                    montoAplicado += saldoCuota;
+                    montoDisponible -= saldoCuota;
+
+                    cuota.SaldoPendiente = 0m;
+                    cuota.Pagada = true;
+                    cuota.Atrasada = false;
+
+                    cuotasAfectadas.Add(cuota);
+                }
+                else
+                {
+                    montoAplicado += montoDisponible;
+
+                    var nuevoSaldo = saldoCuota - montoDisponible;
+                    cuota.SaldoPendiente = nuevoSaldo;
+
+                    cuotasAfectadas.Add(cuota);
+                    montoDisponible = 0m;
+                    break;
+                }
             }
+
+            if (montoAplicado <= 0 || !cuotasAfectadas.Any())
+                return Result<PayLoanResultDTO>.Fail("El monto indicado no aplica a ninguna cuota pendiente.");
+
+            var cambio = command.Monto - montoAplicado;
 
             loan.MontoPendiente = Math.Max(0, loan.MontoPendiente - montoAplicado);
             loan.CuotasPagadas = loan.TablaAmortizacion.Count(c => c.Pagada);
@@ -147,14 +190,19 @@ namespace ArtemisBanking.Application.Services
             var hayCuotasAtrasadasSinPagar = loan.TablaAmortizacion.Any(c => c.Atrasada && !c.Pagada);
             loan.EstadoPago = hayCuotasAtrasadasSinPagar ? "En mora" : "Al dia";
 
-            account.Balance -= montoAplicado;
+            account.Balance -= command.Monto;
+
+            if (cambio > 0)
+            {
+                account.Balance += cambio;
+            }
 
             var transaction = new Transaction
             {
                 SavingsAccountId = account.Id,
                 Monto = montoAplicado,
                 FechaTransaccion = now,
-                Tipo = "DÉBITO",
+                Tipo = "CRÉDITO",
                 Origen = account.NumeroCuenta,
                 Beneficiario = loan.NumeroPrestamo,
                 Estado = "APROBADA",
@@ -163,6 +211,7 @@ namespace ArtemisBanking.Application.Services
             };
 
             await _transactionRepository.AddAsync(transaction);
+
             await _loanRepository.UpdateAsync(loan);
             await _loanPaymentScheduleRepository.UpdateRangeAsync(cuotasAfectadas.ToList());
             await _savingsAccountRepository.UpdateAsync(account);
@@ -214,6 +263,7 @@ namespace ArtemisBanking.Application.Services
 
             return Result<PayLoanResultDTO>.Ok(result);
         }
+
 
         private static (List<LoanPaymentSchedule> cuotasAfectadas, decimal montoAplicado, decimal cambio)
             CalcularAplicacionPago(ICollection<LoanPaymentSchedule> tablaAmortizacion, decimal montoDisponible)

@@ -115,6 +115,7 @@ namespace ArtemisBanking.Application.Services
                     NumeroCuota = c.NumeroCuota,
                     FechaPago = c.FechaPago,
                     ValorCuota = c.ValorCuota,
+                    SaldoPendiente = c.SaldoPendiente,
                     Pagada = c.Pagada,
                     Atrasada = !c.Pagada && c.FechaPago.Date < hoy
                 });
@@ -155,9 +156,9 @@ namespace ArtemisBanking.Application.Services
                 });
             }
 
-
             return vm;
         }
+
         private string ObtenerNombreComercio(CreditCardConsumption c)
         {
             if (string.IsNullOrWhiteSpace(c.Comercio))

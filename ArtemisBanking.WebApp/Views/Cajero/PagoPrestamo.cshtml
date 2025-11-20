@@ -15,25 +15,36 @@
     <form asp-action="PagoPrestamo" method="post">
         @Html.AntiForgeryToken()
 
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
         <div class="mb-3">
             <label asp-for="CuentaOrigen" class="form-label fw-bold">Cuenta Origen</label>
-            <input asp-for="CuentaOrigen" class="form-control" placeholder="Ej: 2024000101" />
+            <input asp-for="CuentaOrigen"
+                   class="form-control"
+                   placeholder="Ej: 2024000101"
+                   maxlength="20" />
             <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="LoanId" class="form-label fw-bold">ID del Préstamo</label>
-            <input asp-for="LoanId" class="form-control" placeholder="Ej: 17" />
-            <span asp-validation-for="LoanId" class="text-danger"></span>
+            <label asp-for="LoanNumber" class="form-label fw-bold">Numero del Préstamo</label>
+            <input asp-for="LoanNumber"
+                   class="form-control"
+                   type="text"
+                   placeholder="Ej: 000123456" />
+            <span asp-validation-for="LoanNumber" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="Monto" class="form-label fw-bold">Monto a Pagar</label>
-            <input asp-for="Monto" class="form-control" placeholder="Ej: 3500" />
+            <input asp-for="Monto"
+                   class="form-control"
+                   type="number"
+                   min="1"
+                   step="0.01"
+                   placeholder="Ej: 3500" />
             <span asp-validation-for="Monto" class="text-danger"></span>
         </div>
-
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
         <button type="submit" class="btn btn-primary">Continuar</button>
         <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>

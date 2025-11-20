@@ -12,6 +12,21 @@
         .ThenByDescending(c => c.Balance);
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
 <div class="container-fluid">
 
     <div class="row mb-4">
@@ -131,10 +146,12 @@
                                     @foreach (var p in Model.Prestamos)
                                     {
                                         var estado = p.EstadoPago;
-                                        var estadoClass = p.EstadoPago == "Al dia"
-                                        ? "badge bg-success"
-                                        : "badge bg-danger";
-
+                                        var estadoClass = p.EstadoPago switch
+                                        {
+                                            "Al dia" => "badge bg-success",
+                                            "En mora" => "badge bg-danger",
+                                            _ => "badge bg-secondary"
+                                        };
                                         <tr>
                                             <td>@p.NumeroPrestamo</td>
                                             <td class="text-end">@p.MontoCapital.ToString("C")</td>

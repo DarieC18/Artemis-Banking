@@ -9,7 +9,8 @@ namespace ArtemisBanking.Application.Mapping
         public CajeroTarjetaProfile()
         {
             CreateMap<PagoTarjetaFormViewModel, PayCreditCardDTO>()
-                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+                .ForMember(dest => dest.UserId, opt => opt.Ignore())
+                .ForMember(dest => dest.CreditCardId, opt => opt.Ignore());
 
             CreateMap<PayCreditCardPreviewDTO, PagoTarjetaConfirmViewModel>()
                 .ForMember(dest => dest.CuentaOrigen,

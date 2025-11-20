@@ -12,6 +12,10 @@ namespace ArtemisBanking.Application.ViewModels.Cajero
         [Display(Name = "Id del préstamo")]
         public int LoanId { get; set; }
 
+        [Required]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "El número de préstamo debe tener 9 dígitos.")]
+        public string LoanNumber { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "El monto a pagar es requerido.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que cero.")]
         [Display(Name = "Monto a pagar")]

@@ -127,7 +127,7 @@ public class CajeroController : Controller
             CurrentBalance = preview.CurrentBalance
         };
 
-        return View("ConfirmarDeposito", confirmVm);
+        return View("DepositoConfirmacion", confirmVm);
     }
 
     [HttpPost]
@@ -145,10 +145,13 @@ public class CajeroController : Controller
 
         var executeResult = await _accountCashOperationsService.ExecuteDepositAsync(command);
 
-        if (executeResult.IsFailure)
+        if (executeResult.IsFailure || executeResult.Value is null)
         {
-            ModelState.AddModelError(string.Empty, executeResult.GeneralError ?? "No se pudo completar el depósito.");
-            return View(model);
+            var error = executeResult.GeneralError
+                        ?? "No se pudo completar el depósito.";
+
+            TempData["ErrorMessage"] = error;
+            return View("DepositoConfirmacion", model);
         }
 
         TempData["SuccessMessage"] =
@@ -227,9 +230,12 @@ public class CajeroController : Controller
 
         var executeResult = await _accountCashOperationsService.ExecuteWithdrawalAsync(command);
 
-        if (executeResult.IsFailure)
+        if (executeResult.IsFailure || executeResult.Value is null)
         {
-            ModelState.AddModelError(string.Empty, executeResult.GeneralError ?? "No se pudo completar el retiro.");
+            var error = executeResult.GeneralError
+                        ?? "No se pudo completar el retiro.";
+
+            TempData["ErrorMessage"] = error;
             return View("RetiroConfirmacion", model);
         }
 
@@ -238,6 +244,7 @@ public class CajeroController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
     //Pago Tarjetas
     [HttpGet]
     public IActionResult PagoTarjeta()
@@ -270,10 +277,10 @@ public class CajeroController : Controller
         var preview = previewResult.Value!;
 
         var confirmVm = _mapper.Map<PagoTarjetaConfirmViewModel>(preview);
-        confirmVm.CreditCardId = model.CreditCardId;
+        confirmVm.CreditCardId = previewResult.Value!.InternalCardId;
         confirmVm.MontoSolicitado = model.Monto;
 
-        return View("ConfirmarPagoTarjeta", confirmVm);
+        return View("PagoTarjetaConfirmacion", confirmVm);
     }
 
     [HttpPost]
@@ -281,7 +288,7 @@ public class CajeroController : Controller
     public async Task<IActionResult> ConfirmarPagoTarjeta(PagoTarjetaConfirmViewModel model)
     {
         if (!ModelState.IsValid)
-            return View(model);
+            return View("PagoTarjetaConfirmacion", model);
 
         var userId = _userManager.GetUserId(User);
 
@@ -295,12 +302,13 @@ public class CajeroController : Controller
 
         var executeResult = await _creditCardPaymentService.ExecutePayCreditCardAsync(command);
 
-        if (executeResult.IsFailure)
+        if (executeResult.IsFailure || executeResult.Value is null)
         {
-            ModelState.AddModelError(string.Empty,
-                executeResult.GeneralError ?? "No se pudo completar el pago de la tarjeta.");
-            model.ErrorMessage = executeResult.GeneralError;
-            return View("ConfirmarPagoTarjeta", model);
+            var error = executeResult.GeneralError
+                        ?? "No se pudo completar el pago de la tarjeta.";
+
+            TempData["ErrorMessage"] = error;
+            return View("PagoTarjetaConfirmacion", model);
         }
 
         var result = executeResult.Value!;
@@ -331,7 +339,8 @@ public class CajeroController : Controller
 
         var dto = new PayLoanDTO
         {
-            LoanId = model.LoanId,
+            LoanId = 0,
+            LoanNumber = model.LoanNumber,
             CuentaOrigen = model.CuentaOrigen,
             Monto = model.Monto,
             UserId = userId!
@@ -341,7 +350,8 @@ public class CajeroController : Controller
 
         if (previewResult.IsFailure || previewResult.Value is null)
         {
-            var error = previewResult.GeneralError ?? "No se pudo generar la vista previa del pago de préstamo.";
+            var error = previewResult.GeneralError
+                        ?? "No se pudo generar la vista previa del pago de préstamo.";
             ModelState.AddModelError(string.Empty, error);
             model.ErrorMessage = error;
             return View(model);
@@ -355,7 +365,7 @@ public class CajeroController : Controller
             CuentaOrigenEnmascarada = preview.SourceAccountMasked,
             BalanceActualCuentaOrigen = preview.SourceCurrentBalance,
 
-            LoanId = model.LoanId,
+            LoanId = dto.LoanId,
             NumeroPrestamo = preview.LoanNumber,
             TitularPrestamo = preview.LoanHolderFullName,
             DeudaPendienteActual = preview.TotalDebtRemaining,
@@ -363,7 +373,6 @@ public class CajeroController : Controller
             MontoSolicitado = preview.RequestedAmount,
             CuotasAfectadas = preview.InstallmentsToAffect
         };
-
         return View("PagoPrestamoConfirmacion", confirmVm);
     }
 
@@ -388,17 +397,17 @@ public class CajeroController : Controller
 
         if (executeResult.IsFailure || executeResult.Value is null)
         {
-            var error = executeResult.GeneralError ?? "No se pudo completar el pago de préstamo.";
-            ModelState.AddModelError(string.Empty, error);
-            model.ErrorMessage = error;
+            var error = executeResult.GeneralError
+                        ?? "No se pudo completar el pago de préstamo.";
+
+            TempData["ErrorMessage"] = error;
             return View("PagoPrestamoConfirmacion", model);
         }
 
         var result = executeResult.Value;
 
         TempData["SuccessMessage"] =
-            $"Pago realizado al préstamo {MaskForView(result.LoanNumber)} por {result.PaidAmount:C}. " +
-            $"Nueva deuda pendiente: {result.NewTotalDebtRemaining:C}.";
+            $"Pago realizado al préstamo {MaskForView(result.LoanNumber)} por {result.PaidAmount:C}.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -469,10 +478,12 @@ public class CajeroController : Controller
 
         var executeResult = await _cashierThirdPartyTransferService.ExecuteAsync(command);
 
-        if (executeResult.IsFailure)
+        if (executeResult.IsFailure || executeResult.Value is null)
         {
-            ModelState.AddModelError(string.Empty,
-                executeResult.GeneralError ?? "No se pudo completar la transferencia.");
+            var error = executeResult.GeneralError
+                        ?? "No se pudo completar la transferencia.";
+
+            TempData["ErrorMessage"] = error;
             return View("TransferenciaTercerosConfirmacion", model);
         }
 

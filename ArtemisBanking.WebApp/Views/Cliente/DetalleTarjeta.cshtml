@@ -45,7 +45,15 @@
                             <td class="text-end">@c.Monto.ToString("C")</td>
                             <td>@c.Comercio</td>
                             <td class="text-center">
-                                <span class="badge @(c.Estado == "APROBADO" ? "bg-danger" : "bg-success")">
+                                @{
+                                    var estadoClass = c.Estado?.Trim().ToUpper() switch
+                                    {
+                                        "APROBADO" => "bg-success",
+                                        "RECHAZADO" => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @estadoClass">
                                     @c.Estado
                                 </span>
                             </td>

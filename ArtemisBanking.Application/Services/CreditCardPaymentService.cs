@@ -50,10 +50,12 @@ namespace ArtemisBanking.Application.Services
             if (sourceAccount.Balance < request.Monto)
                 return Result<PayCreditCardPreviewDTO>.Fail("Fondos insuficientes en la cuenta de origen.");
 
-            var creditCard = await _creditCardRepository.GetByIdAsync(request.CreditCardId);
+            var creditCard = await _creditCardRepository.GetByNumberAsync(request.CardNumber);
 
             if (creditCard is null)
-                return Result<PayCreditCardPreviewDTO>.Fail("La tarjeta de crédito no existe.");
+                return Result<PayCreditCardPreviewDTO>.Fail("La tarjeta no existe o está inactiva.");
+
+            request.CreditCardId = creditCard.Id;
 
             if (!creditCard.IsActive)
                 return Result<PayCreditCardPreviewDTO>.Fail("La tarjeta de crédito está inactiva.");
@@ -79,7 +81,9 @@ namespace ArtemisBanking.Application.Services
                 CurrentDebt = creditCard.DeudaActual,
 
                 RequestedAmount = request.Monto,
-                RealPaymentAmount = realPaymentAmount
+                RealPaymentAmount = realPaymentAmount,
+
+                InternalCardId = creditCard.Id
             };
 
             return Result<PayCreditCardPreviewDTO>.Ok(preview);

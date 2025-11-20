@@ -9,7 +9,7 @@
         public string CardNumberMasked { get; set; } = default!;
         public string CardHolderFullName { get; set; } = default!;
         public decimal CurrentDebt { get; set; }
-
+        public int InternalCardId { get; set; }
         public decimal RequestedAmount { get; set; }
         public decimal RealPaymentAmount { get; set; }
     }

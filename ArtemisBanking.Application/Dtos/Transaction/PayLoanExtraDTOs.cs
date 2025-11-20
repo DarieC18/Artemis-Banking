@@ -7,11 +7,10 @@ namespace ArtemisBanking.Application.Dtos.Transaction
         public string SourceAccountNumber { get; set; } = default!;
         public string SourceAccountMasked { get; set; } = default!;
         public decimal SourceCurrentBalance { get; set; }
-
         public string LoanNumber { get; set; } = default!;
         public string LoanHolderFullName { get; set; } = default!;
         public decimal TotalDebtRemaining { get; set; }
-
+        public int InternalLoanId { get; set; }
         public decimal RequestedAmount { get; set; }
 
         public IReadOnlyCollection<LoanPaymentScheduleDTO> InstallmentsToAffect { get; set; }

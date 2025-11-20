@@ -9,8 +9,8 @@ namespace ArtemisBanking.Application.ViewModels.Cajero
         public string CuentaOrigen { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La tarjeta es obligatoria.")]
-        [Display(Name = "ID de tarjeta de crédito")]
-        public int CreditCardId { get; set; }
+        [Display(Name = "Número de tarjeta de crédito")]
+        public string CardNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El monto es obligatorio.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que cero.")]

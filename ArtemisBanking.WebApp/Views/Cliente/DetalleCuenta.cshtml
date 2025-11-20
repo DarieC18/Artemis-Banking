@@ -19,9 +19,9 @@
             <table class="table table-sm table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Fecha</th>
-                        <th class="text-end">Monto</th>
-                        <th>Tipo</th>
+                        <th>Fecha de la transacción</th>
+                        <th class="text-end">Monto de la transacción</th>
+                        <th>Tipo de transacción</th>
                         <th>Beneficiario</th>
                         <th>Origen</th>
                         <th>Estado</th>
@@ -30,14 +30,39 @@
                 <tbody>
                     @foreach (var t in Model.Transacciones)
                     {
+                        string FormatearTC(string valor)
+                        {
+                            if (string.IsNullOrWhiteSpace(valor))
+                                return valor;
+
+                            var digits = new string(valor.Where(char.IsDigit).ToArray());
+
+                            if (digits.Length >= 12 && digits.Length <= 19)
+                                return "****" + digits[^4..];
+
+                            return valor;
+                        }
+
+                        var beneficiarioFmt = FormatearTC(t.Beneficiario);
+                        var origenFmt = FormatearTC(t.Origen);
+
                         <tr>
                             <td>@t.Fecha.ToString("dd/MM/yyyy hh:mm tt")</td>
                             <td class="text-end">@t.Monto.ToString("C")</td>
                             <td>@t.Tipo</td>
-                            <td>@t.Beneficiario</td>
-                            <td>@t.Origen</td>
+                            <td>@beneficiarioFmt</td>
+                            <td>@origenFmt</td>
                             <td>
-                                <span class="badge @(t.Estado == "APROBADA" ? "bg-danger" : "bg-success")">
+                                @{
+                                    var estadoClass = t.Estado.Trim().ToUpper() switch
+                                    {
+                                        "APROBADA" => "bg-success",
+                                        "RECHAZADA" => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+
+                                <span class="badge @estadoClass">
                                     @t.Estado
                                 </span>
                             </td>

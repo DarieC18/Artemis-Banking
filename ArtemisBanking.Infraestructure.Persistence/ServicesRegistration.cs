@@ -23,6 +23,7 @@ namespace ArtemisBanking.Infrastructure.Persistence
             services.AddScoped<ISavingsAccountReadRepository, SavingsAccountReadRepository>();
             services.AddScoped<ILoanReadRepository, LoanReadRepository>();
             services.AddScoped<ICreditCardReadRepository, CreditCardReadRepository>();
+            services.AddScoped<ICreditCardConsumptionRepository, CreditCardConsumptionRepository>();
 
         }
     }

@@ -4,6 +4,17 @@
 @{
     ViewData["Title"] = "Agregar Beneficiario";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <h2 class="mt-3">Agregar Beneficiario</h2>
 

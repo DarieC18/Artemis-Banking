@@ -3,14 +3,24 @@
 @{
     ViewData["Title"] = "Confirmar retiro";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <h2 class="mb-4">Confirmar retiro</h2>
 
 <div class="alert alert-warning">
-    <p><strong>Cuenta origen:</strong> @Model.AccountMasked (@Model.AccountNumber)</p>
+    <p><strong>Cuenta origen:</strong> @Model.AccountNumber</p>
     <p><strong>Titular:</strong> @Model.HolderFullName</p>
     <p><strong>Monto a retirar:</strong> @Model.Amount.ToString("C")</p>
-    <p><strong>Balance actual:</strong> @Model.CurrentBalance.ToString("C")</p>
 </div>
 
 <p>¿Desea confirmar este retiro?</p>

@@ -14,20 +14,20 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="mb-3">
-        <label asp-for="CuentaOrigen" class="form-label"></label>
-        <input asp-for="CuentaOrigen" class="form-control" />
+        <label class="form-label">Número de cuenta origen</label>
+        <input asp-for="CuentaOrigen" class="form-control" placeholder="Ingrese la cuenta origen" />
         <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="CreditCardId" class="form-label"></label>
-        <input asp-for="CreditCardId" class="form-control" />
-        <span asp-validation-for="CreditCardId" class="text-danger"></span>
+        <label class="form-label">Número de la tarjeta de crédito</label>
+        <input asp-for="CardNumber" class="form-control" maxlength="16" minlength="16" placeholder="Ingrese los 16 dígitos" />
+        <span asp-validation-for="CardNumber" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Monto" class="form-label"></label>
-        <input asp-for="Monto" class="form-control" />
+        <label class="form-label">Monto a pagar</label>
+        <input asp-for="Monto" class="form-control" type="number" min="1" step="0.01" placeholder="Ingrese el monto" />
         <span asp-validation-for="Monto" class="text-danger"></span>
     </div>
 

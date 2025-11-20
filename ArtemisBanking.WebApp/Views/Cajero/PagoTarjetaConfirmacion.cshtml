@@ -3,6 +3,17 @@
 @{
     ViewData["Title"] = "Confirmar pago de tarjeta de crédito";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <h2>Confirmar pago de tarjeta de crédito</h2>
 
@@ -11,16 +22,10 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Resumen de la operación</h5>
-
-        <p><strong>Cuenta origen:</strong> @Model.CuentaOrigenEnmascarada (@Model.CuentaOrigen)</p>
-        <p><strong>Balance actual cuenta origen:</strong> @Model.BalanceActualCuentaOrigen.ToString("N2")</p>
-
         <p><strong>Tarjeta:</strong> @Model.NumeroTarjetaEnmascarada</p>
         <p><strong>Titular:</strong> @Model.TitularTarjeta</p>
-        <p><strong>Deuda actual de la tarjeta:</strong> @Model.DeudaActual.ToString("N2")</p>
 
         <p><strong>Monto solicitado:</strong> @Model.MontoSolicitado.ToString("N2")</p>
-        <p><strong>Monto que se aplicará realmente:</strong> @Model.MontoAplicadoReal.ToString("N2")</p>
 
         @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
         {

@@ -7,5 +7,7 @@ namespace ArtemisBanking.Application.Interfaces.Repositories
         Task<List<Loan>> GetActiveByUserIdAsync(string userId);
         Task<Loan?> GetByIdWithScheduleAsync(int loanId);
         Task UpdateAsync(Loan loan);
+        Task<Loan?> GetByNumberWithScheduleAsync(string loanNumber);
+
     }
 }

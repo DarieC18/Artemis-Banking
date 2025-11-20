@@ -20,7 +20,15 @@
             <p><strong>Plazo:</strong> @Model.PlazoMeses meses</p>
             <p>
                 <strong>Estado:</strong>
-                <span class="badge @(Model.EstadoPago == "Al dia" ? "bg-danger" : "bg-success")">
+                @{
+                    var estadoClass = Model.EstadoPago?.Trim().ToLower() switch
+                    {
+                        "al dia" => "bg-success",
+                        "en mora" => "bg-danger",
+                        _ => "bg-secondary"
+                    };
+                }
+                <span class="badge @estadoClass">
                     @Model.EstadoPago
                 </span>
             </p>
@@ -50,7 +58,7 @@
                         <tr>
                             <td>@c.NumeroCuota</td>
                             <td>@c.FechaPago.ToString("dd/MM/yyyy")</td>
-                            <td class="text-end">@c.ValorCuota.ToString("C")</td>
+                            <td class="text-end">@c.SaldoPendiente.ToString("C")</td>
                             <td class="text-center">
                                 <span class="badge @(c.Pagada ? "bg-success" : "bg-secondary")">
                                     @(c.Pagada ? "Pagada" : "No pagada")
