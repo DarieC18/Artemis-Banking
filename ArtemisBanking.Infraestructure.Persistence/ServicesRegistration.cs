@@ -1,4 +1,5 @@
-﻿using ArtemisBanking.Application.Interfaces.Repositories;
+﻿using ArtemisBanking.Application.Interfaces.Persistence;
+using ArtemisBanking.Application.Interfaces.Repositories;
 using ArtemisBanking.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace ArtemisBanking.Infrastructure.Persistence
             services.AddScoped<ILoanReadRepository, LoanReadRepository>();
             services.AddScoped<ICreditCardReadRepository, CreditCardReadRepository>();
             services.AddScoped<ICreditCardConsumptionRepository, CreditCardConsumptionRepository>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         }
     }

@@ -21,7 +21,7 @@ builder.Services.AddPersistenceLayerIoc(builder.Configuration);
 var app = builder.Build();
 
 await app.SeedIdentityAsync();
-//await app.SeedBankingDataAsync();
+//await app.SeedBankingDataAsync(); Seeder para TESTING
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

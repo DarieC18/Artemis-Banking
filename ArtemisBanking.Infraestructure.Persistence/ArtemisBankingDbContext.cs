@@ -18,6 +18,7 @@ namespace ArtemisBanking.Infrastructure.Persistence
         public DbSet<CreditCardConsumption> CreditCardConsumptions { get; set; }
         public DbSet<Beneficiary> Beneficiaries { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Commerce> Commerces { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
