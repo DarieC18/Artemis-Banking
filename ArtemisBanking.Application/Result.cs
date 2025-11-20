@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ArtemisBanking.Application.Common
+﻿namespace ArtemisBanking.Application.Common
 {
     public class Result
     {

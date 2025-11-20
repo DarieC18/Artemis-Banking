@@ -1,3 +1,4 @@
+@model ArtemisBanking.Application.ViewModels.AdminDashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -12,7 +13,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Transacciones totales</h6>
-                <h2 class="card-title" id="totalTransactions">--</h2>
+                <h2 class="card-title">@Model.TotalTransactions.ToString("N0")</h2>
                 <p class="text-muted small">Acumuladas desde el inicio</p>
             </div>
         </div>
@@ -21,7 +22,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Transacciones hoy</h6>
-                <h2 class="card-title" id="todayTransactions">--</h2>
+                <h2 class="card-title">@Model.TodayTransactions.ToString("N0")</h2>
                 <p class="text-muted small">Movimientos del día actual</p>
             </div>
         </div>
@@ -30,7 +31,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Pagos procesados hoy</h6>
-                <h2 class="card-title" id="todayPayments">--</h2>
+                <h2 class="card-title">@Model.TodayPayments.ToString("N0")</h2>
                 <p class="text-muted small">Pagos exitosos registrados</p>
             </div>
         </div>
@@ -39,7 +40,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Total pagos históricos</h6>
-                <h2 class="card-title" id="totalPayments">--</h2>
+                <h2 class="card-title">@Model.TotalPayments.ToString("N0")</h2>
                 <p class="text-muted small">Incluye pagos históricos</p>
             </div>
         </div>
@@ -51,16 +52,16 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Clientes activos</h6>
-                <h2 class="card-title" id="activeClients">--</h2>
+                <h2 class="card-title">@Model.ActiveClients.ToString("N0")</h2>
                 <p class="text-muted small">Usuarios con acceso vigente</p>
             </div>
         </div>
     </div>
     <div class="col-12 col-md-6 col-lg-4">
         <div class="card border-0 shadow-sm h-100">
-            <div la="card-body">
+            <div class="card-body">
                 <h6 class="card-subtitle text-muted">Clientes inactivos</h6>
-                <h2 class="card-title" id="inactiveClients">--</h2>
+                <h2 class="card-title">@Model.InactiveClients.ToString("N0")</h2>
                 <p class="text-muted small">Usuarios pendientes de activación</p>
             </div>
         </div>
@@ -69,7 +70,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Productos financieros totales</h6>
-                <h2 class="card-title" id="totalProducts">--</h2>
+                <h2 class="card-title">@Model.TotalProducts.ToString("N0")</h2>
                 <p class="text-muted small">Cuentas + préstamos + tarjetas</p>
             </div>
         </div>
@@ -81,7 +82,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Préstamos vigentes</h6>
-                <h2 class="card-title" id="activeLoans">--</h2>
+                <h2 class="card-title">@Model.ActiveLoans.ToString("N0")</h2>
                 <p class="text-muted small">Préstamos actualmente activos</p>
             </div>
         </div>
@@ -90,7 +91,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Tarjetas activas</h6>
-                <h2 class="card-title" id="activeCards">--</h2>
+                <h2 class="card-title">@Model.ActiveCreditCards.ToString("N0")</h2>
                 <p class="text-muted small">Tarjetas de crédito habilitadas</p>
             </div>
         </div>
@@ -99,7 +100,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Cuentas de ahorro abiertas</h6>
-                <h2 class="card-title" id="openSavings">--</h2>
+                <h2 class="card-title">@Model.OpenSavingsAccounts.ToString("N0")</h2>
                 <p class="text-muted small">Incluye cuentas principales y secundarias</p>
             </div>
         </div>
@@ -111,7 +112,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <h6 class="card-subtitle text-muted">Monto promedio de deuda por cliente</h6>
-                <h2 class="card-title" id="avgDebtPerClient">--</h2>
+                <h2 class="card-title">@Model.AverageDebtPerClient.ToString("C2")</h2>
                 <p class="text-muted small">Deuda total dividida entre clientes activos</p>
             </div>
         </div>

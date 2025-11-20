@@ -65,12 +65,12 @@ namespace ArtemisBanking.WebApp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.GeneralError ?? "Error al crear el usuario.");
+                    ModelState.AddModelError("", result.GeneralError ?? "Error al crear el usuario");
                 }
                 return View(model);
             }
 
-            TempData["SuccessMessage"] = "Usuario creado exitosamente. Se ha enviado un correo de activación.";
+            TempData["SuccessMessage"] = "Usuario creado exitosamente. Se ha enviado un correo de activación";
             return RedirectToAction(nameof(Index));
         }
 
@@ -80,7 +80,7 @@ namespace ArtemisBanking.WebApp.Controllers
             var user = await _adminUserService.GetUserByIdAsync(id, cancellationToken);
             if (user == null)
             {
-                TempData["ErrorMessage"] = "Usuario no encontrado.";
+                TempData["ErrorMessage"] = "Usuario no encontrado";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -112,12 +112,12 @@ namespace ArtemisBanking.WebApp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.GeneralError ?? "Error al actualizar el usuario.");
+                    ModelState.AddModelError("", result.GeneralError ?? "Error al actualizar el usuario");
                 }
                 return View(model);
             }
 
-            TempData["SuccessMessage"] = "Usuario actualizado exitosamente.";
+            TempData["SuccessMessage"] = "Usuario actualizado exitosamente";
             return RedirectToAction(nameof(Index));
         }
 
@@ -128,7 +128,7 @@ namespace ArtemisBanking.WebApp.Controllers
             var currentAdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentAdminId))
             {
-                TempData["ErrorMessage"] = "No se pudo identificar al administrador actual.";
+                TempData["ErrorMessage"] = "No se pudo identificar al administrador actual";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -136,12 +136,12 @@ namespace ArtemisBanking.WebApp.Controllers
 
             if (result.IsFailure)
             {
-                TempData["ErrorMessage"] = result.GeneralError ?? "Error al cambiar el estado del usuario.";
+                TempData["ErrorMessage"] = result.GeneralError ?? "Error al cambiar el estado del usuario";
             }
             else
             {
                 var action = activate ? "activado" : "inactivado";
-                TempData["SuccessMessage"] = $"Usuario {action} exitosamente.";
+                TempData["SuccessMessage"] = $"Usuario {action} exitosamente";
             }
 
             return RedirectToAction(nameof(Index));

@@ -22,6 +22,8 @@ namespace ArtemisBanking.Application
             services.AddScoped<IAdminUserService, AdminUserService>();
             services.AddScoped<IAdminLoanService, AdminLoanService>();
             services.AddScoped<IAdminCreditCardService, AdminCreditCardService>();
+            services.AddScoped<IAdminSavingsAccountService, AdminSavingsAccountService>();
+            services.AddScoped<IAdminDashboardService, AdminDashboardService>();
         }
     }
 }

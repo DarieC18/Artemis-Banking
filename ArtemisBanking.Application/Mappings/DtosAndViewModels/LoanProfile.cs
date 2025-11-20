@@ -12,6 +12,9 @@ namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
             CreateMap<ClientForLoanDTO, ClientForLoanViewModel>().ReverseMap();
             CreateMap<AssignLoanDTO, AssignLoanViewModel>().ReverseMap();
             CreateMap<UpdateLoanDTO, UpdateLoanViewModel>().ReverseMap();
+            
+            // Mapeos para API
+            CreateMap<AssignLoanRequestDTO, AssignLoanDTO>();
         }
     }
 }

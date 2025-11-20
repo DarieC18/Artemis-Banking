@@ -1,0 +1,101 @@
+@model ArtemisBanking.Application.Dtos.SavingsAccount.SavingsAccountDetailDTO
+@{
+    ViewData["Title"] = "Detalle de cuenta";
+    var accountLabel = $"Cuenta {Model.NumeroCuenta}";
+}
+
+<section class="mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+        <div>
+            <h1 class="display-6 fw-semibold text-primary">@accountLabel</h1>
+            <p class="text-muted mb-0">Historial de transacciones y estado actual.</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver al listado
+        </a>
+    </div>
+</section>
+
+<section class="row g-4 mb-4">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Cliente</p>
+                <h5 class="mb-0">@Model.ClienteNombre @Model.ClienteApellido</h5>
+                <small class="text-muted">@Model.ClienteCedula</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Balance actual</p>
+                <h4 class="mb-0 text-success">RD$ @Model.Balance.ToString("N2")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Tipo</p>
+                <span class="badge @(Model.EsPrincipal ? "bg-primary" : "bg-secondary")">@Model.TipoCuenta</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Estado</p>
+                <span class="badge @(Model.Estado == "ACTIVA" ? "bg-success" : "bg-danger")">@Model.Estado</span>
+                <p class="text-muted small mb-0">Creada el @Model.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Transacciones</h4>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Tipo</th>
+                        <th>Origen</th>
+                        <th>Beneficiario</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Transacciones != null && Model.Transacciones.Any())
+                    {
+                        foreach (var tx in Model.Transacciones)
+                        {
+                            <tr>
+                                <td>@tx.FechaTransaccion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>RD$ @tx.Monto.ToString("N2")</td>
+                                <td>@tx.Tipo</td>
+                                <td>@tx.Origen</td>
+                                <td>@tx.Beneficiario</td>
+                                <td>
+                                    <span class="badge @(tx.Estado == "APROBADA" ? "bg-success" : "bg-danger")">@tx.Estado</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Esta cuenta aún no registra transacciones.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+

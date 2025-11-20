@@ -17,17 +17,20 @@ namespace ArtemisBanking.Application.Services
         private static readonly string[] SupportedRoles = { "Administrador", "Cajero", "Cliente" };
         private readonly IIdentityUserManager _identityUserManager;
         private readonly ISavingsAccountRepository _savingsAccountRepository;
+        private readonly ILoanRepository _loanRepository;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
         public AdminUserService(
             IIdentityUserManager identityUserManager,
             ISavingsAccountRepository savingsAccountRepository,
+            ILoanRepository loanRepository,
             IEmailService emailService,
             IMapper mapper)
         {
             _identityUserManager = identityUserManager;
             _savingsAccountRepository = savingsAccountRepository;
+            _loanRepository = loanRepository;
             _emailService = emailService;
             _mapper = mapper;
         }
@@ -251,7 +254,10 @@ namespace ArtemisBanking.Application.Services
             while (true)
             {
                 var number = RandomNumberGenerator.GetInt32(100000000, 999999999).ToString();
-                if (await _savingsAccountRepository.GetByAccountNumberAsync(number) == null)
+                var existsInAccounts = await _savingsAccountRepository.ExistsByAccountNumberAsync(number);
+                var existsInLoans = await _loanRepository.GetByLoanNumberAsync(number) != null;
+
+                if (!existsInAccounts && !existsInLoans)
                 {
                     return number;
                 }

@@ -17,7 +17,29 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
         {
             return await _context.SavingsAccounts
                 .Where(a => a.UserId == userId && a.IsActive)
+                .OrderByDescending(a => a.FechaCreacion)
                 .ToListAsync();
+        }
+
+        public async Task<List<SavingsAccount>> GetByUserIdIncludingInactiveAsync(string userId)
+        {
+            return await _context.SavingsAccounts
+                .Where(a => a.UserId == userId)
+                .OrderByDescending(a => a.FechaCreacion)
+                .ToListAsync();
+        }
+
+        public async Task<List<SavingsAccount>> GetAllAsync()
+        {
+            return await _context.SavingsAccounts
+                .OrderByDescending(a => a.FechaCreacion)
+                .ToListAsync();
+        }
+
+        public async Task<SavingsAccount?> GetByIdAsync(int id)
+        {
+            return await _context.SavingsAccounts
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<SavingsAccount?> GetPrincipalByUserIdAsync(string userId)
@@ -30,6 +52,12 @@ namespace ArtemisBanking.Infrastructure.Persistence.Repositories
         {
             return await _context.SavingsAccounts
                 .FirstOrDefaultAsync(a => a.NumeroCuenta == accountNumber && a.IsActive);
+        }
+
+        public async Task<bool> ExistsByAccountNumberAsync(string accountNumber)
+        {
+            return await _context.SavingsAccounts
+                .AnyAsync(a => a.NumeroCuenta == accountNumber);
         }
 
         public async Task UpdateAsync(SavingsAccount account)

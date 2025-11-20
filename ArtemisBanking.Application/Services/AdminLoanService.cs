@@ -18,6 +18,7 @@ namespace ArtemisBanking.Application.Services
         private readonly ISavingsAccountRepository _savingsAccountRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IEmailService _emailService;
+        private readonly ICreditCardRepository _creditCardRepository;
         private readonly IMapper _mapper;
 
         public AdminLoanService(
@@ -27,6 +28,7 @@ namespace ArtemisBanking.Application.Services
             ISavingsAccountRepository savingsAccountRepository,
             ITransactionRepository transactionRepository,
             IEmailService emailService,
+            ICreditCardRepository creditCardRepository,
             IMapper mapper)
         {
             _loanRepository = loanRepository;
@@ -35,6 +37,7 @@ namespace ArtemisBanking.Application.Services
             _savingsAccountRepository = savingsAccountRepository;
             _transactionRepository = transactionRepository;
             _emailService = emailService;
+            _creditCardRepository = creditCardRepository;
             _mapper = mapper;
         }
 
@@ -176,7 +179,7 @@ namespace ArtemisBanking.Application.Services
 
             double factorCrecimiento = Math.Pow(1 + r, plazoMeses);
 
-            // Aplicar la formyla
+            // Aplica la formyla
             double numerador = r * factorCrecimiento;
             double denominador = factorCrecimiento - 1;
 
@@ -185,7 +188,7 @@ namespace ArtemisBanking.Application.Services
             return Math.Round(cuota, 2); // Redondea a centavos
         }
 
-        /// Calcula el monto total a pagar (capital + intereses) usando Sistema Francés
+        // Calcula el monto total a pagar (capital + intereses) usando Sistema Francés
         private decimal CalcularMontoTotalConIntereses(decimal montoCapital, decimal tasaAnual, int plazoMeses)
         {
             var cuotaMensual = CalcularCuotaMensualSistemaFrances(montoCapital, tasaAnual, plazoMeses);
@@ -204,7 +207,33 @@ namespace ArtemisBanking.Application.Services
             if (request.PlazoMeses % 6 != 0 || request.PlazoMeses < 6 || request.PlazoMeses > 60)
                 return Result.Fail("El plazo debe ser un múltiplo de 6 meses entre 6 y 60 meses");
 
-            //Generar el numero unico de prestamo
+            // Valida que el cliente es o se convierte en cliente de alto riesgo
+            var averageDebt = await GetAverageDebtAsync(cancellationToken);
+            var existingLoans = await _loanRepository.GetByUserIdAsync(request.UserId);
+            var deudaPrestamos = existingLoans.Where(l => l.IsActive).Sum(l => l.MontoPendiente);
+            
+            // Incluir tambien la deuda de tarjetas de crédito
+            var existingCreditCards = await _creditCardRepository.GetActiveByUserIdAsync(request.UserId);
+            var deudaTarjetas = existingCreditCards.Sum(c => c.DeudaActual);
+            var existingDebt = deudaPrestamos + deudaTarjetas;
+            
+            // Calcula la deuda total que tendria con este nuevo préstamo
+            var montoTotalConInteres = CalcularMontoTotalConIntereses(request.MontoCapital, request.TasaInteres, request.PlazoMeses);
+            var nuevaDeudaTotal = existingDebt + montoTotalConInteres;
+
+            // Verifica si es cliente de alto riesgo
+            if (existingDebt > averageDebt)
+            {
+                return Result.Fail("Este cliente se considera de alto riesgo, ya que su deuda actual supera el promedio del sistema");
+            }
+
+            // Verifica si se convertiria en cliente de alto riesgo
+            if (nuevaDeudaTotal > averageDebt)
+            {
+                return Result.Fail("Asignar este préstamo convertirá al cliente en un cliente de alto riesgo, ya que su deuda superará el umbral promedio del sistema");
+            }
+
+            //Genera el numero unico de prestamo
             var numeroPrestamo = await _loanRepository.GenerateUniqueLoanNumberAsync();
 
             //Calcula la cuota mensual con Sistema Frances

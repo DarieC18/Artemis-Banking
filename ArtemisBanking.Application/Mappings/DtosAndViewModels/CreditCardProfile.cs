@@ -15,6 +15,9 @@ namespace ArtemisBanking.Application.Mappings.DtosAndViewModels
             CreateMap<AssignCreditCardViewModel, AssignCreditCardDTO>();
 
             CreateMap<UpdateCreditCardLimitViewModel, UpdateCreditCardLimitDTO>();
+            
+            // Mapeos para API
+            CreateMap<AssignCreditCardRequestDTO, AssignCreditCardDTO>();
         }
     }
 }

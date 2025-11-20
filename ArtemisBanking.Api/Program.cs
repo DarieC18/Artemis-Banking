@@ -1,13 +1,16 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using ArtemisBanking.Api.Extensions;
+using ArtemisBanking.Application;
 using ArtemisBanking.Domain.Settings;
+using ArtemisBanking.Infrastructure.Persistence;
 using ArtemisBanking.Infrastructure.Shared;
 using ArtemisBanking.Infraestructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ArtemisBanking.Application.Mappings.EntitiesAndDtos;
+using ArtemisBanking.Application.Mappings.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,10 +36,15 @@ builder.Services.AddSession();
 
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddIdentityInfrastructureForApi(builder.Configuration);
+builder.Services.AddPersistenceLayerIoc(builder.Configuration);
+builder.Services.AddApplicationLayerIoc(builder.Configuration);
 builder.Services.AddAutoMapper(
     typeof(ArtemisBanking.Infraestructure.Identity.Mappings.AppUserMappingProfile).Assembly,
     typeof(ArtemisBanking.Application.Mappings.DtosAndViewModels.AdminUserProfile).Assembly,
-    typeof(SavingsAccountProfile).Assembly);
+    typeof(SavingsAccountProfile).Assembly,
+    typeof(ArtemisBanking.Application.Mappings.DtosAndViewModels.LoanApiProfile).Assembly,
+    typeof(CreditCardApiProfile).Assembly,
+    typeof(SavingsAccountApiProfile).Assembly);
 
 builder.Services.AddAuthorization();
 
