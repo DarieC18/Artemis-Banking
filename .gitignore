@@ -27,10 +27,16 @@ project.nuget.cache
 
 ArtemisBanking.Api/.gitignore
 ArtemisBanking.WebApp/.gitignore
+ArtemisBanking.Api/appsettings.json
+ArtemisBanking.Api/appsettings.Development.json
+ArtemisBanking.WebApp/appsettings.json
+ArtemisBanking.WebApp/appsettings.Development.json
+
 
 # ASP.NET
 wwwroot/lib/
 node_modules/
+
 
 *.dll
 *.pdb
