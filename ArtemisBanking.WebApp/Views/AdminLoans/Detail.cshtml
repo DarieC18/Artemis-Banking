@@ -1,6 +1,7 @@
 @model ArtemisBanking.Application.Dtos.Loan.LoanDetailDTO
 @{
     ViewData["Title"] = "Detalle del Préstamo";
+    var hoy = DateTime.UtcNow.Date;
 }
 
 <section class="mb-4">
@@ -21,7 +22,8 @@
                 <p><strong>Monto pendiente:</strong> RD$ @Model.MontoPendiente.ToString("N2")</p>
                 <p><strong>Tasa de interés:</strong> @Model.TasaInteres.ToString("N2")%</p>
                 <p><strong>Plazo (meses):</strong> @Model.PlazoMeses</p>
-                <p><strong>Estado:</strong> 
+                <p>
+                    <strong>Estado:</strong>
                     @if (Model.EstadoPago == "En mora")
                     {
                         <span class="badge bg-danger">@Model.EstadoPago</span>
@@ -51,9 +53,10 @@
                     <thead class="table-light">
                         <tr>
                             <th>Número de cuota</th>
-                            <th>Valor de cuota</th>
                             <th>Fecha de pago</th>
-                            <th>Estado</th>
+                            <th>Valor de la cuota</th>
+                            <th>Estado de pago</th>
+                            <th>Atraso</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,20 +64,21 @@
                         {
                             <tr>
                                 <td>@cuota.NumeroCuota</td>
-                                <td>RD$ @cuota.ValorCuota.ToString("N2")</td>
                                 <td>@cuota.FechaPago.ToString("dd/MM/yyyy")</td>
+                                <td>RD$ @cuota.ValorCuota.ToString("N2")</td>
                                 <td>
-                                    @if (cuota.Pagada)
-                                    {
-                                        <span class="badge bg-success">Pagada</span>
-                                    }
-                                    else if (cuota.Atrasada)
+                                    <span class="badge @(cuota.Pagada ? "bg-success" : "bg-secondary")">
+                                        @(cuota.Pagada ? "Pagada" : "No pagada")
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (!cuota.Pagada && cuota.FechaPago.Date < hoy)
                                     {
                                         <span class="badge bg-danger">Atrasada</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-warning">Pendiente</span>
+                                        <span class="badge bg-success">En tiempo</span>
                                     }
                                 </td>
                             </tr>
@@ -89,4 +93,3 @@
 <div class="mt-4">
     <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
 </div>
-

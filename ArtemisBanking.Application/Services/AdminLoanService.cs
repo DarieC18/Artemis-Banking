@@ -41,12 +41,7 @@ namespace ArtemisBanking.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<LoanListItemDTO>> GetLoansAsync(
-            int pageNumber,
-            int pageSize,
-            string? statusFilter = null,
-            string? cedulaFilter = null,
-            CancellationToken cancellationToken = default)
+        public async Task<PaginatedResult<LoanListItemDTO>> GetLoansAsync(int pageNumber, int pageSize, string? statusFilter = null, string? cedulaFilter = null, CancellationToken cancellationToken = default)
         {
             if (pageNumber <= 0) pageNumber = 1;
             if (pageSize <= 0) pageSize = 20;
@@ -55,15 +50,45 @@ namespace ArtemisBanking.Application.Services
 
             if (!string.IsNullOrWhiteSpace(cedulaFilter))
             {
+                cedulaFilter = cedulaFilter.Trim();
+
                 var allUsers = await _identityUserManager.GetAllAsync(cancellationToken);
-                var user = allUsers.FirstOrDefault(u => u.Cedula == cedulaFilter);
-                if (user == null)
+
+                var matchingUserIds = allUsers
+                    .Where(u => !string.IsNullOrWhiteSpace(u.Cedula) &&
+                                u.Cedula.Contains(cedulaFilter))
+                    .Select(u => u.Id)
+                    .ToList();
+
+                if (!matchingUserIds.Any())
                 {
-                    return new PaginatedResult<LoanListItemDTO>(new List<LoanListItemDTO>(), pageNumber, pageSize, 0);
+                    return new PaginatedResult<LoanListItemDTO>(
+                        new List<LoanListItemDTO>(), pageNumber, pageSize, 0);
                 }
 
-                loans = await _loanRepository.GetByUserIdAsync(user.Id);
-                loans = loans.OrderByDescending(l => l.FechaCreacion).ToList();
+                var loansList = new List<Loan>();
+                foreach (var userId in matchingUserIds)
+                {
+                    var userLoans = await _loanRepository.GetByUserIdAsync(userId);
+                    if (userLoans != null && userLoans.Any())
+                    {
+                        loansList.AddRange(userLoans);
+                    }
+                }
+
+                loans = loansList;
+
+                if (!string.IsNullOrWhiteSpace(statusFilter))
+                {
+                    if (statusFilter == "Activos")
+                    {
+                        loans = loans.Where(l => l.IsActive).ToList();
+                    }
+                    else if (statusFilter == "Completados")
+                    {
+                        loans = loans.Where(l => !l.IsActive).ToList();
+                    }
+                }
             }
             else
             {
@@ -71,11 +96,22 @@ namespace ArtemisBanking.Application.Services
                 {
                     loans = await _loanRepository.GetAllCompletedAsync();
                 }
-                else
+                else if (statusFilter == "Todos")
+                {
+                    var activos = await _loanRepository.GetAllActiveAsync();
+                    var completados = await _loanRepository.GetAllCompletedAsync();
+                    loans = activos.Concat(completados).ToList();
+                }
+                else // null, vacío o "Activos"
                 {
                     loans = await _loanRepository.GetAllActiveAsync();
                 }
             }
+
+            loans = loans
+                .OrderByDescending(l => l.IsActive)
+                .ThenByDescending(l => l.FechaCreacion)
+                .ToList();
 
             var totalCount = loans.Count;
             var pagedLoans = loans
@@ -188,14 +224,13 @@ namespace ArtemisBanking.Application.Services
             return Math.Round(cuota, 2); // Redondea a centavos
         }
 
-        // Calcula el monto total a pagar (capital + intereses) usando Sistema Francés
         private decimal CalcularMontoTotalConIntereses(decimal montoCapital, decimal tasaAnual, int plazoMeses)
         {
             var cuotaMensual = CalcularCuotaMensualSistemaFrances(montoCapital, tasaAnual, plazoMeses);
             return cuotaMensual * plazoMeses;
         }
 
-        public async Task<Result> AssignLoanAsync(AssignLoanDTO request, string adminUserId, CancellationToken cancellationToken = default)
+        public async Task<Result> AssignLoanAsync(AssignLoanDTO request, string adminUserId, bool ignoreRisk = false, CancellationToken cancellationToken = default)
         {
             var user = await _identityUserManager.GetByIdAsync(request.UserId, cancellationToken);
             if (user == null)
@@ -207,32 +242,34 @@ namespace ArtemisBanking.Application.Services
             if (request.PlazoMeses % 6 != 0 || request.PlazoMeses < 6 || request.PlazoMeses > 60)
                 return Result.Fail("El plazo debe ser un múltiplo de 6 meses entre 6 y 60 meses");
 
-            // Valida que el cliente es o se convierte en cliente de alto riesgo
             var averageDebt = await GetAverageDebtAsync(cancellationToken);
             var existingLoans = await _loanRepository.GetByUserIdAsync(request.UserId);
             var deudaPrestamos = existingLoans.Where(l => l.IsActive).Sum(l => l.MontoPendiente);
-            
-            // Incluir tambien la deuda de tarjetas de crédito
+
             var existingCreditCards = await _creditCardRepository.GetActiveByUserIdAsync(request.UserId);
             var deudaTarjetas = existingCreditCards.Sum(c => c.DeudaActual);
+
             var existingDebt = deudaPrestamos + deudaTarjetas;
-            
-            // Calcula la deuda total que tendria con este nuevo préstamo
-            var montoTotalConInteres = CalcularMontoTotalConIntereses(request.MontoCapital, request.TasaInteres, request.PlazoMeses);
+
+            var montoTotalConInteres = CalcularMontoTotalConIntereses(
+                request.MontoCapital,
+                request.TasaInteres,
+                request.PlazoMeses);
+
             var nuevaDeudaTotal = existingDebt + montoTotalConInteres;
 
-            // Verifica si es cliente de alto riesgo
-            if (existingDebt > averageDebt)
+            if (!ignoreRisk && averageDebt > 0)
             {
-                return Result.Fail("Este cliente se considera de alto riesgo, ya que su deuda actual supera el promedio del sistema");
-            }
+                if (existingDebt > averageDebt)
+                {
+                    return Result.Fail("Este cliente se considera de alto riesgo, ya que su deuda actual supera el promedio del sistema");
+                }
 
-            // Verifica si se convertiria en cliente de alto riesgo
-            if (nuevaDeudaTotal > averageDebt)
-            {
-                return Result.Fail("Asignar este préstamo convertirá al cliente en un cliente de alto riesgo, ya que su deuda superará el umbral promedio del sistema");
+                if (nuevaDeudaTotal > averageDebt)
+                {
+                    return Result.Fail("Asignar este préstamo convertirá al cliente en un cliente de alto riesgo, ya que su deuda superará el umbral promedio del sistema");
+                }
             }
-
             //Genera el numero unico de prestamo
             var numeroPrestamo = await _loanRepository.GenerateUniqueLoanNumberAsync();
 
@@ -274,7 +311,6 @@ namespace ArtemisBanking.Application.Services
             cuentaPrincipal.Balance += request.MontoCapital;
             await _savingsAccountRepository.UpdateAsync(cuentaPrincipal);
 
-            //Registra la transaccion tipo CREDITO
             var transaccion = new Transaction
             {
                 SavingsAccountId = cuentaPrincipal.Id,
@@ -283,7 +319,8 @@ namespace ArtemisBanking.Application.Services
                 Tipo = "CREDITO",
                 Origen = numeroPrestamo,
                 Beneficiario = cuentaPrincipal.NumeroCuenta,
-                Estado = "APROBADA"
+                Estado = "APROBADA",
+                OperatedByUserId = request.UserId
             };
             await _transactionRepository.AddAsync(transaccion);
 
@@ -387,28 +424,34 @@ namespace ArtemisBanking.Application.Services
 
             return cuotasAtrasadas ? "En mora" : "Al día";
         }
+
         private List<LoanPaymentSchedule> GeneratePaymentSchedule(Loan loan, decimal cuotaMensual, decimal montoCapital, decimal tasaAnual)
         {
             var schedule = new List<LoanPaymentSchedule>();
             var fechaCreacion = loan.FechaCreacion;
-            var saldoPendiente = loan.MontoPendiente;
+
+            var saldoCapital = montoCapital;
+
+            decimal r = tasaAnual / 100m / 12m;
 
             for (int i = 1; i <= loan.PlazoMeses; i++)
             {
-                // La primera cuota vence el mismo dia del mes siguiente
                 var fechaVencimiento = fechaCreacion.AddMonths(i);
-                
-                // Calcula el saldo pendiente despues de esta cuota
-                saldoPendiente -= cuotaMensual;
-                if (saldoPendiente < 0) saldoPendiente = 0;
+
+                var interes = Math.Round(saldoCapital * r, 2);
+                var amortizacion = cuotaMensual - interes;
+                amortizacion = Math.Round(amortizacion, 2);
+
+                saldoCapital -= amortizacion;
+                if (saldoCapital < 0) saldoCapital = 0;
 
                 schedule.Add(new LoanPaymentSchedule
                 {
                     LoanId = loan.Id,
                     NumeroCuota = i,
-                    ValorCuota = cuotaMensual,
-                    SaldoPendiente = saldoPendiente,
                     FechaPago = fechaVencimiento,
+                    ValorCuota = cuotaMensual,
+                    SaldoPendiente = cuotaMensual,
                     Pagada = false,
                     Atrasada = false
                 });
@@ -420,21 +463,53 @@ namespace ArtemisBanking.Application.Services
         private async Task EnviarCorreoPrestamoAprobado(string email, string nombre, string apellido, string numeroPrestamo, decimal monto, int plazoMeses, decimal tasaInteres, decimal cuotaMensual)
         {
             var mensaje = $@"
-         Estimado {nombre} {apellido},
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-        Su préstamo ha sido aprobado exitosamente.
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Notificación de aprobación de préstamo
+                      </h2>
 
-        Detalles:
-        - Número de préstamo: {numeroPrestamo}
-        - Monto aprobado: RD${monto:N2}
-        - Plazo: {plazoMeses} meses
-        - Tasa de interés: {tasaInteres}% anual
-        - Cuota mensual: RD${cuotaMensual}
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola <strong>{nombre} {apellido}</strong>,
+                      </p>
 
-        El monto ha sido depositado en su cuenta de ahorro principal
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        Tu préstamo ha sido aprobado exitosamente. A continuación, los detalles del mismo:
+                      </p>
 
-        Gracias,
-        Artemis Banking";
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Número de préstamo:</strong> {numeroPrestamo}<br/>
+                        <strong>Monto aprobado:</strong> RD${monto:N2}<br/>
+                        <strong>Plazo:</strong> {plazoMeses} meses<br/>
+                        <strong>Tasa de interés:</strong> {tasaInteres}% anual<br/>
+                        <strong>Cuota mensual:</strong> RD${cuotaMensual}
+                      </p>
+
+                      <p style=""font-size: 15px; line-height: 1.5; margin-top: 15px;"">
+                        El monto aprobado ha sido depositado en tu cuenta de ahorro principal.
+                      </p>
+
+                      <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                  border-left: 4px solid #ffa726; font-size: 14px;"">
+                        Si no reconoces esta operación, contacta al banco de inmediato.
+                      </div>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            ";
 
             var emailRequest = new EmailRequestDto
             {
@@ -449,16 +524,47 @@ namespace ArtemisBanking.Application.Services
         private async Task EnviarCorreoTasaActualizada(string email, string nombre, string apellido, string numeroPrestamo, decimal nuevaTasa, decimal nuevaCuota, DateTime fechaAplicacion)
         {
             var mensaje = $@"
-        Estimado {nombre} {apellido},
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                       style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                              padding: 25px; border: 1px solid #e0e0e0;"">
+                  <tr>
+                    <td>
 
-        La tasa de interés de su préstamo #{numeroPrestamo} ha sido actualizada.
+                      <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                        Actualización de tasa de interés de préstamo
+                      </h2>
 
-        - Nueva tasa: {nuevaTasa}% anual
-        - Nueva cuota mensual: RD${nuevaCuota:N2}
-        - Aplica desde: {fechaAplicacion:dd/MM/yyyy}
+                      <p style=""font-size: 15px; margin-bottom: 10px;"">
+                        Hola <strong>{nombre} {apellido}</strong>,
+                      </p>
 
-        Gracias,
-        Artemis Banking";
+                      <p style=""font-size: 15px; line-height: 1.5;"">
+                        La tasa de interés de tu préstamo <strong>#{numeroPrestamo}</strong> ha sido actualizada.
+                      </p>
+
+                      <p style=""margin-top: 20px; font-size: 15px;"">
+                        <strong>Nueva tasa:</strong> {nuevaTasa}% anual<br/>
+                        <strong>Nueva cuota mensual:</strong> RD${nuevaCuota:N2}<br/>
+                        <strong>Aplica desde:</strong> {fechaAplicacion:dd/MM/yyyy}
+                      </p>
+
+                      <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                  border-left: 4px solid #ffa726; font-size: 14px;"">
+                        Si no reconoces esta actualización, contacta al banco de inmediato.
+                      </div>
+
+                      <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                        ArtemisBanking © {DateTime.Now.Year}
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            ";
 
             var emailRequest = new EmailRequestDto
             {

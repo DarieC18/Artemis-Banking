@@ -1,4 +1,5 @@
-﻿using ArtemisBanking.Application.Dtos.Transaction;
+﻿using ArtemisBanking.Application.Common;
+using ArtemisBanking.Application.Dtos.Transaction;
 
 namespace ArtemisBanking.Application.Interfaces.Services
 {

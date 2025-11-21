@@ -1,8 +1,6 @@
-using Asp.Versioning;
-using ArtemisBanking.Api.Controllers;
-using ArtemisBanking.Application.Common;
 using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Interfaces.Services;
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -109,7 +107,7 @@ namespace ArtemisBanking.Api.Controllers.v1.Loan
             }
 
             var dto = _mapper.Map<AssignLoanDTO>(request);
-            var result = await _adminLoanService.AssignLoanAsync(dto, adminId, cancellationToken);
+            var result = await _adminLoanService.AssignLoanAsync(dto, adminId, ignoreRisk: false, cancellationToken);
 
             if (result.IsFailure)
             {

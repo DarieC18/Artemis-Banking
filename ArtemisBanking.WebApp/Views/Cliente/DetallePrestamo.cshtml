@@ -48,6 +48,7 @@
                         <th># Cuota</th>
                         <th>Fecha de pago</th>
                         <th class="text-end">Valor cuota</th>
+                        <th class="text-end">Pendiente por pagar</th>
                         <th class="text-center">Estado de pago</th>
                         <th class="text-center">Atraso</th>
                     </tr>
@@ -55,13 +56,27 @@
                 <tbody>
                     @foreach (var c in Model.Cuotas)
                     {
+                        var esParcial = !c.Pagada && c.SaldoPendiente > 0 && c.SaldoPendiente < c.ValorCuota;
+                        var estadoPagoClass = c.Pagada
+                        ? "bg-success"
+                        : (esParcial ? "bg-info" : "bg-secondary");
+                        var estadoPagoTexto = c.Pagada
+                        ? "Pagada"
+                        : (esParcial ? "Parcial" : "No pagada");
+
                         <tr>
                             <td>@c.NumeroCuota</td>
                             <td>@c.FechaPago.ToString("dd/MM/yyyy")</td>
+
+                            <!-- Cuota fija francesa -->
+                            <td class="text-end">@c.ValorCuota.ToString("C")</td>
+
+                            <!-- Lo que falta por pagar de ESA cuota -->
                             <td class="text-end">@c.SaldoPendiente.ToString("C")</td>
+
                             <td class="text-center">
-                                <span class="badge @(c.Pagada ? "bg-success" : "bg-secondary")">
-                                    @(c.Pagada ? "Pagada" : "No pagada")
+                                <span class="badge @estadoPagoClass">
+                                    @estadoPagoTexto
                                 </span>
                             </td>
                             <td class="text-center">

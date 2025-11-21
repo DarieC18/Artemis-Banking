@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ArtemisBanking.Application.Dtos.Loan;
+﻿using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Dtos.SavingsAccount;
+using System.ComponentModel.DataAnnotations;
 
 namespace ArtemisBanking.Application.ViewModels.Cliente
 {

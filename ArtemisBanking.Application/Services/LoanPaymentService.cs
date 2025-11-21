@@ -1,4 +1,5 @@
-﻿using ArtemisBanking.Application.Dtos.Loan;
+﻿using ArtemisBanking.Application.Common;
+using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Dtos.Transaction;
 using ArtemisBanking.Application.DTOs.Email;
 using ArtemisBanking.Application.Interfaces;

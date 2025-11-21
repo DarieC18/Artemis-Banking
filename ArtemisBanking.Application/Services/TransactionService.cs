@@ -547,8 +547,7 @@ namespace ArtemisBanking.Application.Services
 
             var cuotasPendientes = prestamo.TablaAmortizacion
                 .Where(c => c.SaldoPendiente > 0)
-                .OrderBy(c => c.FechaPago)
-                .ThenBy(c => c.NumeroCuota)
+                .OrderBy(c => c.NumeroCuota)
                 .ToList();
 
             if (!cuotasPendientes.Any())
@@ -577,6 +576,7 @@ namespace ArtemisBanking.Application.Services
 
                 montoRestante -= montoAplicadoCuota;
             }
+
             var montoAplicado = montoOriginalIngresado - montoRestante;
 
             if (montoRestante > 0)
@@ -586,10 +586,17 @@ namespace ArtemisBanking.Application.Services
             }
 
             prestamo.CuotasPagadas = prestamo.TablaAmortizacion.Count(c => c.Pagada);
-            prestamo.MontoPendiente = prestamo.TablaAmortizacion.Sum(c => c.SaldoPendiente);
+            prestamo.MontoPendiente = prestamo.TablaAmortizacion
+                .Where(c => c.SaldoPendiente > 0)
+                .Sum(c => c.SaldoPendiente);
+
+            if (prestamo.MontoPendiente <= 0)
+            {
+                prestamo.MontoPendiente = 0;
+                prestamo.IsActive = false;
+            }
 
             await _prestamos.UpdateAsync(prestamo);
-
             var trans = new Transaction
             {
                 SavingsAccountId = origen.Id,

@@ -1,4 +1,5 @@
-﻿using ArtemisBanking.Application.DTOs.Commerce;
+﻿using ArtemisBanking.Application.Common;
+using ArtemisBanking.Application.DTOs.Commerce;
 using ArtemisBanking.Application.DTOs.Common;
 using ArtemisBanking.Application.Interfaces.Persistence;
 using ArtemisBanking.Application.Interfaces.Services;

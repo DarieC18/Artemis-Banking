@@ -94,10 +94,13 @@
                                         <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <form asp-action="ToggleStatus" method="post" style="display: inline;" onsubmit="return confirm('¿Está seguro que desea @(user.IsActive ? "inactivar" : "activar") este usuario?');">
+                                        <form asp-action="ToggleStatus"
+                                              method="post"
+                                              asp-route-id="@user.Id"
+                                              asp-route-activate="@(!user.IsActive)"
+                                              style="display: inline;"
+                                              onsubmit="return confirm('¿Está seguro que desea @(user.IsActive ? "inactivar" : "activar") este usuario?');">
                                             @Html.AntiForgeryToken()
-                                            <input type="hidden" name="id" value="@user.Id" />
-                                            <input type="hidden" name="activate" value="@(!user.IsActive).ToString().ToLower()" />
                                             <button type="submit" class="btn btn-sm @(user.IsActive ? "btn-outline-warning" : "btn-outline-success")">
                                                 @(user.IsActive ? "Inactivar" : "Activar")
                                             </button>

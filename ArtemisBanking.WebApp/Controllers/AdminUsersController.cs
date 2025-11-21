@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using ArtemisBanking.Application.Dtos.AdminUsers;
 using ArtemisBanking.Application.Interfaces.Services;
 using ArtemisBanking.Application.ViewModels;
-using ArtemisBanking.Application.Dtos.AdminUsers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace ArtemisBanking.WebApp.Controllers
@@ -123,7 +123,7 @@ namespace ArtemisBanking.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ToggleStatus(string id, string activate, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> ToggleStatus(string id, bool activate, CancellationToken cancellationToken = default)
         {
             var currentAdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentAdminId))
@@ -132,23 +132,7 @@ namespace ArtemisBanking.WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Convertir el string a bool
-            bool activateBool;
-            if (string.IsNullOrWhiteSpace(activate))
-            {
-                TempData["ErrorMessage"] = "Valor de activación inválido";
-                return RedirectToAction(nameof(Index));
-            }
-            
-            // Intentar parsear directamente
-            if (!bool.TryParse(activate, out activateBool))
-            {
-                // Si falla, intentar con comparación case-insensitive
-                var activateLower = activate.Trim().ToLowerInvariant();
-                activateBool = activateLower == "true" || activateLower == "1";
-            }
-
-            var result = await _adminUserService.ToggleUserStatusAsync(id, activateBool, currentAdminId, cancellationToken);
+            var result = await _adminUserService.ToggleUserStatusAsync(id, activate, currentAdminId, cancellationToken);
 
             if (result.IsFailure)
             {
@@ -156,7 +140,7 @@ namespace ArtemisBanking.WebApp.Controllers
             }
             else
             {
-                var action = activateBool ? "activado" : "inactivado";
+                var action = activate ? "activado" : "inactivado";
                 TempData["SuccessMessage"] = $"Usuario {action} exitosamente";
             }
 

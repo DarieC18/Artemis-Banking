@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using ArtemisBanking.Application.Common;
 using ArtemisBanking.Application.Dtos.Identity;
 using ArtemisBanking.Application.Dtos.SavingsAccount;
@@ -8,6 +7,7 @@ using ArtemisBanking.Application.Interfaces.Repositories;
 using ArtemisBanking.Application.Interfaces.Services;
 using ArtemisBanking.Domain.Entities;
 using AutoMapper;
+using System.Security.Cryptography;
 
 namespace ArtemisBanking.Application.Services
 {
@@ -172,7 +172,6 @@ namespace ArtemisBanking.Application.Services
             var cuentaPrincipal = await _savingsAccountRepository.GetPrincipalByUserIdAsync(request.UserId);
             if (cuentaPrincipal == null)
             {
-                // Si no existe cuenta principal, la crea automaticamente (solo por ahora hasta el merge)
                 var numeroCuentaPrincipal = await GenerateUniqueAccountNumberAsync(cancellationToken);
                 cuentaPrincipal = new SavingsAccount
                 {
@@ -266,7 +265,8 @@ namespace ArtemisBanking.Application.Services
                     Tipo = "DEBITO",
                     Origen = cuenta.NumeroCuenta,
                     Beneficiario = cuentaPrincipal.NumeroCuenta,
-                    Estado = "APROBADA"
+                    Estado = "APROBADA",
+                    OperatedByUserId = cuenta.UserId
                 };
 
                 var transaccionCredito = new Transaction
@@ -277,7 +277,8 @@ namespace ArtemisBanking.Application.Services
                     Tipo = "CREDITO",
                     Origen = cuenta.NumeroCuenta,
                     Beneficiario = cuentaPrincipal.NumeroCuenta,
-                    Estado = "APROBADA"
+                    Estado = "APROBADA",
+                    OperatedByUserId = cuenta.UserId
                 };
 
                 await _transactionRepository.AddAsync(transaccionDebito);

@@ -1,4 +1,5 @@
-﻿using ArtemisBanking.Application.DTOs.Common;
+﻿using ArtemisBanking.Application.Common;
+using ArtemisBanking.Application.DTOs.Common;
 using ArtemisBanking.Application.DTOs.Hermes;
 
 namespace ArtemisBanking.Application.Interfaces.Services

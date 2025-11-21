@@ -15,5 +15,6 @@ namespace ArtemisBanking.Application.Interfaces.Repositories
         Task<decimal> GetAverageDebtAsync();
         Task<bool> HasActiveLoanAsync(string userId);
         Task<string> GenerateUniqueLoanNumberAsync();
+        Task<Loan?> GetByNumberWithScheduleAsync(string loanNumber);
     }
 }

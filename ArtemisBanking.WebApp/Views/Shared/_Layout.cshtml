@@ -1,33 +1,33 @@
-﻿@{
-    var brandController = "Account";
-    var brandAction = "Login";
+﻿﻿@{
+var brandController = "Account";
+var brandAction = "Login";
 
-    if (User.Identity?.IsAuthenticated == true)
+if (User.Identity?.IsAuthenticated == true)
+{
+    if (User.IsInRole("Cliente"))
     {
-        if (User.IsInRole("Cliente"))
-        {
-            brandController = "Cliente";
-            brandAction = "Index";
-        }
-        else if (User.IsInRole("Cajero"))
-        {
-            brandController = "Cajero";
-            brandAction = "Index";
-        }
-        else if (User.IsInRole("Administrador"))
-        {
-            brandController = "Admin";
-            brandAction = "Dashboard";
-        }
+        brandController = "Cliente";
+        brandAction = "Index";
     }
+    else if (User.IsInRole("Cajero"))
+    {
+        brandController = "Cajero";
+        brandAction = "Index";
+    }
+    else if (User.IsInRole("Administrador"))
+    {
+        brandController = "Admin";
+        brandAction = "Dashboard";
+    }
+}
 }
 
 <!DOCTYPE html>
-<html lang="@(isAdmin ? "es" : "en")">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]@(isAdmin ? " - Panel Administrador | Artemis Banking" : " - ArtemisBanking.WebApp")</title>
+    <title>@ViewData["Title"] - ArtemisBanking.WebApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ArtemisBanking.WebApp.styles.css" asp-append-version="true" />
@@ -169,7 +169,6 @@
                                     </ul>
                                 </li>
                             }
-
                             @* ======================= ADMINISTRADOR ======================= *@
                             else if (User.IsInRole("Administrador"))
                             {
@@ -182,22 +181,29 @@
 
                                 <li class="nav-item">
                                     <a class="nav-link text-dark"
-                                       asp-controller="Admin" asp-action="Usuarios">
-                                        Usuarios
+                                       asp-controller="AdminUsers" asp-action="Index">
+                                        Gestionar usuarios
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link text-dark"
-                                       asp-controller="Admin" asp-action="Roles">
-                                        Roles
+                                       asp-controller="AdminLoans" asp-action="Index">
+                                        Gestionar préstamos
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link text-dark"
-                                       asp-controller="Admin" asp-action="Configuracion">
-                                        Configuración
+                                       asp-controller="AdminCreditCards" asp-action="Index">
+                                        Gestionar tarjetas
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="AdminSavings" asp-action="Index">
+                                        Gestionar cuentas
                                     </a>
                                 </li>
                             }

@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using ArtemisBanking.Application.Dtos.Loan;
 using ArtemisBanking.Application.Interfaces.Services;
 using ArtemisBanking.Application.ViewModels;
-using ArtemisBanking.Application.Dtos.Loan;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace ArtemisBanking.WebApp.Controllers
@@ -137,6 +137,30 @@ namespace ArtemisBanking.WebApp.Controllers
             bool needsWarning = false;
             string warningMessage = "";
 
+            if (averageDebtForRisk > 0)
+            {
+                if (clientForRisk != null && clientForRisk.DeudaTotal > averageDebtForRisk)
+                {
+                    needsWarning = true;
+                    warningMessage = "Este cliente se considera de alto riesgo, ya que su deuda actual supera el promedio del sistema";
+                }
+                else if (nuevaDeudaTotal > averageDebtForRisk)
+                {
+                    needsWarning = true;
+                    warningMessage = "Asignar este préstamo convertirá al cliente en un cliente de alto riesgo, ya que su deuda superará el umbral promedio del sistema";
+                }
+            }
+
+            if (needsWarning)
+            {
+                ViewBag.NeedsWarning = true;
+                ViewBag.WarningMessage = warningMessage;
+                ViewBag.Client = _mapper.Map<ClientForLoanViewModel>(clientForRisk);
+                ViewBag.AverageDebt = averageDebtForRisk;
+                ViewBag.CurrentDebt = clientForRisk?.DeudaTotal ?? 0;
+                return View(model);
+            }
+
             if (clientForRisk != null && clientForRisk.DeudaTotal > averageDebtForRisk)
             {
                 needsWarning = true;
@@ -166,7 +190,7 @@ namespace ArtemisBanking.WebApp.Controllers
             }
 
             var dto = _mapper.Map<AssignLoanDTO>(model);
-            var result = await _adminLoanService.AssignLoanAsync(dto, currentAdminId, cancellationToken);
+            var result = await _adminLoanService.AssignLoanAsync(dto, currentAdminId, false, cancellationToken);
 
             if (result.IsFailure)
             {
@@ -199,7 +223,7 @@ namespace ArtemisBanking.WebApp.Controllers
             }
 
             var dto = _mapper.Map<AssignLoanDTO>(model);
-            var result = await _adminLoanService.AssignLoanAsync(dto, currentAdminId, cancellationToken);
+            var result = await _adminLoanService.AssignLoanAsync(dto, currentAdminId, true, cancellationToken);
 
             if (result.IsFailure)
             {

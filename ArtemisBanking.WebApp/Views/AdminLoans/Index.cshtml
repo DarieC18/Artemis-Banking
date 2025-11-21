@@ -35,25 +35,33 @@
 <section class="card border-0 shadow-sm mb-4">
     <div class="card-body">
         <form method="get" asp-action="Index" class="row g-3 align-items-end">
+
             <div class="col-md-3">
                 <label for="cedulaFilter" class="form-label">Buscar por cédula:</label>
-                <input type="text" name="cedulaFilter" id="cedulaFilter" class="form-control" value="@cedulaFilter" placeholder="Ingrese cédula" />
+                <input type="text" name="cedulaFilter" id="cedulaFilter"
+                       class="form-control" value="@cedulaFilter"
+                       placeholder="Ingrese cédula" />
             </div>
+
             <div class="col-md-3">
                 <label for="statusFilter" class="form-label">Filtrar por estado:</label>
                 <select name="statusFilter" id="statusFilter" class="form-select">
-                    <option value="">Todos</option>
+                    <option value="Todos" selected="@(statusFilter == "Todos" || string.IsNullOrWhiteSpace(statusFilter))">Todos</option>
                     <option value="Activos" selected="@(statusFilter == "Activos")">Activos</option>
                     <option value="Completados" selected="@(statusFilter == "Completados")">Completados</option>
                 </select>
             </div>
+
             <div class="col-md-2">
                 <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
             </div>
+
             @if (!string.IsNullOrEmpty(cedulaFilter))
             {
                 <div class="col-md-2">
-                    <a asp-action="Index" asp-route-statusFilter="@statusFilter" class="btn btn-outline-secondary w-100">Limpiar</a>
+                    <a asp-action="Index"
+                       asp-route-statusFilter="@statusFilter"
+                       class="btn btn-outline-secondary w-100">Limpiar</a>
                 </div>
             }
         </form>

@@ -4,130 +4,136 @@
 }
 
 <section class="mb-4">
-    <h1 class="display-5 fw-semibold text-primary">Panel del administrador</h1>
-    <p class="lead text-muted">Monitorea la actividad general del banco y gestiona los productos de los clientes.</p>
+    <h1 class="display-5 fw-semibold text-primary">Panel del Administrador</h1>
+    <p class="lead text-muted">Monitorea la actividad general del banco y las métricas operativas clave.</p>
 </section>
 
-<section class="row g-4 mb-5">
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Transacciones totales</h6>
-                <h2 class="card-title">@Model.TotalTransactions.ToString("N0")</h2>
-                <p class="text-muted small">Acumuladas desde el inicio</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Transacciones hoy</h6>
-                <h2 class="card-title">@Model.TodayTransactions.ToString("N0")</h2>
-                <p class="text-muted small">Movimientos del día actual</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Pagos procesados hoy</h6>
-                <h2 class="card-title">@Model.TodayPayments.ToString("N0")</h2>
-                <p class="text-muted small">Pagos exitosos registrados</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Total pagos históricos</h6>
-                <h2 class="card-title">@Model.TotalPayments.ToString("N0")</h2>
-                <p class="text-muted small">Incluye pagos históricos</p>
-            </div>
-        </div>
-    </div>
-</section>
+<section class="mb-5">
+    <h4 class="fw-semibold text-secondary mb-3">Actividad de Transacciones</h4>
 
-<section class="row g-4 mb-5">
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Clientes activos</h6>
-                <h2 class="card-title">@Model.ActiveClients.ToString("N0")</h2>
-                <p class="text-muted small">Usuarios con acceso vigente</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Clientes inactivos</h6>
-                <h2 class="card-title">@Model.InactiveClients.ToString("N0")</h2>
-                <p class="text-muted small">Usuarios pendientes de activación</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Productos financieros totales</h6>
-                <h2 class="card-title">@Model.TotalProducts.ToString("N0")</h2>
-                <p class="text-muted small">Cuentas + préstamos + tarjetas</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="row g-4 mb-5">
-    <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Préstamos vigentes</h6>
-                <h2 class="card-title">@Model.ActiveLoans.ToString("N0")</h2>
-                <p class="text-muted small">Préstamos actualmente activos</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Tarjetas activas</h6>
-                <h2 class="card-title">@Model.ActiveCreditCards.ToString("N0")</h2>
-                <p class="text-muted small">Tarjetas de crédito habilitadas</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Cuentas de ahorro abiertas</h6>
-                <h2 class="card-title">@Model.OpenSavingsAccounts.ToString("N0")</h2>
-                <p class="text-muted small">Incluye cuentas principales y secundarias</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="row g-4 mb-5">
-    <div class="col-12 col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Monto promedio de deuda por cliente</h6>
-                <h2 class="card-title">RD$ @Model.AverageDebtPerClient.ToString("N2")</h2>
-                <p class="text-muted small">Deuda total dividida entre clientes activos</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-subtitle text-muted">Accesos rápidos</h6>
-                <div class="d-flex flex-wrap gap-2">
-                    <a asp-controller="AdminUsers" asp-action="Index" class="btn btn-outline-primary btn-sm">Gestionar usuarios</a>
-                    <a asp-controller="AdminLoans" asp-action="Index" class="btn btn-outline-primary btn-sm">Gestionar préstamos</a>
-                    <a asp-controller="AdminCreditCards" asp-action="Index" class="btn btn-outline-primary btn-sm">Gestionar tarjetas</a>
-                    <a asp-controller="AdminSavings" asp-action="Index" class="btn btn-outline-primary btn-sm">Gestionar cuentas</a>
+    <div class="row g-4">
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Transacciones Totales</h6>
+                    <h2 class="card-title">@Model.TotalTransactions.ToString("N0")</h2>
+                    <p class="text-muted small">Acumuladas desde el inicio</p>
                 </div>
             </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Transacciones Hoy</h6>
+                    <h2 class="card-title">@Model.TodayTransactions.ToString("N0")</h2>
+                    <p class="text-muted small">Movimientos en el día actual</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Pagos Procesados Hoy</h6>
+                    <h2 class="card-title">@Model.TodayPayments.ToString("N0")</h2>
+                    <p class="text-muted small">Pagos exitosos registrados</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Total Pagos Históricos</h6>
+                    <h2 class="card-title">@Model.TotalPayments.ToString("N0")</h2>
+                    <p class="text-muted small">Incluye pagos desde apertura</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h4 class="fw-semibold text-secondary mb-3">Estado de Clientes</h4>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Clientes Activos</h6>
+                    <h2 class="card-title">@Model.ActiveClients.ToString("N0")</h2>
+                    <p class="text-muted small">Usuarios con acceso vigente</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Clientes Inactivos</h6>
+                    <h2 class="card-title">@Model.InactiveClients.ToString("N0")</h2>
+                    <p class="text-muted small">Pendientes de activación</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Productos Financieros Totales</h6>
+                    <h2 class="card-title">@Model.TotalProducts.ToString("N0")</h2>
+                    <p class="text-muted small">Cuentas + Préstamos + Tarjetas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h4 class="fw-semibold text-secondary mb-3">Productos Activos</h4>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Préstamos Vigentes</h6>
+                    <h2 class="card-title">@Model.ActiveLoans.ToString("N0")</h2>
+                    <p class="text-muted small">Préstamos actualmente activos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Tarjetas Activas</h6>
+                    <h2 class="card-title">@Model.ActiveCreditCards.ToString("N0")</h2>
+                    <p class="text-muted small">Tarjetas de crédito habilitadas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">Cuentas de Ahorro Abiertas</h6>
+                    <h2 class="card-title">@Model.OpenSavingsAccounts.ToString("N0")</h2>
+                    <p class="text-muted small">Cuentas principales y secundarias</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h4 class="fw-semibold text-secondary mb-3">Indicadores Financieros</h4>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h6 class="card-subtitle text-muted">Monto Promedio de Deuda por Cliente</h6>
+            <h2 class="card-title">RD$ @Model.AverageDebtPerClient.ToString("N2")</h2>
+            <p class="text-muted small">Deuda total dividida entre clientes activos</p>
         </div>
     </div>
 </section>

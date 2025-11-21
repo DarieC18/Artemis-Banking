@@ -1,4 +1,5 @@
-﻿using ArtemisBanking.Application.DTOs.Common;
+﻿using ArtemisBanking.Application.Common;
+using ArtemisBanking.Application.DTOs.Common;
 using ArtemisBanking.Application.DTOs.Email;
 using ArtemisBanking.Application.DTOs.Hermes;
 using ArtemisBanking.Application.Interfaces;
@@ -168,7 +169,8 @@ namespace ArtemisBanking.Application.Services
                 Tipo = "CRÉDITO",
                 Beneficiario = principalAccount.NumeroCuenta,
                 Origen = $"TARJETA ****{card.NumeroTarjeta[^4..]}",
-                Estado = "APROBADA"
+                Estado = "APROBADA",
+                OperatedByUserId = commerceUser.Id
             };
 
             await _transactionRepo.AddAsync(trx);

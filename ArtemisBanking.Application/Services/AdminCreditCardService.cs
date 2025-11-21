@@ -1,4 +1,3 @@
-using System;
 using ArtemisBanking.Application.Common;
 using ArtemisBanking.Application.Dtos.CreditCard;
 using ArtemisBanking.Application.DTOs.Email;
@@ -37,12 +36,7 @@ namespace ArtemisBanking.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<CreditCardListItemDTO>> GetCreditCardsAsync(
-            int pageNumber,
-            int pageSize,
-            string? estadoFilter = null,
-            string? cedulaFilter = null,
-            CancellationToken cancellationToken = default)
+        public async Task<PaginatedResult<CreditCardListItemDTO>> GetCreditCardsAsync(int pageNumber, int pageSize, string? estadoFilter = null, string? cedulaFilter = null, CancellationToken cancellationToken = default)
         {
             if (pageNumber <= 0) pageNumber = 1;
             if (pageSize <= 0) pageSize = 20;
@@ -51,20 +45,28 @@ namespace ArtemisBanking.Application.Services
 
             if (!string.IsNullOrWhiteSpace(cedulaFilter))
             {
+                cedulaFilter = cedulaFilter.Trim();
+
                 var allUsers = await _identityUserManager.GetAllAsync(cancellationToken);
-                var user = allUsers.FirstOrDefault(u => u.Cedula == cedulaFilter);
-                if (user == null)
+
+                var matchingUserIds = allUsers
+                    .Where(u => !string.IsNullOrWhiteSpace(u.Cedula) &&
+                                u.Cedula.Contains(cedulaFilter))
+                    .Select(u => u.Id)
+                    .ToHashSet();
+
+                if (!matchingUserIds.Any())
                 {
-                    return new PaginatedResult<CreditCardListItemDTO>(new List<CreditCardListItemDTO>(), pageNumber, pageSize, 0);
+                    return new PaginatedResult<CreditCardListItemDTO>(
+                        new List<CreditCardListItemDTO>(), pageNumber, pageSize, 0);
                 }
 
-                // Obtiene todas las tarjetas del usuario
-                creditCards = await _creditCardRepository.GetByCedulaAsync(cedulaFilter);
-                
-                // Filtra por UserId
-                creditCards = creditCards.Where(c => c.UserId == user.Id).ToList();
+                creditCards = await _creditCardRepository.GetAllAsync(null, null);
 
-                // Aplica los filtro de estado si existe
+                creditCards = creditCards
+                    .Where(c => matchingUserIds.Contains(c.UserId))
+                    .ToList();
+
                 if (!string.IsNullOrWhiteSpace(estadoFilter))
                 {
                     if (estadoFilter == "ACTIVA")
@@ -77,7 +79,6 @@ namespace ArtemisBanking.Application.Services
                     }
                 }
 
-                // Ordenar: primero ACTIVAS, luego CANCELADAS, ambas por fecha descendente
                 creditCards = creditCards
                     .OrderByDescending(c => c.IsActive)
                     .ThenByDescending(c => c.FechaCreacion)
@@ -85,11 +86,10 @@ namespace ArtemisBanking.Application.Services
             }
             else
             {
-                // Si no hay filtro de cedula, usar estadoFilter directamente
                 var estadoParaFiltro = estadoFilter;
                 if (string.IsNullOrWhiteSpace(estadoFilter))
                 {
-                    estadoParaFiltro = "ACTIVA"; // Por defecto mostrar solo activas
+                    estadoParaFiltro = "ACTIVA";
                 }
 
                 creditCards = await _creditCardRepository.GetAllAsync(estadoParaFiltro, null);
@@ -113,9 +113,10 @@ namespace ArtemisBanking.Application.Services
                     ClienteNombre = user?.Nombre ?? "",
                     ClienteApellido = user?.Apellido ?? "",
                     LimiteCredito = card.LimiteCredito,
-                    FechaExpiracion = card.FechaExpiracion, // Ya viene como string MM/yy
+                    FechaExpiracion = card.FechaExpiracion,
                     DeudaActual = card.DeudaActual,
-                    Estado = card.IsActive ? "ACTIVA" : "CANCELADA"
+                    Estado = card.IsActive ? "ACTIVA" : "CANCELADA",
+
                 });
             }
 
@@ -135,8 +136,8 @@ namespace ArtemisBanking.Application.Services
             return new CreditCardDetailDTO
             {
                 NumeroTarjeta = card.NumeroTarjeta,
-                Ultimos4Digitos = card.NumeroTarjeta.Length >= 4 
-                    ? card.NumeroTarjeta.Substring(card.NumeroTarjeta.Length - 4) 
+                Ultimos4Digitos = card.NumeroTarjeta.Length >= 4
+                    ? card.NumeroTarjeta.Substring(card.NumeroTarjeta.Length - 4)
                     : card.NumeroTarjeta,
                 LimiteCredito = card.LimiteCredito,
                 DeudaActual = card.DeudaActual,
@@ -158,7 +159,6 @@ namespace ArtemisBanking.Application.Services
 
             foreach (var cliente in clientes)
             {
-                // Calcula la deuda total: prestamos + tarjetas
                 var loans = await _loanRepository.GetByUserIdAsync(cliente.Id);
                 var deudaPrestamos = loans
                     .Where(l => l.IsActive)
@@ -201,21 +201,17 @@ namespace ArtemisBanking.Application.Services
                 return Result.Fail("Cliente no encontrado");
             }
 
-            // Genera el numero unico de 16 dígitos
             string numeroTarjeta;
             do
             {
                 numeroTarjeta = GenerateCardNumber();
             } while (await _creditCardRepository.ExistsByNumberAsync(numeroTarjeta));
 
-            // Calcula la fecha de expiracion (+3 años) y la convierte a formato MM/yy
             var fechaExpiracionDateTime = DateTime.Now.AddYears(3);
             var fechaExpiracionString = fechaExpiracionDateTime.ToString("MM/yy");
 
-            // Genera el CVC aleatorio de 3 digitos y cifra con SHA-256
             var cvcCifrado = CvcEncryptionHelper.GenerateAndEncryptCVC();
 
-            // Crea la tarjeta
             var nuevaTarjeta = new CreditCard
             {
                 NumeroTarjeta = numeroTarjeta,
@@ -253,7 +249,6 @@ namespace ArtemisBanking.Application.Services
                 return Result.Fail("No se puede actualizar el límite de una tarjeta cancelada");
             }
 
-            // Valida que el nuevo limite no sea menor que la deuda actual
             if (request.LimiteCredito < tarjeta.DeudaActual)
             {
                 return Result.Fail($"El nuevo límite (RD${request.LimiteCredito}) no puede ser menor " +
@@ -264,26 +259,55 @@ namespace ArtemisBanking.Application.Services
             tarjeta.LimiteCredito = request.LimiteCredito;
             await _creditCardRepository.UpdateAsync(tarjeta);
 
-            // Envia el correo al cliente
             var user = await _identityUserManager.GetByIdAsync(tarjeta.UserId);
             if (user != null && !string.IsNullOrWhiteSpace(user.Email))
             {
-                var ultimos4Digitos = tarjeta.NumeroTarjeta.Length >= 4 
-                    ? tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4) 
+                var ultimos4Digitos = tarjeta.NumeroTarjeta.Length >= 4
+                    ? tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4)
                     : tarjeta.NumeroTarjeta;
 
                 var asunto = $"Límite de tarjeta [{ultimos4Digitos}] modificado";
                 var cuerpo = $@"
-                Estimado {user.Nombre} {user.Apellido},
+                <html>
+                  <body style=""font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;"">
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                           style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px;
+                                  padding: 25px; border: 1px solid #e0e0e0;"">
+                      <tr>
+                        <td>
 
-                El límite de su tarjeta de crédito terminada en {ultimos4Digitos} ha sido modificado.
+                          <h2 style=""color: #2e2e2e; margin-bottom: 15px;"">
+                            Notificación de actualización de límite de tarjeta
+                          </h2>
 
-                Nuevo límite aprobado: RD${request.LimiteCredito}
+                          <p style=""font-size: 15px; margin-bottom: 10px;"">
+                            Hola <strong>{user.Nombre} {user.Apellido}</strong>,
+                          </p>
 
-                Si tiene alguna pregunta, contáctenos.
+                          <p style=""font-size: 15px; line-height: 1.5;"">
+                            El límite de tu tarjeta de crédito terminada en
+                            <strong>{ultimos4Digitos}</strong> ha sido actualizado.
+                          </p>
 
-                Gracias,
-                Artemis Banking";
+                          <p style=""margin-top: 20px; font-size: 15px;"">
+                            <strong>Nuevo límite aprobado:</strong> RD${request.LimiteCredito}
+                          </p>
+
+                          <div style=""margin-top: 25px; padding: 15px; background-color: #fff4e5;
+                                      border-left: 4px solid #ffa726; font-size: 14px;"">
+                            Si no reconoces esta actualización, contacta al banco de inmediato.
+                          </div>
+
+                          <p style=""margin-top: 30px; color: #888; font-size: 12px;"">
+                            ArtemisBanking © {DateTime.Now.Year}
+                          </p>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                ";
 
                 await _emailService.SendAsync(new EmailRequestDto
                 {
@@ -309,7 +333,6 @@ namespace ArtemisBanking.Application.Services
                 return Result.Fail("La tarjeta ya está cancelada");
             }
 
-            // Valida que la deuda sea cero
             if (tarjeta.DeudaActual > 0)
             {
                 return Result.Fail("Para cancelar esta tarjeta, el cliente debe " +

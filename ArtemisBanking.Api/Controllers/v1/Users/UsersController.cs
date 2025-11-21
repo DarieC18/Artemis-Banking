@@ -1,4 +1,4 @@
-﻿using ArtemisBanking.Application;
+﻿using ArtemisBanking.Application.Common;
 using ArtemisBanking.Application.DTOs.Common;
 using ArtemisBanking.Application.DTOs.Users;
 using ArtemisBanking.Application.Interfaces.Services;

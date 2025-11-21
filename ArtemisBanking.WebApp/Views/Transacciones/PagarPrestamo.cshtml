@@ -1,4 +1,4 @@
-﻿@using ArtemisBanking.Application.ViewModels.Cliente
+﻿﻿@using ArtemisBanking.Application.ViewModels.Cliente
 @model PayLoanViewModel
 
 @{
@@ -25,12 +25,13 @@
         <label asp-for="LoanId" class="form-label"></label>
         <select asp-for="LoanId" class="form-select">
             <option value="">-- Seleccione un préstamo --</option>
+
             @if (Model.PrestamosDisponibles != null)
             {
                 foreach (var prestamo in Model.PrestamosDisponibles)
                 {
                     <option value="@prestamo.Id">
-                        Préstamo #@prestamo.Id
+                        @prestamo.NumeroPrestamo
                     </option>
                 }
             }
