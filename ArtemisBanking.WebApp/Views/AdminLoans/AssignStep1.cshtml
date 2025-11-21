@@ -2,60 +2,89 @@
 @{
     ViewData["Title"] = "Asignar Préstamo - Paso 1";
     var averageDebt = (decimal)ViewBag.AverageDebt;
+    var cedulaFilter = ViewBag.CedulaFilter as string;
 }
 
-<section class="mb-4">
-    <h1 class="display-5 fw-semibold text-primary">Asignar Préstamo - Paso 1: Selección de Cliente</h1>
-    <p class="lead text-muted">Seleccione el cliente al que desea asignar un préstamo.</p>
-</section>
+<div class="ab-page-header">
+    <h1 class="ab-page-title">
+        <i class="fas fa-user-check me-2"></i>
+        Paso 1: Selección de Cliente
+    </h1>
+    <p class="ab-page-subtitle">
+        Seleccione el cliente al que desea asignar un préstamo
+    </p>
+</div>
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
         @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
 
-<section class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <h5 class="text-primary">Valor de deuda promedio del sistema: <strong>RD$ @averageDebt.ToString("N2")</strong></h5>
-            </div>
+<div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(244, 180, 0, 0.1) 0%, rgba(220, 53, 69, 0.1) 100%); border-left: 4px solid #F4B400;">
+    <div class="d-flex align-items-center gap-3">
+        <div class="ab-stat-icon" style="width: 60px; height: 60px; background-color: rgba(244, 180, 0, 0.2); color: #F4B400;">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div>
+            <div class="text-white-50 mb-1">Deuda Promedio del Sistema</div>
+            <div class="h3 mb-0 fw-bold" style="color: #F4B400;">@averageDebt.ToString("C")</div>
+            <small class="text-white-50">
+                <i class="fas fa-info-circle me-1"></i>
+                Los clientes con deuda superior serán marcados como alto riesgo
+            </small>
         </div>
     </div>
-</section>
+</div>
 
-<section class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <form method="get" asp-action="AssignStep1" class="mb-3" id="searchForm">
-            <div class="row g-3">
-                <div class="col-md-8">
-                    <input type="text" name="cedulaFilter" id="cedulaSearch" class="form-control" placeholder="Buscar por cédula..." />
+<div class="ab-card mb-4">
+    <div class="ab-card-body">
+        <form method="get" asp-action="AssignStep1" id="searchForm" class="row g-3 align-items-end">
+            <div class="col-md-8">
+                <label for="cedulaSearch" class="ab-form-label">
+                    Buscar Cliente
+                </label>
+                <div class="input-group">
+                    </span>
+                    <input type="text" name="cedulaFilter" id="cedulaSearch"
+                           class="ab-form-control"
+                           value="@cedulaFilter"
+                           placeholder="Ingrese la cédula del cliente..."
+                           style="font-family: 'Courier New', monospace;" />
                 </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
-                </div>
+            </div>
+            <div class="col-md-4 d-grid">
+                <button type="submit" class="ab-btn ab-btn-primary">
+                    <i class="fas fa-search me-2"></i>
+                    Buscar
+                </button>
             </div>
         </form>
     </div>
-</section>
+</div>
 
-<form method="post" asp-action="AssignStep1" id="clientForm">
+<form method="post" asp-action="AssignStep1" id="clientForm" data-loading>
     @Html.AntiForgeryToken()
-    
-    <section class="card border-0 shadow-sm">
-        <div class="card-body">
+
+    <div class="ab-card">
+        <div class="ab-card-header">
+            <h2 class="ab-card-title">
+                <i class="fas fa-users me-2"></i>
+                Clientes Elegibles
+            </h2>
+        </div>
+
+        <div class="ab-card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
+                <table class="ab-table">
+                    <thead>
                         <tr>
-                            <th>Seleccionar</th>
-                            <th>Cédula</th>
-                            <th>Nombre y apellido</th>
-                            <th>Correo electrónico</th>
-                            <th>Deuda total actual</th>
+                            <th><i class="fas fa-id-card me-1"></i> Cédula</th>
+                            <th><i class="fas fa-user me-1"></i> Nombre y Apellido</th>
+                            <th><i class="fas fa-envelope me-1"></i> Correo</th>
+                            <th class="text-end"><i class="fas fa-exclamation-triangle me-1"></i> Deuda Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,44 +92,134 @@
                         {
                             @foreach (var client in Model)
                             {
-                                <tr>
+                                var isHighRisk = client.DeudaTotal > averageDebt;
+                                <tr style="cursor: pointer; @(isHighRisk ? "background: rgba(220, 53, 69, 0.05);" : "")"
+                                    onclick="selectLoanClient(this, '@client.UserId')">
                                     <td>
-                                        <input type="radio" name="userId" value="@client.UserId" required />
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="radio"
+                                                   name="userId"
+                                                   value="@client.UserId"
+                                                   id="loanuser_@client.UserId"
+                                                   class="form-check-input loan-client-radio"
+                                                   required
+                                                   style="cursor: pointer;" />
+                                            <label for="loanuser_@client.UserId" style="cursor: pointer; margin: 0; font-family: 'Courier New', monospace;">
+                                                @client.Cedula
+                                            </label>
+                                        </div>
                                     </td>
-                                    <td>@client.Cedula</td>
-                                    <td>@client.Nombre @client.Apellido</td>
-                                    <td>@client.Email</td>
-                                    <td>RD$ @client.DeudaTotal.ToString("N2")</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                 style="width: 35px; height: 35px; background: linear-gradient(135deg, @(isHighRisk ? "#DC3545" : "#1B3B6F") 0%, @(isHighRisk ? "#B91C1C" : "#2A5490") 100%); color: white; font-weight: bold; flex-shrink: 0;">
+                                                @client.Nombre?.Substring(0, 1).ToUpper()
+                                            </div>
+                                            <div>
+                                                <div class="fw-medium text-white">@client.Nombre @client.Apellido</div>
+                                                @if (isHighRisk)
+                                                {
+                                                    <small class="ab-badge ab-badge-danger" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                                        Alto Riesgo
+                                                    </small>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-envelope text-white-50 me-1"></i>
+                                        <span style="color: rgba(255, 255, 255, 0.7);">@client.Email</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="fw-bold @(isHighRisk ? "text-danger" : "text-warning")">
+                                            @client.DeudaTotal.ToString("C")
+                                        </span>
+                                        @if (isHighRisk)
+                                        {
+                                            <br />
+                                            <small class="text-danger">
+                                                <i class="fas fa-arrow-up me-1"></i>
+                                                Sobre promedio
+                                            </small>
+                                        }
+                                    </td>
                                 </tr>
                             }
                         }
                         else
                         {
                             <tr>
-                                <td colspan="5" class="text-center text-muted">No hay clientes elegibles disponibles.</td>
+                                <td colspan="4">
+                                    <div class="ab-empty-state">
+                                        <div class="ab-empty-state-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <h3 class="ab-empty-state-title">No hay clientes elegibles</h3>
+                                        <p class="ab-empty-state-text">
+                                            No hay clientes disponibles para asignar préstamos en este momento.
+                                        </p>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
         </div>
-    </section>
+    </div>
 
-    <div class="mt-4 d-flex justify-content-between">
-        <a asp-action="Index" class="btn btn-secondary">Volver</a>
-        <button type="submit" class="btn btn-primary">Siguiente paso</button>
+    <div class="d-flex justify-content-between mt-4">
+        <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver
+        </a>
+        <button type="submit" class="ab-btn ab-btn-primary">
+            Siguiente Paso
+            <i class="fas fa-arrow-right ms-2"></i>
+        </button>
     </div>
 </form>
 
+<style>
+    .ab-table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+        .ab-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            transform: translateX(4px);
+        }
+
+        .ab-table tbody tr:has(.loan-client-radio:checked) {
+            background-color: rgba(0, 191, 165, 0.15) !important;
+            border-left: 4px solid var(--ab-secondary);
+        }
+</style>
+
 @section Scripts {
     <script>
+        function selectLoanClient(row, userId) {
+            const radio = document.getElementById('loanuser_' + userId);
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.loan-client-radio').forEach(radio => {
+                radio.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        });
+
         document.getElementById('clientForm').addEventListener('submit', function(e) {
             const selected = document.querySelector('input[name="userId"]:checked');
             if (!selected) {
                 e.preventDefault();
-                alert('Debe seleccionar un cliente.');
+                alert('Debe seleccionar un cliente antes de continuar.');
             }
         });
     </script>
 }
-

@@ -14,11 +14,19 @@
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
     // Toggle sidebar en desktop
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function () {
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
             sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('sidebar-collapsed');
-            navbar.classList.toggle('sidebar-collapsed');
+
+            if (mainContent) {
+                mainContent.classList.toggle('sidebar-collapsed');
+            }
+            if (navbar) {
+                navbar.classList.toggle('sidebar-collapsed');
+            }
 
             // Guardar preferencia en localStorage
             const isCollapsed = sidebar.classList.contains('collapsed');
@@ -29,8 +37,12 @@
         const savedState = localStorage.getItem('artemis-sidebar-collapsed');
         if (savedState === 'true') {
             sidebar.classList.add('collapsed');
-            mainContent.classList.add('sidebar-collapsed');
-            navbar.classList.add('sidebar-collapsed');
+            if (mainContent) {
+                mainContent.classList.add('sidebar-collapsed');
+            }
+            if (navbar) {
+                navbar.classList.add('sidebar-collapsed');
+            }
         }
     }
 

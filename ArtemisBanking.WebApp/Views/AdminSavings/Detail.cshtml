@@ -1,109 +1,196 @@
 @model ArtemisBanking.Application.Dtos.SavingsAccount.SavingsAccountDetailDTO
 @{
     ViewData["Title"] = "Detalle de cuenta";
-    var accountLabel = $"Cuenta {Model.NumeroCuenta}";
 }
 
-<section class="mb-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="display-6 fw-semibold text-primary">@accountLabel</h1>
-            <p class="text-muted mb-0">Historial de transacciones y estado actual.</p>
+            <h1 class="ab-page-title mb-2 d-flex align-items-center">
+                <img src="~/images/artemis-logo-icon.png"
+                     alt="Logo"
+                     class="me-2"
+                     style="height: 1em; width: auto; object-fit: contain;" />
+                Detalle de Cuenta de Ahorros
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                <i class="fas fa-hashtag"></i>
+                <span style="font-family: 'Courier New', monospace;">@Model.NumeroCuenta</span>
+            </p>
         </div>
+
         <div class="d-flex gap-2">
             @if (Model.Estado == "ACTIVA" && !Model.EsPrincipal)
             {
-                <a asp-action="Cancel" asp-route-id="@ViewBag.AccountId" class="btn btn-outline-danger">
-                    <i class="bi bi-x-circle"></i> Cancelar cuenta
-                </a>
             }
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Volver al listado
+            <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>
+                Volver
             </a>
         </div>
     </div>
-</section>
+</div>
 
-<section class="row g-4 mb-4">
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <p class="text-muted mb-1">Cliente</p>
-                <h5 class="mb-0">@Model.ClienteNombre @Model.ClienteApellido</h5>
-                <small class="text-muted">@Model.ClienteCedula</small>
+<div class="ab-stats-grid mb-4">
+    <div class="ab-stat-card primary">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-user"></i>
             </div>
         </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <p class="text-muted mb-1">Balance actual</p>
-                <h4 class="mb-0 text-success">RD$ @Model.Balance.ToString("N2")</h4>
-            </div>
+        <div class="ab-stat-label">Cliente</div>
+        <div class="ab-stat-value" style="font-size: 1.5rem;">@Model.ClienteNombre @Model.ClienteApellido</div>
+        <div class="ab-stat-change">
+            <i class="fas fa-id-card me-1"></i>
+            @Model.ClienteCedula
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <p class="text-muted mb-1">Tipo</p>
-                <span class="badge @(Model.EsPrincipal ? "bg-primary" : "bg-secondary")">@Model.TipoCuenta</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <p class="text-muted mb-1">Estado</p>
-                <span class="badge @(Model.Estado == "ACTIVA" ? "bg-success" : "bg-danger")">@Model.Estado</span>
-                <p class="text-muted small mb-0">Creada el @Model.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy")</p>
-            </div>
-        </div>
-    </div>
-</section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">Transacciones</h4>
+    <div class="ab-stat-card success">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-striped align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Monto</th>
-                        <th>Tipo</th>
-                        <th>Origen</th>
-                        <th>Beneficiario</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Transacciones != null && Model.Transacciones.Any())
-                    {
-                        foreach (var tx in Model.Transacciones)
+        <div class="ab-stat-label">Balance Actual</div>
+        <div class="ab-stat-value">RD$ @Model.Balance.ToString("N2")</div>
+    </div>
+
+    <div class="ab-stat-card warning">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-piggy-bank"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Tipo de Cuenta</div>
+        <div class="ab-stat-value" style="font-size: 1.5rem;">@Model.TipoCuenta</div>
+        <div class="ab-stat-change">
+            @if (Model.EsPrincipal)
+            {
+                <i class="fas fa-star me-1"></i>
+                <span>Principal</span>
+            }
+            else
+            {
+                <i class="fas fa-circle me-1"></i>
+                <span>Secundaria</span>
+            }
+        </div>
+    </div>
+
+    <div class="ab-stat-card @(Model.Estado == "ACTIVA" ? "info" : "danger")">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas @(Model.Estado == "ACTIVA" ? "fa-check-circle" : "fa-times-circle")"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Estado de la Cuenta</div>
+        <div class="ab-stat-value" style="font-size: 1.75rem;">@Model.Estado</div>
+        <div class="ab-stat-change">
+            Creada: @Model.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy")
+        </div>
+    </div>
+</div>
+
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-exchange-alt me-2"></i>
+            Historial de Transacciones
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
+        @if (Model.Transacciones != null && Model.Transacciones.Any())
+        {
+            <div class="table-responsive">
+                <table class="ab-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-calendar me-1"></i> Fecha</th>
+                            <th class="text-end"><i class="fas fa-dollar-sign me-1"></i> Monto</th>
+                            <th><i class="fas fa-tag me-1"></i> Tipo</th>
+                            <th><i class="fas fa-user-check me-1"></i> Beneficiario</th>
+                            <th><i class="fas fa-arrow-right me-1"></i> Origen</th>
+                            <th class="text-center"><i class="fas fa-info-circle me-1"></i> Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tx in Model.Transacciones)
                         {
-                            <tr>
-                                <td>@tx.FechaTransaccion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>RD$ @tx.Monto.ToString("N2")</td>
-                                <td>@tx.Tipo</td>
-                                <td>@tx.Origen</td>
-                                <td>@tx.Beneficiario</td>
-                                <td>
-                                    <span class="badge @(tx.Estado == "APROBADA" ? "bg-success" : "bg-danger")">@tx.Estado</span>
-                                </td>
-                            </tr>
+                    @functions {
+                        string FormatearTC(string valor)
+                        {
+                            if (string.IsNullOrWhiteSpace(valor))
+                                return valor;
+
+                            var digits = new string(valor.Where(char.IsDigit).ToArray());
+
+                            if (digits.Length >= 12 && digits.Length <= 19)
+                                return "•••• " + digits[^4..];
+
+                            return valor;
                         }
                     }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-4">Esta cuenta aún no registra transacciones.</td>
-                        </tr>
-                    }
+
+                    var beneficiarioFmt = FormatearTC(tx.Beneficiario);
+                    var origenFmt = FormatearTC(tx.Origen);
+
+                    var tipoUpper = tx.Tipo?.ToUpper().Trim();
+                    var esDebito = tipoUpper == "DÉBITO" || tipoUpper == "DEBITO";
+                    var montoClass = esDebito ? "text-danger" : "text-success";
+
+                    <tr>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span>@tx.FechaTransaccion.ToLocalTime().ToString("dd/MM/yyyy")</span>
+                                <small class="text-white-50">@tx.FechaTransaccion.ToLocalTime().ToString("hh:mm tt")</small>
+                            </div>
+                        </td>
+                        <td class="text-end fw-bold @montoClass">
+                            @(esDebito ? "-" : "+")RD$ @tx.Monto.ToString("N2")
+                        </td>
+                        <td>
+                            <span class="ab-badge ab-badge-@(esDebito ? "danger" : "success")">
+                                @tx.Tipo
+                            </span>
+                        </td>
+                        <td>
+                            <span style="font-family: 'Courier New', monospace;">@beneficiarioFmt</span>
+                        </td>
+                        <td>
+                            <span style="font-family: 'Courier New', monospace;">@origenFmt</span>
+                        </td>
+                        <td class="text-center">
+                            @{
+                                var estadoClass = tx.Estado?.Trim().ToUpper() switch
+                                {
+                                    "APROBADA" => "ab-badge-success",
+                                    "RECHAZADA" => "ab-badge-danger",
+                                    _ => "ab-badge-info"
+                                };
+                            }
+                            <span class="ab-badge @estadoClass">
+                                @tx.Estado
+                            </span>
+                        </td>
+                    </tr>
+                                        }
                 </tbody>
             </table>
         </div>
+                }
+                else
+        {
+            <div class="ab-empty-state">
+                <div class="ab-empty-state-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <h3 class="ab-empty-state-title">No hay transacciones</h3>
+                <p class="ab-empty-state-text">
+                    Esta cuenta aún no registra ningún movimiento o transacción.
+                </p>
+            </div>
+        }
     </div>
-</section>
-
+</div>

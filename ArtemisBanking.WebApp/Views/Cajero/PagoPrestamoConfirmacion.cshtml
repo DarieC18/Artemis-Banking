@@ -3,93 +3,242 @@
 @{
     ViewData["Title"] = "Confirmación de Pago de Préstamo";
 }
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-check-circle me-2"></i>
+            Confirmar Pago de Préstamo
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Revise las cuotas que serán pagadas antes de confirmar
+        </p>
+    </div>
+</div>
+
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
 }
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<div class="container mt-4">
-
-    <h2 class="mb-4">Confirmar Pago de Préstamo</h2>
-
-    @if (!string.IsNullOrWhiteSpace(Model?.ErrorMessage))
-    {
-        <div class="alert alert-danger">@Model.ErrorMessage</div>
-    }
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <dl class="row mb-0">
-                <dt class="col-sm-4">Cuenta Origen</dt>
-                <dd class="col-sm-8">
-                    <small class="text-muted">(@Model.CuentaOrigen)</small>
-                </dd>
-
-                <dt class="col-sm-4">Número de Préstamo</dt>
-                <dd class="col-sm-8">@Model.NumeroPrestamo</dd>
-
-                <dt class="col-sm-4">Titular del Préstamo</dt>
-                <dd class="col-sm-8">@Model.TitularPrestamo</dd>
-
-                <dt class="col-sm-4">Monto a Aplicar</dt>
-                <dd class="col-sm-8 fw-bold">@Model.MontoSolicitado.ToString("C")</dd>
-            </dl>
-        </div>
+@if (!string.IsNullOrWhiteSpace(Model?.ErrorMessage))
+{
+    <div class="ab-alert ab-alert-danger mb-4">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @Model.ErrorMessage
     </div>
+}
 
-    <h4>Cuotas que se cubrirán</h4>
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Resumen del pago -->
+        <div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(27, 59, 111, 0.1) 0%, rgba(244, 180, 0, 0.1) 100%); border-left: 4px solid var(--ab-primary);">
+            <div class="ab-card-body">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--ab-primary) 0%, var(--ab-primary-dark) 100%); border-radius: 50%; box-shadow: 0 8px 24px rgba(27, 59, 111, 0.3);">
+                        <i class="fas fa-hand-holding-usd" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h3 class="mb-2" style="color: var(--ab-white); font-weight: 600;">
+                        Pago de @Model.MontoSolicitado.ToString("C")
+                    </h3>
+                    <p class="mb-0" style="color: rgba(255, 255, 255, 0.7);">
+                        Verifique los datos antes de confirmar
+                    </p>
+                </div>
 
-    @if (Model.CuotasAfectadas != null && Model.CuotasAfectadas.Any())
-    {
-        <table class="table table-striped table-sm mt-3">
-            <thead>
-                <tr>
-                    <th># Cuota</th>
-                    <th>Valor</th>
-                    <th>Fecha</th>
-                    <th>¿Atrasada?</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var cuota in Model.CuotasAfectadas)
-                {
-                    <tr>
-                        <td>@cuota.NumeroCuota</td>
-                        <td>@cuota.ValorCuota.ToString("C")</td>
-                        <td>@cuota.FechaPago.ToShortDateString()</td>
-                        <td>@(cuota.Atrasada ? "Sí" : "No")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="alert alert-warning">
-            No se encontró ninguna cuota que pueda ser afectada con este monto.
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1 d-flex align-items-center" style="color: rgba(255, 255, 255, 0.6);">
+                                <img src="~/images/artemis-logo-icon.png"
+                                     alt="Icono"
+                                     class="me-2"
+                                     style="height: 1.1em; width: auto; opacity: 0.8;" />
+                                Cuenta Origen
+                            </small>
+                            <strong style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.CuentaOrigen
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-hashtag me-1"></i>
+                                Número de Préstamo
+                            </small>
+                            <strong style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.NumeroPrestamo
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-user me-1"></i>
+                                Titular del Préstamo
+                            </small>
+                            <strong style="color: var(--ab-white); font-size: 1.1rem;">
+                                @Model.TitularPrestamo
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 text-center" style="background-color: rgba(27, 59, 111, 0.15); border-radius: var(--ab-border-radius); border: 1px solid rgba(27, 59, 111, 0.3);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-dollar-sign me-1"></i>
+                                Monto a Aplicar
+                            </small>
+                            <strong style="color: #5A9FFF; font-size: 1.5rem; font-weight: bold;">
+                                @Model.MontoSolicitado.ToString("C")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    }
 
-    <form asp-action="ConfirmarPagoPrestamo" method="post" class="mt-4">
-        @Html.AntiForgeryToken()
+        <!-- Cuotas que se cubrirán -->
+        <div class="ab-card">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-list-ol me-2"></i>
+                    Cuotas que se cubrirán
+                </h2>
+            </div>
 
-        <input type="hidden" asp-for="CuentaOrigen" />
-        <input type="hidden" asp-for="LoanId" />
-        <input type="hidden" asp-for="MontoSolicitado" />
+            <div class="ab-card-body">
+                @if (Model.CuotasAfectadas != null && Model.CuotasAfectadas.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="ab-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-hashtag me-1"></i> # Cuota</th>
+                                    <th class="text-end"><i class="fas fa-dollar-sign me-1"></i> Valor</th>
+                                    <th><i class="fas fa-calendar me-1"></i> Fecha</th>
+                                    <th class="text-center"><i class="fas fa-exclamation-triangle me-1"></i> Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cuota in Model.CuotasAfectadas)
+                                {
+                                    <tr style="@(cuota.Atrasada ? "background-color: rgba(220, 53, 69, 0.05);" : "")">
+                                        <td>
+                                            <span class="fw-semibold">Cuota #@cuota.NumeroCuota</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="fw-bold text-white">@cuota.ValorCuota.ToString("C")</span>
+                                        </td>
+                                        <td>
+                                            <span style="color: rgba(255, 255, 255, 0.8);">@cuota.FechaPago.ToShortDateString()</span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (cuota.Atrasada)
+                                            {
+                                                <span class="ab-badge ab-badge-danger">
+                                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                                    Atrasada
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="ab-badge ab-badge-success">
+                                                    <i class="fas fa-check-circle me-1"></i>
+                                                    Al día
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    @if (Model.CuotasAfectadas.Any(c => c.Atrasada))
+                    {
+                        <div class="ab-alert ab-alert-warning mt-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Hay cuotas atrasadas que serán pagadas con esta operación</strong>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="ab-empty-state">
+                        <div class="ab-empty-state-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3 class="ab-empty-state-title">No se encontraron cuotas</h3>
+                        <p class="ab-empty-state-text">
+                            No se encontró ninguna cuota que pueda ser afectada con este monto.
+                        </p>
+                        <a asp-action="PagoPrestamo" class="ab-btn ab-btn-primary mt-3">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Volver e intentar de nuevo
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
 
-        <button type="submit" class="btn btn-success">Confirmar Pago</button>
-        <a asp-action="PagoPrestamo" class="btn btn-secondary ms-2">Volver</a>
-    </form>
+        <!-- Confirmación -->
+        @if (Model.CuotasAfectadas != null && Model.CuotasAfectadas.Any())
+        {
+            <div class="ab-card mt-4">
+                <div class="ab-card-body text-center py-4">
+                    <h5 class="mb-4" style="color: var(--ab-white);">
+                        ¿Desea confirmar este pago de préstamo?
+                    </h5>
 
+                    <form asp-action="ConfirmarPagoPrestamo" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="CuentaOrigen" />
+                        <input type="hidden" asp-for="LoanId" />
+                        <input type="hidden" asp-for="MontoSolicitado" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                            <a asp-action="PagoPrestamo" class="ab-btn ab-btn-outline-primary" style="min-width: 180px;">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Volver
+                            </a>
+                            <button type="submit" class="ab-btn ab-btn-success" style="min-width: 180px;">
+                                <i class="fas fa-check me-2"></i>
+                                Confirmar Pago
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 p-3" style="background-color: rgba(40, 167, 69, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(40, 167, 69, 0.3);">
+                        <small style="color: rgba(255, 255, 255, 0.8);">
+                            <i class="fas fa-shield-alt me-1" style="color: var(--ab-success);"></i>
+                            Esta operación será procesada de forma inmediata y las cuotas serán marcadas como pagadas
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 @section Scripts {

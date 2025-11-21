@@ -3,89 +3,160 @@
     ViewData["Title"] = "Crear Usuario";
 }
 
-<section class="mb-4">
-    <h1 class="display-5 fw-semibold text-primary">Crear Usuario</h1>
-</section>
+<div class="ab-page-header">
+    <h1 class="ab-page-title">
+        <i class="fas fa-user-plus me-2"></i>
+        Crear Usuario
+    </h1>
+    <p class="ab-page-subtitle">
+        Completa el formulario para crear un nuevo usuario en el sistema
+    </p>
+</div>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
+<div class="ab-card">
+    <form asp-action="Create" method="post" data-loading>
+        @Html.AntiForgeryToken()
 
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div asp-validation-summary="ModelOnly" class="ab-alert ab-alert-danger mb-4"></div>
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label asp-for="Nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-                    <input asp-for="Nombre" class="form-control" />
-                    <span asp-validation-for="Nombre" class="text-danger"></span>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="Nombre" class="ab-form-label">
+                        <i class="fas fa-user me-1"></i>
+                        Nombre <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="Nombre" class="ab-form-control" placeholder="Ingrese el nombre" />
+                    <span asp-validation-for="Nombre" class="ab-invalid-feedback"></span>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Apellido" class="form-label">Apellido <span class="text-danger">*</span></label>
-                    <input asp-for="Apellido" class="form-control" />
-                    <span asp-validation-for="Apellido" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="Apellido" class="ab-form-label">
+                        <i class="fas fa-user me-1"></i>
+                        Apellido <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="Apellido" class="ab-form-control" placeholder="Ingrese el apellido" />
+                    <span asp-validation-for="Apellido" class="ab-invalid-feedback"></span>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Cedula" class="form-label">Cédula <span class="text-danger">*</span></label>
-                    <input asp-for="Cedula" class="form-control" />
-                    <span asp-validation-for="Cedula" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="Cedula" class="ab-form-label">
+                        <i class="fas fa-id-card me-1"></i>
+                        Cédula <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="Cedula" class="ab-form-control" placeholder="000-0000000-0" style="font-family: 'Courier New', monospace;" />
+                    <span asp-validation-for="Cedula" class="ab-invalid-feedback"></span>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Email" class="form-label">Correo electrónico <span class="text-danger">*</span></label>
-                    <input asp-for="Email" type="email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="Email" class="ab-form-label">
+                        <i class="fas fa-envelope me-1"></i>
+                        Correo Electrónico <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="Email" type="email" class="ab-form-control" placeholder="usuario@ejemplo.com" />
+                    <span asp-validation-for="Email" class="ab-invalid-feedback"></span>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <label asp-for="UserName" class="form-label">Usuario <span class="text-danger">*</span></label>
-                    <input asp-for="UserName" class="form-control" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="UserName" class="ab-form-label">
+                        <i class="fas fa-at me-1"></i>
+                        Usuario <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="UserName" class="ab-form-control" placeholder="nombre_usuario" />
+                    <span asp-validation-for="UserName" class="ab-invalid-feedback"></span>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Role" class="form-label">Tipo de usuario <span class="text-danger">*</span></label>
-                    <select asp-for="Role" class="form-select" id="roleSelect">
-                        <option value="">Seleccione un tipo</option>
-                        <option value="Administrador">Administrador</option>
-                        <option value="Cajero">Cajero</option>
-                        <option value="Cliente">Cliente</option>
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="Role" class="ab-form-label">
+                        <i class="fas fa-user-tag me-1"></i>
+                        Tipo de Usuario <span class="text-danger">*</span>
+                    </label>
+                    <select asp-for="Role" class="ab-form-control" id="roleSelect">
+                        <option value="">-- Seleccione un tipo --</option>
+                        <option value="Administrador">
+                            🛡️ Administrador
+                        </option>
+                        <option value="Cajero">
+                            💼 Cajero
+                        </option>
+                        <option value="Cliente">
+                            👤 Cliente
+                        </option>
                     </select>
-                    <span asp-validation-for="Role" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <label asp-for="Password" class="form-label">Contraseña <span class="text-danger">*</span></label>
-                    <input asp-for="Password" type="password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <label asp-for="ConfirmPassword" class="form-label">Confirmar contraseña <span class="text-danger">*</span></label>
-                    <input asp-for="ConfirmPassword" type="password" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-6" id="montoInicialContainer" style="display: none;">
-                    <label asp-for="MontoInicial" class="form-label">Monto inicial</label>
-                    <input asp-for="MontoInicial" type="number" step="0.01" min="0" class="form-control" value="0" />
-                    <span asp-validation-for="MontoInicial" class="text-danger"></span>
-                    <small class="form-text text-muted">Puede ser 0</small>
+                    <span asp-validation-for="Role" class="ab-invalid-feedback"></span>
                 </div>
             </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Crear Usuario</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="Password" class="ab-form-label">
+                        <i class="fas fa-lock me-1"></i>
+                        Contraseña <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="Password" type="password" class="ab-form-control" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="ab-invalid-feedback"></span>
+                </div>
             </div>
-        </form>
-    </div>
-</section>
+
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="ConfirmPassword" class="ab-form-label">
+                        <i class="fas fa-lock me-1"></i>
+                        Confirmar Contraseña <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="ConfirmPassword" type="password" class="ab-form-control" placeholder="••••••••" />
+                    <span asp-validation-for="ConfirmPassword" class="ab-invalid-feedback"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6" id="montoInicialContainer" style="display: none;">
+                <div class="ab-form-group">
+                    <label asp-for="MontoInicial" class="ab-form-label">
+                        <i class="fas fa-dollar-sign me-1"></i>
+                        Monto Inicial
+                    </label>
+                    <input asp-for="MontoInicial" type="number" step="0.01" min="0" class="ab-form-control" value="0" placeholder="0.00" data-money />
+                    <span asp-validation-for="MontoInicial" class="ab-invalid-feedback"></span>
+                    <small class="text-white-50 mt-2 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Balance inicial de la cuenta principal (puede ser 0)
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="ab-alert ab-alert-info mt-4">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Nota:</strong> Los campos marcados con <span class="text-danger">*</span> son obligatorios.
+        </div>
+
+        <div class="ab-card-footer d-flex gap-3 mt-4">
+            <button type="submit" class="ab-btn ab-btn-primary">
+                <i class="fas fa-save me-2"></i>
+                Crear Usuario
+            </button>
+            <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+                <i class="fas fa-times me-2"></i>
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         document.getElementById('roleSelect').addEventListener('change', function() {
             const montoContainer = document.getElementById('montoInicialContainer');
@@ -97,4 +168,3 @@
         });
     </script>
 }
-

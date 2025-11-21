@@ -5,20 +5,122 @@
     ViewData["Title"] = "Agregar Beneficiario";
 }
 
-<h2 class="mt-3">Agregar Beneficiario</h2>
-
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="mb-3">
-        <label asp-for="NumeroCuentaBeneficiario" class="form-label"></label>
-        <input asp-for="NumeroCuentaBeneficiario" class="form-control" />
-        <span asp-validation-for="NumeroCuentaBeneficiario" class="text-danger"></span>
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-user-plus me-2"></i>
+            Agregar Beneficiario
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Registra una cuenta de destino frecuente para tus transferencias
+        </p>
     </div>
+</div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Volver</a>
-</form>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="ab-card">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Datos del Beneficiario
+                </h2>
+            </div>
+
+            <div class="ab-card-body">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="ab-alert ab-alert-danger mb-4">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="fas fa-exclamation-circle" style="margin-top: 0.125rem;"></i>
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="ab-form-group">
+                        <label asp-for="NumeroCuentaBeneficiario" class="ab-form-label">
+                            <i class="fas fa-hashtag me-1"></i>
+                            Número de Cuenta del Beneficiario
+                        </label>
+                        <input asp-for="NumeroCuentaBeneficiario"
+                               class="ab-form-control"
+                               placeholder="Ingrese el número de cuenta"
+                               style="font-family: 'Courier New', monospace;" />
+                        <span asp-validation-for="NumeroCuentaBeneficiario" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Ingresa el número de cuenta de ahorros del beneficiario que deseas agregar
+                        </small>
+                    </div>
+
+                    <div class="ab-alert ab-alert-info">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fas fa-lightbulb" style="margin-top: 0.125rem;"></i>
+                            <div>
+                                <strong style="display: block; margin-bottom: 0.5rem;">¿Qué es un beneficiario?</strong>
+                                <ul class="mb-0" style="padding-left: 1.25rem;">
+                                    <li class="mb-2">Es una cuenta de destino que usas frecuentemente</li>
+                                    <li class="mb-2">Te permite realizar transferencias más rápido</li>
+                                    <li>El sistema verificará que la cuenta exista y esté activa</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+                        <a asp-action="Index" class="ab-btn ab-btn-outline-primary w-100 w-md-auto">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Volver
+                        </a>
+                        <button type="submit" class="ab-btn ab-btn-primary w-100 w-md-auto">
+                            <i class="fas fa-save me-2"></i>
+                            Guardar Beneficiario
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="ab-card mt-4">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-question-circle me-2"></i>
+                    ¿Necesitas ayuda?
+                </h2>
+            </div>
+            <div class="ab-card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fas fa-shield-alt" style="color: var(--ab-success); font-size: 1.25rem; margin-top: 0.25rem;"></i>
+                            <div>
+                                <h6 class="fw-semibold mb-1" style="color: var(--ab-white);">Seguridad</h6>
+                                <small style="color: rgba(255, 255, 255, 0.7);">
+                                    Solo puedes agregar cuentas válidas y activas del sistema
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fas fa-clock" style="color: var(--ab-info); font-size: 1.25rem; margin-top: 0.25rem;"></i>
+                            <div>
+                                <h6 class="fw-semibold mb-1" style="color: var(--ab-white);">Verificación</h6>
+                                <small style="color: rgba(255, 255, 255, 0.7);">
+                                    El sistema verifica automáticamente que la cuenta exista
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
