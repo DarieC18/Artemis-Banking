@@ -35,7 +35,7 @@ namespace ArtemisBanking.Infraestructure.Identity.Seeds
             var cajeroUser = new AppUser
             {
                 UserName = "cajero",
-                Email = "cajero@artemisbanking.com",
+                Email = "cajero@artemisbanking.com", 
                 EmailConfirmed = true,
                 Cedula = "00200000002",
                 Nombre = "Juan",

@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{2D94A379-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtemisBanking.Integration.Tests", "ArtemisBanking.Integration.Tests\ArtemisBanking.Integration.Tests.csproj", "{E7D96A45-87A7-42F7-8D4C-D49711178D9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtemisBanking.Unit.Tests", "ArtemisBanking.Unit.Tests\ArtemisBanking.Unit.Tests.csproj", "{CE8D0A35-5676-49A7-8787-D2E074F2E4C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{E7D96A45-87A7-42F7-8D4C-D49711178D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7D96A45-87A7-42F7-8D4C-D49711178D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7D96A45-87A7-42F7-8D4C-D49711178D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8D0A35-5676-49A7-8787-D2E074F2E4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8D0A35-5676-49A7-8787-D2E074F2E4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8D0A35-5676-49A7-8787-D2E074F2E4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8D0A35-5676-49A7-8787-D2E074F2E4C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{1C0E50F4-2BEC-40E7-80DA-C4EC834C5C11} = {864DB6CA-1049-4D85-B199-9481BBFD9EDC}
 		{2D94A379-5B61-4186-BDF9-4A540ADF01BC} = {FB36006E-7093-4273-B7C4-DC48DAE515B5}
 		{E7D96A45-87A7-42F7-8D4C-D49711178D9E} = {2D94A379-5B61-4186-BDF9-4A540ADF01BC}
+		{CE8D0A35-5676-49A7-8787-D2E074F2E4C6} = {2D94A379-5B61-4186-BDF9-4A540ADF01BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2921FFA-7BD0-49B2-99F5-9F5F2BC012C8}
