@@ -3,40 +3,84 @@
     ViewData["Title"] = "Detalles de Tarjeta de Crédito";
 }
 
-<section class="mb-4">
-    <h1 class="display-5 fw-semibold text-primary">Consumos de la tarjeta **** **** **** @Model.Ultimos4Digitos</h1>
-</section>
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-credit-card me-2"></i>
+                Detalle de Tarjeta
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                <i class="fas fa-hashtag"></i>
+                <span style="font-family: 'Courier New', monospace;">**** **** **** @Model.Ultimos4Digitos</span>
+            </p>
+        </div>
+        <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver
+        </a>
+    </div>
+</div>
 
-<section class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-3">
-                <strong>Límite de crédito:</strong> RD$ @Model.LimiteCredito.ToString("N2")
-            </div>
-            <div class="col-md-3">
-                <strong>Deuda actual:</strong> RD$ @Model.DeudaActual.ToString("N2")
-            </div>
-            <div class="col-md-3">
-                <strong>Crédito disponible:</strong> RD$ @Model.CreditoDisponible.ToString("N2")
-            </div>
-            <div class="col-md-3">
-                <strong>Fecha de expiración:</strong> @Model.FechaExpiracion
+<div class="ab-stats-grid mb-4">
+    <div class="ab-stat-card success">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
         </div>
+        <div class="ab-stat-label">Límite de Crédito</div>s
+        <div class="ab-stat-value">RD$ @Model.LimiteCredito.ToString("N2")</div>
     </div>
-</section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h5 class="mb-3">Historial de Consumos</h5>
+    <div class="ab-stat-card danger">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Deuda Actual</div>
+        <div class="ab-stat-value">RD$ @Model.DeudaActual.ToString("N2")</div>
+    </div>
+
+    <div class="ab-stat-card info">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Crédito Disponible</div>
+        <div class="ab-stat-value">RD$ @Model.CreditoDisponible.ToString("N2")</div>
+    </div>
+
+    <div class="ab-stat-card warning">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Fecha de Expiración</div>
+        <div class="ab-stat-value" style="font-family: 'Courier New', monospace;">@Model.FechaExpiracion</div>
+    </div>
+</div>
+
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-receipt me-2"></i>
+            Historial de Consumos
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="table-light">
+            <table class="ab-table">
+                <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Monto</th>
-                        <th>Comercio</th>
-                        <th>Estado</th>
+                        <th><i class="fas fa-calendar me-1"></i> Fecha</th>
+                        <th class="text-end"><i class="fas fa-dollar-sign me-1"></i> Monto</th>
+                        <th><i class="fas fa-store me-1"></i> Comercio</th>
+                        <th class="text-center"><i class="fas fa-info-circle me-1"></i> Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,17 +89,40 @@
                         @foreach (var consumo in Model.Consumos)
                         {
                             <tr>
-                                <td>@consumo.FechaConsumo.ToString("dd/MM/yyyy")</td>
-                                <td>RD$ @consumo.Monto.ToString("N2")</td>
-                                <td>@consumo.Comercio</td>
                                 <td>
-                                    @if (consumo.Estado == "APROBADO")
+                                    @consumo.FechaConsumo.ToString("dd/MM/yyyy")
+                                </td>
+                                <td class="text-end fw-bold text-white">
+                                    RD$ @consumo.Monto.ToString("N2")
+                                </td>
+                                <td>
+                                    @if (consumo.Comercio == "AVANCE")
                                     {
-                                        <span class="badge bg-success">✅ APROBADO</span>
+                                        <span class="ab-badge ab-badge-warning">
+                                            <i class="fas fa-money-bill-wave me-1"></i>
+                                            AVANCE DE EFECTIVO
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-danger">❌ RECHAZADO</span>
+                                        <i class="fas fa-store text-white-50 me-1"></i>
+                                        <span>@consumo.Comercio</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (consumo.Estado == "APROBADO")
+                                    {
+                                        <span class="ab-badge ab-badge-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Aprobado
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ab-badge ab-badge-danger">
+                                            <i class="fas fa-times-circle me-1"></i>
+                                            Rechazado
+                                        </span>
                                     }
                                 </td>
                             </tr>
@@ -64,15 +131,21 @@
                     else
                     {
                         <tr>
-                            <td colspan="4" class="text-center text-muted">No hay consumos registrados para esta tarjeta.</td>
+                            <td colspan="4">
+                                <div class="ab-empty-state">
+                                    <div class="ab-empty-state-icon">
+                                        <i class="fas fa-receipt"></i>
+                                    </div>
+                                    <h3 class="ab-empty-state-title">No hay consumos</h3>
+                                    <p class="ab-empty-state-text">
+                                        No hay consumos registrados para esta tarjeta.
+                                    </p>
+                                </div>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-
-        <div class="mt-4">
-            <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
-        </div>
     </div>
-</section>
+</div>

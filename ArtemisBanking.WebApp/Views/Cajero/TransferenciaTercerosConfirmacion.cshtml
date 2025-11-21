@@ -3,42 +3,159 @@
 @{
     ViewData["Title"] = "Confirmar transferencia a terceros";
 }
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-check-circle me-2"></i>
+            Confirmar Transferencia
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Revise los datos antes de procesar la transferencia
+        </p>
+    </div>
+</div>
+
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
 }
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h2>@ViewData["Title"]</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Resumen de la transferencia -->
+        <div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(0, 191, 165, 0.1) 0%, rgba(27, 59, 111, 0.1) 100%); border-left: 4px solid var(--ab-secondary);">
+            <div class="ab-card-body">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--ab-secondary) 0%, var(--ab-secondary-dark) 100%); border-radius: 50%; box-shadow: 0 8px 24px rgba(0, 191, 165, 0.3);">
+                        <i class="fas fa-exchange-alt" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h3 class="mb-2" style="color: var(--ab-white); font-weight: 600;">
+                        Transferencia de @Model.Monto.ToString("C")
+                    </h3>
+                    <p class="mb-0" style="color: rgba(255, 255, 255, 0.7);">
+                        Verifique los datos antes de confirmar
+                    </p>
+                </div>
 
-<hr />
+                <!-- Flujo visual de la transferencia -->
+                <div class="row g-3 align-items-center">
+                    <!-- Cuenta Origen -->
+                    <div class="col-md-5">
+                        <div class="p-3 h-100" style="background-color: rgba(220, 53, 69, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(220, 53, 69, 0.3);">
+                            <div class="text-center mb-2">
+                                <i class="fas fa-arrow-circle-up" style="font-size: 2rem; color: var(--ab-danger);"></i>
+                            </div>
+                            <small class="d-block text-center mb-2" style="color: rgba(255, 255, 255, 0.6);">
+                                Cuenta Origen
+                            </small>
+                            <strong class="d-block text-center" style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.CuentaOrigen
+                            </strong>
+                        </div>
+                    </div>
 
-<div class="alert alert-warning">
-    <p><strong>Cuenta origen:</strong> @Model.CuentaOrigen</p>
-    <p><strong>Cuenta destino:</strong> @Model.CuentaDestino</p>
-    <p><strong>Titular destino:</strong> @Model.TitularDestino</p>
-    <p><strong>Monto:</strong> @Model.Monto.ToString("C")</p>
-    <p>¿Desea confirmar esta operación?</p>
+                    <!-- Flecha -->
+                    <div class="col-md-2 text-center">
+                        <i class="fas fa-arrow-right" style="font-size: 2rem; color: var(--ab-secondary);"></i>
+                    </div>
+
+                    <!-- Cuenta Destino -->
+                    <div class="col-md-5">
+                        <div class="p-3 h-100" style="background-color: rgba(40, 167, 69, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(40, 167, 69, 0.3);">
+                            <div class="text-center mb-2">
+                                <i class="fas fa-arrow-circle-down" style="font-size: 2rem; color: var(--ab-success);"></i>
+                            </div>
+                            <small class="d-block text-center mb-2" style="color: rgba(255, 255, 255, 0.6);">
+                                Cuenta Destino
+                            </small>
+                            <strong class="d-block text-center" style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.CuentaDestino
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Titular y Monto -->
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-user me-1"></i>
+                                Titular de la cuenta destino
+                            </small>
+                            <strong style="color: var(--ab-white); font-size: 1.1rem;">
+                                @Model.TitularDestino
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 text-center" style="background-color: rgba(0, 191, 165, 0.15); border-radius: var(--ab-border-radius); border: 1px solid rgba(0, 191, 165, 0.3);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-dollar-sign me-1"></i>
+                                Monto a transferir
+                            </small>
+                            <strong style="color: var(--ab-secondary); font-size: 1.5rem; font-weight: bold;">
+                                @Model.Monto.ToString("C")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmación -->
+        <div class="ab-card">
+            <div class="ab-card-body text-center py-4">
+                <h5 class="mb-4" style="color: var(--ab-white);">
+                    ¿Desea confirmar esta transferencia?
+                </h5>
+
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                    <form asp-action="CancelarTransferenciaTerceros" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="ab-btn ab-btn-outline-primary" style="min-width: 180px;">
+                            <i class="fas fa-times me-2"></i>
+                            Cancelar
+                        </button>
+                    </form>
+
+                    <form asp-action="ConfirmarTransferenciaTerceros" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="CuentaOrigen" />
+                        <input type="hidden" asp-for="CuentaDestino" />
+                        <input type="hidden" asp-for="TitularDestino" />
+                        <input type="hidden" asp-for="Monto" />
+
+                        <button type="submit" class="ab-btn ab-btn-success" style="min-width: 180px;">
+                            <i class="fas fa-check me-2"></i>
+                            Confirmar Transferencia
+                        </button>
+                    </form>
+                </div>
+
+                <div class="mt-4 p-3" style="background-color: rgba(0, 191, 165, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(0, 191, 165, 0.3);">
+                    <small style="color: rgba(255, 255, 255, 0.8);">
+                        <i class="fas fa-shield-alt me-1" style="color: var(--ab-secondary);"></i>
+                        Esta transferencia será procesada de forma inmediata y ambas cuentas serán actualizadas
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<form asp-action="ConfirmarTransferenciaTerceros" method="post">
-    @Html.AntiForgeryToken()
-
-    <input type="hidden" asp-for="CuentaOrigen" />
-    <input type="hidden" asp-for="CuentaDestino" />
-    <input type="hidden" asp-for="TitularDestino" />
-    <input type="hidden" asp-for="Monto" />
-
-    <button type="submit" class="btn btn-success">Confirmar</button>
-</form>
-
-<form asp-action="CancelarTransferenciaTerceros" method="post" class="mt-2">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-secondary">Cancelar</button>
-</form>

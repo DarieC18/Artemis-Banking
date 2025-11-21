@@ -47,10 +47,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Artemis Banking</title>
 
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-    <!-- Artemis Banking CSS -->
     <link rel="stylesheet" href="~/css/variables.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
@@ -75,10 +73,12 @@
             <aside class="ab-sidebar" id="sidebar">
                 <div class="ab-sidebar-header">
                     <a href="@Url.Action(brandAction, brandController)" class="ab-sidebar-brand">
-                        <div class="ab-sidebar-brand-logo">
-                            <i class="fas fa-university"></i>
+                        <div class="ab-sidebar-brand-logo" style="background: transparent; box-shadow: none; border-radius: 0; padding: 0; width: 50px; height: 50px; min-width: 50px;">
+                            <img src="~/images/artemis-logo-icon.png"
+                                 alt="Artemis Logo"
+                                 style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
-                        <span class="ab-sidebar-brand-text">Artemis</span>
+                        <span class="ab-sidebar-brand-text" style="font-size: 1.3rem; margin-left: 10px;">Artemis</span>
                     </a>
                     <button class="ab-sidebar-toggle" id="sidebarToggle" type="button">
                         <i class="fas fa-chevron-left"></i>
@@ -246,8 +246,11 @@
 
                     @if (!hasSidebar)
                     {
-                        <a href="@Url.Action(brandAction, brandController)" class="ab-navbar-brand">
-                            <i class="fas fa-university"></i> Artemis Banking
+                        <a href="@Url.Action(brandAction, brandController)" class="ab-navbar-brand d-flex align-items-center gap-2">
+                            <img src="~/images/artemis-logo-icon.png"
+                                 alt="Artemis Logo"
+                                 style="height: 50px; width: auto; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));" />
+                            <span style="font-size: 1.4rem;">Artemis Banking</span>
                         </a>
                     }
 

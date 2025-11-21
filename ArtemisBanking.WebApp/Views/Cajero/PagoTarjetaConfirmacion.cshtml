@@ -3,52 +3,210 @@
 @{
     ViewData["Title"] = "Confirmar pago de tarjeta de crédito";
 }
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-check-circle me-2"></i>
+            Confirmar Pago de Tarjeta
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Revise los datos antes de procesar el pago
+        </p>
+    </div>
+</div>
+
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
 }
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h2>Confirmar pago de tarjeta de crédito</h2>
-
-<hr />
-
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Resumen de la operación</h5>
-        <p><strong>Tarjeta:</strong> @Model.NumeroTarjetaEnmascarada</p>
-        <p><strong>Titular:</strong> @Model.TitularTarjeta</p>
-
-        <p><strong>Monto solicitado:</strong> @Model.MontoSolicitado.ToString("N2")</p>
-
-        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        @if (!string.IsNullOrWhiteSpace(Model?.ErrorMessage))
         {
-            <div class="alert alert-danger">
+            <div class="ab-alert ab-alert-danger mb-4">
+                <i class="fas fa-exclamation-circle me-2"></i>
                 @Model.ErrorMessage
             </div>
         }
+
+        <!-- Resumen de la operación -->
+        <div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(27, 59, 111, 0.1) 0%, rgba(0, 191, 165, 0.1) 100%); border-left: 4px solid var(--ab-primary);">
+            <div class="ab-card-body">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--ab-primary) 0%, var(--ab-primary-dark) 100%); border-radius: 50%; box-shadow: 0 8px 24px rgba(27, 59, 111, 0.3);">
+                        <i class="fas fa-credit-card" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h3 class="mb-2" style="color: var(--ab-white); font-weight: 600;">
+                        Pago de @Model.MontoSolicitado.ToString("C")
+                    </h3>
+                    <p class="mb-0" style="color: rgba(255, 255, 255, 0.7);">
+                        Verifique los datos antes de confirmar
+                    </p>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-university me-1"></i>
+                                Cuenta origen
+                            </small>
+                            <strong style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.CuentaOrigenEnmascarada
+                            </strong>
+                            <div class="mt-2">
+                                <small style="color: rgba(255, 255, 255, 0.6);">Balance disponible:</small>
+                                <strong class="ms-2" style="color: var(--ab-success);">
+                                    @Model.BalanceActualCuentaOrigen.ToString("C")
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-credit-card me-1"></i>
+                                Tarjeta
+                            </small>
+                            <strong style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.NumeroTarjetaEnmascarada
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-user me-1"></i>
+                                Titular
+                            </small>
+                            <strong style="color: var(--ab-white); font-size: 1.1rem;">
+                                @Model.TitularTarjeta
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: rgba(220, 53, 69, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(220, 53, 69, 0.3);">
+                                    <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        Deuda actual
+                                    </small>
+                                    <strong style="color: var(--ab-danger); font-size: 1.5rem; font-weight: bold;">
+                                        @Model.DeudaActual.ToString("C")
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="p-3 text-center" style="background-color: rgba(40, 167, 69, 0.15); border-radius: var(--ab-border-radius); border: 1px solid rgba(40, 167, 69, 0.3);">
+                                    <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                        <i class="fas fa-dollar-sign me-1"></i>
+                                        Monto a aplicar
+                                    </small>
+                                    <strong style="color: var(--ab-success); font-size: 1.5rem; font-weight: bold;">
+                                        @Model.MontoAplicadoReal.ToString("C")
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.MontoSolicitado != Model.MontoAplicadoReal)
+                    {
+                        <div class="col-12">
+                            <div class="ab-alert ab-alert-info" style="margin-bottom: 0;">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Nota:</strong> El monto fue ajustado porque excedía la deuda actual de la tarjeta.
+                                Solo se aplicarán <strong>@Model.MontoAplicadoReal.ToString("C")</strong>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="ab-card">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-calculator me-2"></i>
+                    Resultado después del pago
+                </h2>
+            </div>
+            <div class="ab-card-body">
+                <div class="row g-3 text-center mb-4">
+                    <div class="col-md-4">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.03); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-2" style="color: rgba(255, 255, 255, 0.6);">Deuda actual</small>
+                            <strong style="color: var(--ab-danger); font-size: 1.25rem;">@Model.DeudaActual.ToString("C")</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.03); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-2" style="color: rgba(255, 255, 255, 0.6);">Pago aplicado</small>
+                            <strong style="color: var(--ab-white); font-size: 1.25rem;">- @Model.MontoAplicadoReal.ToString("C")</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3" style="background-color: rgba(40, 167, 69, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(40, 167, 69, 0.3);">
+                            <small class="d-block mb-2" style="color: rgba(255, 255, 255, 0.6);">Nueva deuda</small>
+                            <strong style="color: var(--ab-success); font-size: 1.25rem;">@((Model.DeudaActual - Model.MontoAplicadoReal).ToString("C"))</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;" />
+
+                <div class="text-center py-3">
+                    <h5 class="mb-4" style="color: var(--ab-white);">
+                        ¿Desea confirmar este pago de tarjeta?
+                    </h5>
+
+                    <form asp-action="ConfirmarPagoTarjeta" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="CuentaOrigen" type="hidden" />
+                        <input asp-for="CuentaOrigenEnmascarada" type="hidden" />
+                        <input asp-for="BalanceActualCuentaOrigen" type="hidden" />
+                        <input asp-for="CreditCardId" type="hidden" />
+                        <input asp-for="NumeroTarjetaEnmascarada" type="hidden" />
+                        <input asp-for="TitularTarjeta" type="hidden" />
+                        <input asp-for="DeudaActual" type="hidden" />
+                        <input asp-for="MontoSolicitado" type="hidden" />
+                        <input asp-for="MontoAplicadoReal" type="hidden" />
+
+                        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                            <a asp-action="PagoTarjeta" class="ab-btn ab-btn-outline-primary" style="min-width: 180px;">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Volver
+                            </a>
+                            <button type="submit" class="ab-btn ab-btn-success" style="min-width: 180px;">
+                                <i class="fas fa-check me-2"></i>
+                                Confirmar Pago
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<form asp-action="ConfirmarPagoTarjeta" method="post" class="mt-3">
-    @Html.AntiForgeryToken()
-
-    <input asp-for="CuentaOrigen" type="hidden" />
-    <input asp-for="CuentaOrigenEnmascarada" type="hidden" />
-    <input asp-for="BalanceActualCuentaOrigen" type="hidden" />
-    <input asp-for="CreditCardId" type="hidden" />
-    <input asp-for="NumeroTarjetaEnmascarada" type="hidden" />
-    <input asp-for="TitularTarjeta" type="hidden" />
-    <input asp-for="DeudaActual" type="hidden" />
-    <input asp-for="MontoSolicitado" type="hidden" />
-    <input asp-for="MontoAplicadoReal" type="hidden" />
-
-    <button type="submit" class="btn btn-success">Confirmar pago</button>
-    <a asp-action="PagoTarjeta" class="btn btn-secondary">Volver</a>
-</form>

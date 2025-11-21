@@ -3,22 +3,124 @@
     ViewData["Title"] = "Cancelar cuenta secundaria";
 }
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body text-center py-5">
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-ban me-2"></i>
+            Cancelar cuenta secundaria
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Confirme la cancelación de la cuenta de ahorros
+        </p>
+    </div>
+</div>
+
+<div class="ab-stats-grid mb-4">
+    <div class="ab-stat-card primary">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-hashtag"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Número de cuenta</div>
+        <div class="ab-stat-value" style="font-size: 1.5rem; font-family: 'Courier New', monospace;">@Model.NumeroCuenta</div>
+    </div>
+
+    <div class="ab-stat-card info">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Titular</div>
+        <div class="ab-stat-value" style="font-size: 1.25rem;">@Model.ClienteNombre @Model.ClienteApellido</div>
+        <div class="ab-stat-change">
+            <i class="fas fa-id-card me-1"></i>
+            @Model.ClienteCedula
+        </div>
+    </div>
+
+    <div class="ab-stat-card success">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Balance actual</div>
+        <div class="ab-stat-value">RD$ @Model.Balance.ToString("N2")</div>
+    </div>
+
+    <div class="ab-stat-card warning">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-calendar"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Fecha de creación</div>
+        <div class="ab-stat-value" style="font-size: 1.25rem;">@Model.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy")</div>
+    </div>
+</div>
+
+<div class="ab-card">
+    <div class="ab-card-body text-center py-5">
         <div class="mb-4">
-            <span class="display-5 text-warning"><i class="bi bi-exclamation-triangle"></i></span>
-            <h2 class="fw-semibold mt-3">Confirmación de cancelación</h2>
-            <p class="text-muted mb-0">¿Está seguro que desea cancelar la cuenta @Model.NumeroCuenta?</p>
-            <small class="text-muted">Si la cuenta tiene fondos, se transferirán automáticamente a la cuenta principal del cliente.</small>
+            <div class="d-flex justify-content-center mb-4">
+                <div class="ab-stat-icon" style="width: 100px; height: 100px; font-size: 3rem; background-color: rgba(255, 193, 7, 0.2);">
+                    <i class="fas fa-exclamation-triangle" style="color: #FFC107;"></i>
+                </div>
+            </div>
+
+            <h2 class="fw-semibold mb-3" style="color: var(--ab-white); font-size: 1.75rem;">
+                Confirmación de cancelación
+            </h2>
+
+            <p class="mb-3" style="color: rgba(255, 255, 255, 0.8); font-size: 1.125rem;">
+                ¿Está seguro que desea cancelar la cuenta
+                <strong style="font-family: 'Courier New', monospace; color: var(--ab-white);">@Model.NumeroCuenta</strong>?
+            </p>
         </div>
 
-        <form asp-action="Cancel" method="post">
+        <div class="ab-alert ab-alert-warning mx-auto" style="max-width: 600px; text-align: left;">
+            <div class="d-flex align-items-start gap-3">
+                <i class="fas fa-info-circle" style="font-size: 1.5rem; margin-top: 0.25rem;"></i>
+                <div>
+                    <strong style="display: block; margin-bottom: 0.5rem;">Información importante:</strong>
+                    <ul class="mb-0" style="padding-left: 1.25rem;">
+                        <li class="mb-2">Esta acción <strong>no se puede deshacer</strong>.</li>
+                        @if (Model.Balance > 0)
+                        {
+                            <li class="mb-2">
+                                Los fondos disponibles (<strong>RD$ @Model.Balance.ToString("N2")</strong>) se
+                                <strong>transferirán automáticamente</strong> a la cuenta principal del cliente.
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="mb-2">La cuenta no tiene fondos disponibles.</li>
+                        }
+                        <li>El cliente <strong>@Model.ClienteNombre @Model.ClienteApellido</strong> dejará de tener acceso a esta cuenta.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="Cancel" method="post" class="mt-4">
+            @Html.AntiForgeryToken()
             <input type="hidden" name="id" value="@ViewBag.AccountId" />
-            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
-                <a asp-action="Index" class="btn btn-outline-secondary w-100 w-md-auto">Cancelar</a>
-                <button type="submit" class="btn btn-danger w-100 w-md-auto">Aceptar</button>
+
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
+                <a asp-action="Index" class="ab-btn ab-btn-outline-primary" style="min-width: 200px;">
+                    <i class="fas fa-times me-2"></i>
+                    No, volver atrás
+                </a>
+                <button type="submit"
+                        class="ab-btn ab-btn-danger"
+                        style="min-width: 200px;"
+                        data-confirm="¿Está completamente seguro de cancelar esta cuenta?">
+                    <i class="fas fa-check me-2"></i>
+                    Sí, cancelar cuenta
+                </button>
             </div>
         </form>
     </div>
-</section>
-
+</div>

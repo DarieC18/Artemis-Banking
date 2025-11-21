@@ -292,8 +292,7 @@ namespace ArtemisBanking.Application.Services
         }
 
 
-        private static (List<LoanPaymentSchedule> cuotasAfectadas, decimal montoAplicado, decimal cambio)
-            CalcularAplicacionPago(ICollection<LoanPaymentSchedule> tablaAmortizacion, decimal montoDisponible)
+        private static (List<LoanPaymentSchedule> cuotasAfectadas, decimal montoAplicado, decimal cambio) CalcularAplicacionPago(ICollection<LoanPaymentSchedule> tablaAmortizacion, decimal montoDisponible)
         {
             var cuotasPendientes = tablaAmortizacion
                 .Where(c => !c.Pagada)
@@ -304,21 +303,46 @@ namespace ArtemisBanking.Application.Services
             decimal montoAplicado = 0m;
             decimal restante = montoDisponible;
 
-            foreach (var cuota in cuotasPendientes)
+            foreach (var cuotaOriginal in cuotasPendientes)
             {
                 if (restante <= 0)
                     break;
 
-                if (restante >= cuota.ValorCuota)
+                var saldoCuota = cuotaOriginal.SaldoPendiente > 0
+                    ? cuotaOriginal.SaldoPendiente
+                    : cuotaOriginal.ValorCuota;
+
+                if (saldoCuota <= 0)
+                    continue;
+
+                var cuotaPreview = new LoanPaymentSchedule
                 {
-                    cuotasAfectadas.Add(cuota);
-                    montoAplicado += cuota.ValorCuota;
-                    restante -= cuota.ValorCuota;
+                    Id = cuotaOriginal.Id,
+                    NumeroCuota = cuotaOriginal.NumeroCuota,
+                    ValorCuota = cuotaOriginal.ValorCuota,
+                    FechaPago = cuotaOriginal.FechaPago,
+                    Pagada = cuotaOriginal.Pagada,
+                    Atrasada = cuotaOriginal.Atrasada,
+                    SaldoPendiente = saldoCuota
+                };
+
+                if (restante >= saldoCuota)
+                {
+                    montoAplicado += saldoCuota;
+                    restante -= saldoCuota;
+
+                    cuotaPreview.SaldoPendiente = 0m;
+                    cuotaPreview.Pagada = true;
+                    cuotaPreview.Atrasada = false;
                 }
                 else
                 {
-                    break;
+                    montoAplicado += restante;
+                    cuotaPreview.SaldoPendiente = saldoCuota - restante;
+                    restante = 0m;
                 }
+
+                cuotasAfectadas.Add(cuotaPreview);
             }
 
             var cambio = montoDisponible - montoAplicado;

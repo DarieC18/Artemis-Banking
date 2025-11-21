@@ -7,70 +7,98 @@
     var cedulaFilter = ViewBag.CedulaFilter as string;
 }
 
-<section class="mb-4">
+<div class="ab-page-header">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="display-5 fw-semibold text-primary">Gestión de Tarjetas de Crédito</h1>
-        <a asp-action="AssignStep1" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Asignar tarjeta de crédito
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-credit-card me-2"></i>
+                Gestión de Tarjetas de Crédito
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                Administra las tarjetas de crédito del sistema
+            </p>
+        </div>
+        <a asp-action="AssignStep1" class="ab-btn ab-btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>
+            Asignar Tarjeta
         </a>
     </div>
-</section>
+</div>
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
         @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
         @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
 
-<section class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <form method="get" asp-action="Index" class="row g-3 align-items-end">
-            <div class="col-md-4">
-                <label for="cedulaFilter" class="form-label">Buscar por cédula:</label>
-                <input type="text" name="cedulaFilter" id="cedulaFilter" class="form-control" value="@cedulaFilter" placeholder="Ingrese cédula" />
+<div class="ab-filter-bar">
+    <form method="get" asp-action="Index" class="d-flex gap-3 w-100 flex-wrap align-items-end">
+        <div class="ab-filter-group flex-fill">
+            <label for="cedulaFilter" class="ab-form-label">
+                <i class="fas fa-id-card me-1"></i>
+                Buscar por Cédula
+            </label>
+            <input type="text" name="cedulaFilter" id="cedulaFilter" class="ab-form-control"
+                   value="@cedulaFilter" placeholder="000-0000000-0"
+                   style="font-family: 'Courier New', monospace;" />
+        </div>
+        <div class="ab-filter-group flex-fill">
+            <label for="estadoFilter" class="ab-form-label">
+                <i class="fas fa-filter me-1"></i>
+                Estado
+            </label>
+            <select name="estadoFilter" id="estadoFilter" class="ab-form-control">
+                <option value="ACTIVA" selected="@(estadoFilter == "ACTIVA")">Activas</option>
+                <option value="CANCELADA" selected="@(estadoFilter == "CANCELADA")">Canceladas</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="ab-btn ab-btn-secondary">
+                <i class="fas fa-search me-2"></i>
+                Buscar
+            </button>
+        </div>
+        @if (!string.IsNullOrEmpty(cedulaFilter))
+        {
+            <div>
+                <a asp-action="Index" asp-route-estadoFilter="@estadoFilter" class="ab-btn ab-btn-outline-primary">
+                    <i class="fas fa-times me-2"></i>
+                    Limpiar
+                </a>
             </div>
-            <div class="col-md-3">
-                <label for="estadoFilter" class="form-label">Estado:</label>
-                <select name="estadoFilter" id="estadoFilter" class="form-select">
-                    <option value="ACTIVA" selected="@(estadoFilter == "ACTIVA")">Activas</option>
-                    <option value="CANCELADA" selected="@(estadoFilter == "CANCELADA")">Canceladas</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
-            </div>
-            @if (!string.IsNullOrEmpty(cedulaFilter))
-            {
-                <div class="col-md-2">
-                    <a asp-action="Index" asp-route-estadoFilter="@estadoFilter" class="btn btn-outline-secondary w-100">Limpiar</a>
-                </div>
-            }
-        </form>
-    </div>
-</section>
+        }
+    </form>
+</div>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-list me-2"></i>
+            Lista de Tarjetas
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="table-light">
+            <table class="ab-table">
+                <thead>
                     <tr>
-                        <th>Número Tarjeta</th>
-                        <th>Cliente</th>
-                        <th>Límite Crédito</th>
-                        <th>Fecha Expiración</th>
-                        <th>Deuda Actual</th>
-                        <th>Acciones</th>
+                        <th><i class="fas fa-credit-card me-1"></i> Número</th>
+                        <th><i class="fas fa-user me-1"></i> Cliente</th>
+                        <th class="text-end"><i class="fas fa-chart-line me-1"></i> Límite</th>
+                        <th><i class="fas fa-calendar me-1"></i> Expiración</th>
+                        <th class="text-end"><i class="fas fa-exclamation-triangle me-1"></i> Deuda</th>
+                        <th class="text-center"><i class="fas fa-cog me-1"></i> Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,23 +107,53 @@
                         @foreach (var card in Model)
                         {
                             <tr>
-                                <td>@card.NumeroTarjeta</td>
-                                <td>@card.ClienteNombre @card.ClienteApellido</td>
-                                <td>RD$ @card.LimiteCredito.ToString("N2")</td>
-                                <td>@card.FechaExpiracion</td>
-                                <td>RD$ @card.DeudaActual.ToString("N2")</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Detail" asp-route-id="@card.Id" class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-eye"></i> Ver
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-credit-card" style="color: #F4B400;"></i>
+                                        <span style="font-family: 'Courier New', monospace; font-weight: 500;">
+                                            @card.NumeroTarjeta
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                             style="width: 35px; height: 35px; background: linear-gradient(135deg, #1B3B6F 0%, #2A5490 100%); color: white; font-weight: bold; flex-shrink: 0;">
+                                            @card.ClienteNombre?.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span class="fw-medium">@card.ClienteNombre @card.ClienteApellido</span>
+                                    </div>
+                                </td>
+                                <td class="text-end fw-bold text-success">
+                                    @card.LimiteCredito.ToString("C")
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar-alt text-white-50 me-1"></i>
+                                    <span style="font-family: 'Courier New', monospace;">@card.FechaExpiracion</span>
+                                </td>
+                                <td class="text-end fw-bold @(card.DeudaActual > 0 ? "text-danger" : "text-white-50")">
+                                    @card.DeudaActual.ToString("C")
+                                </td>
+                                <td>
+                                    <div class="ab-table-actions justify-content-center">
+                                        <a asp-action="Detail" asp-route-id="@card.Id"
+                                           class="ab-table-icon-btn"
+                                           style="background-color: rgba(0, 191, 165, 0.1); color: #00BFA5;"
+                                           title="Ver detalle">
+                                            <i class="fas fa-eye"></i>
                                         </a>
-                                        <a asp-action="Edit" asp-route-id="@card.Id" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i> Editar
+                                        <a asp-action="Edit" asp-route-id="@card.Id"
+                                           class="ab-table-icon-btn"
+                                           title="Editar tarjeta">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                         @if (card.Estado == "ACTIVA")
                                         {
-                                            <a asp-action="Cancel" asp-route-id="@card.Id" class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-x-circle"></i> Cancelar
+                                            <a asp-action="Cancel" asp-route-id="@card.Id"
+                                               class="ab-table-icon-btn"
+                                               style="background-color: rgba(220, 53, 69, 0.1); color: #DC3545;"
+                                               title="Cancelar tarjeta">
+                                                <i class="fas fa-ban"></i>
                                             </a>
                                         }
                                     </div>
@@ -106,7 +164,17 @@
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted">No se encontraron tarjetas de crédito.</td>
+                            <td colspan="6">
+                                <div class="ab-empty-state">
+                                    <div class="ab-empty-state-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <h3 class="ab-empty-state-title">No hay tarjetas</h3>
+                                    <p class="ab-empty-state-text">
+                                        No se encontraron tarjetas de crédito con los filtros aplicados.
+                                    </p>
+                                </div>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -115,51 +183,45 @@
 
         @if (totalPages > 1)
         {
-            <nav aria-label="Navegación de páginas">
-                <ul class="pagination justify-content-center">
-                    @if (currentPage > 1)
+            <div class="ab-pagination">
+                @if (currentPage > 1)
+                {
+                    <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-estadoFilter="@estadoFilter" asp-route-cedulaFilter="@cedulaFilter">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                }
+                else
+                {
+                    <button class="ab-pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == currentPage)
                     {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-estadoFilter="@estadoFilter" asp-route-cedulaFilter="@cedulaFilter">Anterior</a>
-                        </li>
+                        <button class="ab-pagination-btn active">@i</button>
                     }
                     else
                     {
-                        <li class="page-item disabled">
-                            <span class="page-link">Anterior</span>
-                        </li>
+                        <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@i" asp-route-estadoFilter="@estadoFilter" asp-route-cedulaFilter="@cedulaFilter">@i</a>
                     }
+                }
 
-                    @for (int i = 1; i <= totalPages; i++)
-                    {
-                        if (i == currentPage)
-                        {
-                            <li class="page-item active">
-                                <span class="page-link">@i</span>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="page-item">
-                                <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-estadoFilter="@estadoFilter" asp-route-cedulaFilter="@cedulaFilter">@i</a>
-                            </li>
-                        }
-                    }
-
-                    @if (currentPage < totalPages)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-estadoFilter="@estadoFilter" asp-route-cedulaFilter="@cedulaFilter">Siguiente</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item disabled">
-                            <span class="page-link">Siguiente</span>
-                        </li>
-                    }
-                </ul>
-            </nav>
+                @if (currentPage < totalPages)
+                {
+                    <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-estadoFilter="@estadoFilter" asp-route-cedulaFilter="@cedulaFilter">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <button class="ab-pagination-btn" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                }
+            </div>
         }
     </div>
-</section>
+</div>

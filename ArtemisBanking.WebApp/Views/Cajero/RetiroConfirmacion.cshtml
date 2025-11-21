@@ -3,37 +3,129 @@
 @{
     ViewData["Title"] = "Confirmar retiro";
 }
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Confirmar retiro
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Revise los datos antes de procesar la operación
+        </p>
+    </div>
+</div>
+
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
 }
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h2 class="mb-4">Confirmar retiro</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
 
-<div class="alert alert-warning">
-    <p><strong>Cuenta origen:</strong> @Model.AccountNumber</p>
-    <p><strong>Titular:</strong> @Model.HolderFullName</p>
-    <p><strong>Monto a retirar:</strong> @Model.Amount.ToString("C")</p>
+        <div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(220, 53, 69, 0.1) 100%); border-left: 4px solid var(--ab-warning);">
+            <div class="ab-card-body">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--ab-warning) 0%, #FFD54F 100%); border-radius: 50%; box-shadow: 0 8px 24px rgba(255, 193, 7, 0.3);">
+                        <i class="fas fa-arrow-up" style="font-size: 2rem; color: #000;"></i>
+                    </div>
+                    <h3 class="mb-2" style="color: var(--ab-white); font-weight: 600;">
+                        Retiro de @Model.Amount.ToString("C")
+                    </h3>
+                    <p class="mb-0" style="color: rgba(255, 255, 255, 0.7);">
+                        Verifique los datos antes de confirmar
+                    </p>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-hashtag me-1"></i>
+                                Cuenta origen
+                            </small>
+                            <strong style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.AccountNumber
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-user me-1"></i>
+                                Titular de la cuenta
+                            </small>
+                            <strong style="color: var(--ab-white); font-size: 1.1rem;">
+                                @Model.HolderFullName
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="p-3 text-center" style="background-color: rgba(255, 193, 7, 0.15); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 193, 7, 0.3);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-minus-circle me-1"></i>
+                                Monto a retirar
+                            </small>
+                            <strong style="color: var(--ab-warning); font-size: 2rem; font-weight: bold;">
+                                @Model.Amount.ToString("C")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ab-card">
+            <div class="ab-card-body text-center py-4">
+                <h5 class="mb-4" style="color: var(--ab-white);">
+                    ¿Desea confirmar este retiro?
+                </h5>
+
+                <form asp-action="ConfirmarRetiro" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="AccountNumber" />
+                    <input type="hidden" asp-for="Amount" />
+
+                    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                        <a asp-action="Retiro" class="ab-btn ab-btn-outline-primary" style="min-width: 180px;">
+                            <i class="fas fa-times me-2"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="ab-btn ab-btn-danger" style="min-width: 180px;">
+                            <i class="fas fa-check me-2"></i>
+                            Confirmar Retiro
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-4 p-3" style="background-color: rgba(220, 53, 69, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(220, 53, 69, 0.3);">
+                    <small style="color: rgba(255, 255, 255, 0.8);">
+                        <i class="fas fa-shield-alt me-1" style="color: var(--ab-danger);"></i>
+                        Esta operación será procesada de forma inmediata y quedará registrada en el sistema
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<p>¿Desea confirmar este retiro?</p>
-
-<form asp-action="ConfirmarRetiro" method="post">
-    @Html.AntiForgeryToken()
-
-    <input type="hidden" asp-for="AccountNumber" />
-    <input type="hidden" asp-for="Amount" />
-
-    <button type="submit" class="btn btn-success">Confirmar</button>
-    <a asp-action="Retiro" class="btn btn-secondary ms-2">Cancelar</a>
-</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

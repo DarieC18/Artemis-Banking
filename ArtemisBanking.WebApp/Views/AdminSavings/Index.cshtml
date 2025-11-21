@@ -8,80 +8,102 @@
     var cedulaFilter = ViewBag.CedulaFilter as string;
 }
 
-<section class="mb-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="display-5 fw-semibold text-primary mb-0">Cuentas de ahorro</h1>
-            <p class="text-muted mb-0">Administra cuentas principales y secundarias del sistema.</p>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-piggy-bank me-2"></i>
+                Cuentas de Ahorro
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                Administra cuentas principales y secundarias del sistema
+            </p>
         </div>
-        <a asp-action="AssignStep1" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Asignar cuenta de ahorro
+        <a asp-action="AssignStep1" class="ab-btn ab-btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>
+            Asignar Cuenta
         </a>
     </div>
-</section>
+</div>
 
 @if (TempData["SuccessMessage"] is string successMessage)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
         @successMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
 @if (TempData["ErrorMessage"] is string errorMessage)
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
         @errorMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
-<section class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <form asp-action="Index" method="get" class="row g-3 align-items-end">
-            <div class="col-md-4">
-                <label for="cedulaFilter" class="form-label">Buscar por cédula</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control" id="cedulaFilter" name="cedulaFilter" value="@cedulaFilter" placeholder="001-1234567-8" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="estadoFilter" class="form-label">Estado</label>
-                <select class="form-select" id="estadoFilter" name="estadoFilter">
-                    <option value="TODAS" selected="@(estadoFilter == "TODAS")">Todas</option>
-                    <option value="ACTIVAS" selected="@(estadoFilter == "ACTIVAS")">Activas</option>
-                    <option value="CANCELADAS" selected="@(estadoFilter == "CANCELADAS")">Canceladas</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="tipoFilter" class="form-label">Tipo</label>
-                <select class="form-select" id="tipoFilter" name="tipoFilter">
-                    <option value="TODAS" selected="@(tipoFilter == "TODAS")">Todas</option>
-                    <option value="PRINCIPAL" selected="@(tipoFilter == "PRINCIPAL")">Principal</option>
-                    <option value="SECUNDARIA" selected="@(tipoFilter == "SECUNDARIA")">Secundaria</option>
-                </select>
-            </div>
-            <div class="col-md-2 d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="submit" class="btn btn-outline-primary w-100">Filtrar</button>
-            </div>
-        </form>
-    </div>
-</section>
+<div class="ab-filter-bar">
+    <form asp-action="Index" method="get" class="d-flex gap-3 w-100 flex-wrap align-items-end">
+        <div class="ab-filter-group flex-fill">
+            <label for="cedulaFilter" class="ab-form-label">
+                <i class="fas fa-id-card me-1"></i>
+                Buscar por Cédula
+            </label>
+            <input type="text" class="ab-form-control" id="cedulaFilter" name="cedulaFilter"
+                   value="@cedulaFilter" placeholder="001-1234567-8"
+                   style="font-family: 'Courier New', monospace;" />
+        </div>
+        <div class="ab-filter-group flex-fill">
+            <label for="estadoFilter" class="ab-form-label">
+                <i class="fas fa-toggle-on me-1"></i>
+                Estado
+            </label>
+            <select class="ab-form-control" id="estadoFilter" name="estadoFilter">
+                <option value="TODAS" selected="@(estadoFilter == "TODAS")">Todas</option>
+                <option value="ACTIVAS" selected="@(estadoFilter == "ACTIVAS")">Activas</option>
+                <option value="CANCELADAS" selected="@(estadoFilter == "CANCELADAS")">Canceladas</option>
+            </select>
+        </div>
+        <div class="ab-filter-group flex-fill">
+            <label for="tipoFilter" class="ab-form-label">
+                <i class="fas fa-filter me-1"></i>
+                Tipo
+            </label>
+            <select class="ab-form-control" id="tipoFilter" name="tipoFilter">
+                <option value="TODAS" selected="@(tipoFilter == "TODAS")">Todas</option>
+                <option value="PRINCIPAL" selected="@(tipoFilter == "PRINCIPAL")">Principal</option>
+                <option value="SECUNDARIA" selected="@(tipoFilter == "SECUNDARIA")">Secundaria</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="ab-btn ab-btn-secondary">
+                <i class="fas fa-search me-2"></i>
+                Filtrar
+            </button>
+        </div>
+    </form>
+</div>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-list me-2"></i>
+            Lista de Cuentas
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
         <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
+            <table class="ab-table">
+                <thead>
                     <tr>
-                        <th>Número</th>
-                        <th>Cliente</th>
-                        <th>Cédula</th>
-                        <th>Balance</th>
-                        <th>Tipo</th>
-                        <th>Estado</th>
-                        <th class="text-center">Acciones</th>
+                        <th><i class="fas fa-hashtag me-1"></i> Número</th>
+                        <th><i class="fas fa-user me-1"></i> Cliente</th>
+                        <th><i class="fas fa-id-card me-1"></i> Cédula</th>
+                        <th class="text-end"><i class="fas fa-dollar-sign me-1"></i> Balance</th>
+                        <th class="text-center"><i class="fas fa-tag me-1"></i> Tipo</th>
+                        <th class="text-center"><i class="fas fa-info-circle me-1"></i> Estado</th>
+                        <th class="text-center"><i class="fas fa-cog me-1"></i> Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,29 +112,53 @@
                         foreach (var cuenta in Model)
                         {
                             <tr>
-                                <td class="fw-semibold">@cuenta.NumeroCuenta</td>
-                                <td>@cuenta.ClienteNombre @cuenta.ClienteApellido</td>
-                                <td>@cuenta.ClienteCedula</td>
-                                <td>RD$ @cuenta.Balance.ToString("N2")</td>
                                 <td>
-                                    <span class="badge @(cuenta.TipoCuenta == "PRINCIPAL" ? "bg-primary" : "bg-secondary")">
-                                        @cuenta.TipoCuenta
+                                    <span class="badge" style="background: rgba(0, 191, 165, 0.2); color: #00BFA5; font-family: 'Courier New', monospace;">
+                                        @cuenta.NumeroCuenta
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge @(cuenta.Estado == "ACTIVA" ? "bg-success" : "bg-danger")">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                             style="width: 35px; height: 35px; background: linear-gradient(135deg, #1B3B6F 0%, #2A5490 100%); color: white; font-weight: bold; flex-shrink: 0;">
+                                            @cuenta.ClienteNombre?.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span class="fw-medium">@cuenta.ClienteNombre @cuenta.ClienteApellido</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="font-family: 'Courier New', monospace;">@cuenta.ClienteCedula</span>
+                                </td>
+                                <td class="text-end fw-bold text-success">
+                                    RD$ @cuenta.Balance.ToString("N2")
+                                </td>
+                                <td class="text-center">
+                                    <span class="ab-badge @(cuenta.TipoCuenta == "PRINCIPAL" ? "ab-badge-primary" : "ab-badge-secondary")">
+                                        <i class="fas @(cuenta.TipoCuenta == "PRINCIPAL" ? "fa-star" : "fa-layer-group") me-1"></i>
+                                        @cuenta.TipoCuenta
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="ab-badge @(cuenta.Estado == "ACTIVA" ? "ab-badge-success" : "ab-badge-danger")">
+                                        <i class="fas @(cuenta.Estado == "ACTIVA" ? "fa-check-circle" : "fa-times-circle") me-1"></i>
                                         @cuenta.Estado
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a asp-action="Detail" asp-route-id="@cuenta.Id" class="btn btn-outline-info btn-sm">
-                                            <i class="bi bi-eye"></i> Ver detalles
+                                    <div class="ab-table-actions justify-content-center">
+                                        <a asp-action="Detail" asp-route-id="@cuenta.Id"
+                                           class="ab-table-icon-btn"
+                                           style="background-color: rgba(0, 191, 165, 0.1); color: #00BFA5;"
+                                           title="Ver detalles">
+                                            <i class="fas fa-eye"></i>
                                         </a>
                                         @if (cuenta.Estado == "ACTIVA" && !cuenta.EsPrincipal)
                                         {
-                                            <a asp-action="Cancel" asp-route-id="@cuenta.Id" class="btn btn-outline-danger btn-sm">
-                                                <i class="bi bi-x-circle"></i> Cancelar
+                                            <a asp-action="Cancel" asp-route-id="@cuenta.Id"
+                                               class="ab-table-icon-btn"
+                                               style="background-color: rgba(220, 53, 69, 0.1); color: #DC3545;"
+                                               title="Cancelar cuenta">
+                                                <i class="fas fa-ban"></i>
                                             </a>
                                         }
                                     </div>
@@ -123,7 +169,17 @@
                     else
                     {
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">No se encontraron cuentas con los filtros actuales.</td>
+                            <td colspan="7">
+                                <div class="ab-empty-state">
+                                    <div class="ab-empty-state-icon">
+                                        <i class="fas fa-piggy-bank"></i>
+                                    </div>
+                                    <h3 class="ab-empty-state-title">No hay cuentas</h3>
+                                    <p class="ab-empty-state-text">
+                                        No se encontraron cuentas con los filtros actuales.
+                                    </p>
+                                </div>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -132,23 +188,35 @@
 
         @if (totalPages > 1)
         {
-            <nav aria-label="Navegación de páginas">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-estadoFilter="@estadoFilter" asp-route-tipoFilter="@tipoFilter" asp-route-cedulaFilter="@cedulaFilter">Anterior</a>
-                    </li>
-                    @for (int i = 1; i <= totalPages; i++)
+            <div class="ab-pagination">
+                <a class="ab-pagination-btn @(currentPage == 1 ? "disabled" : "")"
+                   asp-action="Index" asp-route-page="@(currentPage - 1)"
+                   asp-route-estadoFilter="@estadoFilter" asp-route-tipoFilter="@tipoFilter"
+                   asp-route-cedulaFilter="@cedulaFilter">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == currentPage)
                     {
-                        <li class="page-item @(i == currentPage ? "active" : "")">
-                            <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-estadoFilter="@estadoFilter" asp-route-tipoFilter="@tipoFilter" asp-route-cedulaFilter="@cedulaFilter">@i</a>
-                        </li>
+                        <button class="ab-pagination-btn active">@i</button>
                     }
-                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-estadoFilter="@estadoFilter" asp-route-tipoFilter="@tipoFilter" asp-route-cedulaFilter="@cedulaFilter">Siguiente</a>
-                    </li>
-                </ul>
-            </nav>
+                    else
+                    {
+                        <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@i"
+                           asp-route-estadoFilter="@estadoFilter" asp-route-tipoFilter="@tipoFilter"
+                           asp-route-cedulaFilter="@cedulaFilter">@i</a>
+                    }
+                }
+
+                <a class="ab-pagination-btn @(currentPage == totalPages ? "disabled" : "")"
+                   asp-action="Index" asp-route-page="@(currentPage + 1)"
+                   asp-route-estadoFilter="@estadoFilter" asp-route-tipoFilter="@tipoFilter"
+                   asp-route-cedulaFilter="@cedulaFilter">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
         }
     </div>
-</section>
-
+</div>

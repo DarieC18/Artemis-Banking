@@ -4,36 +4,129 @@
     ViewData["Title"] = "Transferencia a cuentas de terceros";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<hr />
-
-<form asp-action="TransferenciaTerceros" method="post">
-    @Html.AntiForgeryToken()
-
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="mb-3">
-        <label asp-for="CuentaOrigen" class="form-label"></label>
-        <input asp-for="CuentaOrigen" class="form-control" />
-        <span asp-validation-for="CuentaOrigen" class="text-danger"></span>
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-exchange-alt me-2"></i>
+            Transferencia a Terceros
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Realice transferencias entre cuentas de diferentes titulares
+        </p>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="CuentaDestino" class="form-label"></label>
-        <input asp-for="CuentaDestino" class="form-control" />
-        <span asp-validation-for="CuentaDestino" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="ab-card">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-edit me-2"></i>
+                    Datos de la transferencia
+                </h2>
+            </div>
+
+            <div class="ab-card-body">
+                <form asp-action="TransferenciaTerceros" method="post">
+                    @Html.AntiForgeryToken()
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="ab-alert ab-alert-danger mb-4">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="fas fa-exclamation-circle" style="margin-top: 0.125rem;"></i>
+                                <div asp-validation-summary="All"></div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="ab-form-group">
+                        <label asp-for="CuentaOrigen" class="ab-form-label">
+                            <i class="fas fa-arrow-circle-up me-1"></i>
+                            @Html.DisplayNameFor(m => m.CuentaOrigen)
+                        </label>
+                        <input asp-for="CuentaOrigen"
+                               class="ab-form-control"
+                               placeholder="Ingrese el número de cuenta origen"
+                               style="font-family: 'Courier New', monospace;"
+                               autofocus />
+                        <span asp-validation-for="CuentaOrigen" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Cuenta desde donde se debitará el monto
+                        </small>
+                    </div>
+
+                    <div class="ab-form-group">
+                        <label asp-for="CuentaDestino" class="ab-form-label">
+                            <i class="fas fa-arrow-circle-down me-1"></i>
+                            @Html.DisplayNameFor(m => m.CuentaDestino)
+                        </label>
+                        <input asp-for="CuentaDestino"
+                               class="ab-form-control"
+                               placeholder="Ingrese el número de cuenta destino"
+                               style="font-family: 'Courier New', monospace;" />
+                        <span asp-validation-for="CuentaDestino" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Cuenta del beneficiario que recibirá el monto
+                        </small>
+                    </div>
+
+                    <div class="ab-form-group">
+                        <label asp-for="Monto" class="ab-form-label">
+                            <i class="fas fa-dollar-sign me-1"></i>
+                            @Html.DisplayNameFor(m => m.Monto)
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="background-color: rgba(15, 23, 42, 0.95); border-color: rgba(148, 163, 184, 0.35); color: #F9FAFB;">
+                                RD$
+                            </span>
+                            <input asp-for="Monto"
+                                   class="ab-form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.01"
+                                   placeholder="0.00" />
+                        </div>
+                        <span asp-validation-for="Monto" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Monto a transferir (debe ser mayor a 0)
+                        </small>
+                    </div>
+
+                    <div class="ab-alert ab-alert-warning">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fas fa-exclamation-triangle" style="margin-top: 0.125rem;"></i>
+                            <div>
+                                <strong style="display: block; margin-bottom: 0.5rem;">Importante</strong>
+                                <ul class="mb-0" style="padding-left: 1.25rem;">
+                                    <li class="mb-2">Verifique que ambas cuentas sean correctas</li>
+                                    <li class="mb-2">La cuenta origen debe tener fondos suficientes</li>
+                                    <li class="mb-2">La cuenta destino debe estar activa</li>
+                                    <li>Esta operación se procesará de forma inmediata</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+                        <a asp-action="Index" class="ab-btn ab-btn-outline-primary w-100 w-md-auto">
+                            <i class="fas fa-times me-2"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="ab-btn ab-btn-primary w-100 w-md-auto">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Continuar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Monto" class="form-label"></label>
-        <input asp-for="Monto" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="Monto" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Continuar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
