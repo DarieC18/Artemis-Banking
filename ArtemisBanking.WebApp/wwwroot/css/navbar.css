@@ -1,0 +1,363 @@
+﻿/* ============================================
+   ARTEMIS BANKING - Navbar Styles
+   ============================================ */
+
+.ab-navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: var(--ab-navbar-height);
+    background: rgba(10, 14, 39, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: var(--ab-z-fixed);
+    transition: all var(--ab-transition-base);
+    backdrop-filter: blur(10px);
+}
+
+    /* Con sidebar */
+    .ab-navbar.has-sidebar {
+        left: var(--ab-sidebar-width);
+    }
+
+        .ab-navbar.has-sidebar.sidebar-collapsed {
+            left: var(--ab-sidebar-collapsed-width);
+        }
+
+.ab-navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 var(--ab-spacing-xl);
+}
+
+/* === Brand === */
+.ab-navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: var(--ab-font-weight-bold);
+    color: var(--ab-white);
+    text-decoration: none;
+    transition: color var(--ab-transition-fast);
+}
+
+    .ab-navbar-brand:hover {
+        color: var(--ab-secondary);
+    }
+
+.ab-navbar-brand-logo {
+    height: 40px;
+    margin-right: var(--ab-spacing-md);
+}
+
+/* === Nav Items === */
+.ab-navbar-nav {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--ab-spacing-sm);
+}
+
+.ab-nav-item {
+    position: relative;
+}
+
+.ab-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: var(--ab-font-size-base);
+    font-weight: var(--ab-font-weight-medium);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: var(--ab-border-radius);
+    transition: all var(--ab-transition-fast);
+}
+
+    .ab-nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--ab-white);
+    }
+
+    .ab-nav-link.active {
+        background-color: var(--ab-secondary);
+        color: var(--ab-white);
+    }
+
+    .ab-nav-link svg,
+    .ab-nav-link i {
+        margin-right: var(--ab-spacing-sm);
+        font-size: 1.125rem;
+    }
+
+/* === Dropdown === */
+.ab-nav-item.dropdown .ab-nav-link::after {
+    content: '▼';
+    margin-left: var(--ab-spacing-sm);
+    font-size: 0.7rem;
+    transition: transform var(--ab-transition-fast);
+}
+
+.ab-nav-item.dropdown.show .ab-nav-link::after {
+    transform: rotate(180deg);
+}
+
+.ab-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    min-width: 200px;
+    background-color: rgba(20, 25, 50, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--ab-border-radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    padding: var(--ab-spacing-sm);
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--ab-transition-fast);
+    z-index: var(--ab-z-dropdown);
+    backdrop-filter: blur(10px);
+}
+
+.ab-nav-item.dropdown.show .ab-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.ab-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    font-size: var(--ab-font-size-base);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: var(--ab-border-radius);
+    transition: all var(--ab-transition-fast);
+}
+
+    .ab-dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--ab-white);
+    }
+
+    .ab-dropdown-item svg,
+    .ab-dropdown-item i {
+        margin-right: var(--ab-spacing-sm);
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+.ab-dropdown-divider {
+    height: 1px;
+    margin: var(--ab-spacing-sm) 0;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* === Navbar Right (User & Notifications) === */
+.ab-navbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-spacing-md);
+}
+
+
+/* User Menu */
+.ab-nav-user {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-spacing-sm);
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--ab-border-radius-xl);
+    cursor: pointer;
+    transition: all var(--ab-transition-fast);
+}
+
+    .ab-nav-user:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+.ab-nav-user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ab-secondary) 0%, var(--ab-secondary-dark) 100%);
+    color: var(--ab-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--ab-font-weight-semibold);
+    font-size: var(--ab-font-size-sm);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.ab-nav-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.ab-nav-user-name {
+    font-size: var(--ab-font-size-base);
+    font-weight: var(--ab-font-weight-medium);
+    color: var(--ab-white);
+    line-height: 1.2;
+}
+
+.ab-nav-user-role {
+    font-size: var(--ab-font-size-sm);
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.2;
+}
+
+.ab-nav-user-dropdown {
+    margin-left: var(--ab-spacing-xs);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* === Mobile Toggle === */
+.ab-navbar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: var(--ab-border-radius);
+    cursor: pointer;
+    transition: background-color var(--ab-transition-fast);
+}
+
+    .ab-navbar-toggle:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+.ab-navbar-toggle-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+    .ab-navbar-toggle-icon span {
+        width: 24px;
+        height: 2px;
+        background-color: var(--ab-white);
+        transition: all var(--ab-transition-fast);
+    }
+
+/* Toggle animation */
+.ab-navbar-toggle.active .ab-navbar-toggle-icon span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.ab-navbar-toggle.active .ab-navbar-toggle-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.ab-navbar-toggle.active .ab-navbar-toggle-icon span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* === Responsive === */
+@media (max-width: 992px) {
+    .ab-navbar {
+        left: 0 !important;
+    }
+
+    .ab-navbar-toggle {
+        display: flex;
+    }
+
+    .ab-navbar-nav {
+        position: fixed;
+        top: var(--ab-navbar-height);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background-color: var(--ab-white);
+        border-bottom: 1px solid var(--ab-border-color);
+        box-shadow: var(--ab-shadow-lg);
+        padding: var(--ab-spacing-lg);
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all var(--ab-transition-base);
+    }
+
+        .ab-navbar-nav.show {
+            max-height: calc(100vh - var(--ab-navbar-height));
+            opacity: 1;
+            overflow-y: auto;
+        }
+
+    .ab-nav-item {
+        width: 100%;
+        border-bottom: 1px solid var(--ab-gray-200);
+    }
+
+        .ab-nav-item:last-child {
+            border-bottom: none;
+        }
+
+    .ab-nav-link {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 0;
+    }
+
+    .ab-dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border: none;
+        border-left: 2px solid var(--ab-primary);
+        margin-left: var(--ab-spacing-lg);
+        margin-top: var(--ab-spacing-sm);
+        padding: var(--ab-spacing-sm) 0;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height var(--ab-transition-base);
+    }
+
+    .ab-nav-item.dropdown.show .ab-dropdown-menu {
+        max-height: 500px;
+    }
+
+    .ab-nav-user-info {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .ab-navbar-container {
+        padding: 0 var(--ab-spacing-md);
+    }
+
+    .ab-navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    .ab-navbar-brand-logo {
+        height: 32px;
+    }
+
+    .ab-navbar-right {
+        gap: var(--ab-spacing-sm);
+    }
+
+    .ab-nav-notification {
+        width: 36px;
+        height: 36px;
+    }
+}

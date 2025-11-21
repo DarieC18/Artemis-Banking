@@ -1,0 +1,362 @@
+﻿/* ============================================
+   ARTEMIS BANKING - Quick Actions & Dark Theme Enhancements
+   ============================================ */
+
+/* === ACCIONES RÁPIDAS === */
+.ab-quick-actions {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--ab-border-radius-xl);
+    padding: var(--ab-spacing-xxl);
+    margin-bottom: var(--ab-spacing-xxl);
+    backdrop-filter: blur(10px);
+}
+
+.ab-quick-actions-title {
+    font-size: 1.5rem;
+    font-weight: var(--ab-font-weight-semibold);
+    color: var(--ab-white);
+    margin-bottom: var(--ab-spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--ab-spacing-sm);
+}
+
+    .ab-quick-actions-title i {
+        color: var(--ab-accent);
+    }
+
+.ab-quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--ab-spacing-lg);
+}
+
+.ab-quick-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-spacing-md);
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, var(--ab-primary) 0%, var(--ab-primary-dark) 100%);
+    border: none;
+    border-radius: var(--ab-border-radius-lg);
+    color: var(--ab-white);
+    font-size: var(--ab-font-size-lg);
+    font-weight: var(--ab-font-weight-semibold);
+    text-decoration: none;
+    transition: all var(--ab-transition-base);
+    box-shadow: 0 4px 12px rgba(27, 59, 111, 0.3);
+    cursor: pointer;
+}
+
+    .ab-quick-action-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(27, 59, 111, 0.4);
+        color: var(--ab-white);
+    }
+
+    .ab-quick-action-btn.secondary {
+        background: linear-gradient(135deg, var(--ab-secondary) 0%, var(--ab-secondary-dark) 100%);
+        box-shadow: 0 4px 12px rgba(0, 191, 165, 0.3);
+    }
+
+        .ab-quick-action-btn.secondary:hover {
+            box-shadow: 0 8px 20px rgba(0, 191, 165, 0.4);
+        }
+
+    .ab-quick-action-btn.outline {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: none;
+    }
+
+        .ab-quick-action-btn.outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+        }
+
+    .ab-quick-action-btn i {
+        font-size: 1.5rem;
+    }
+
+/* === SECTION TITLES (Dark Theme) === */
+.ab-section-title {
+    font-size: 1.75rem;
+    font-weight: var(--ab-font-weight-semibold);
+    color: var(--ab-white);
+    margin-bottom: var(--ab-spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--ab-spacing-sm);
+}
+
+    .ab-section-title i {
+        color: var(--ab-white);
+    }
+
+/* === PRODUCT SECTION (Dark Theme) === */
+.ab-product-section {
+    margin-bottom: var(--ab-spacing-xxl);
+}
+
+.ab-product-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--ab-spacing-xl);
+}
+
+.ab-product-title {
+    font-size: 1.5rem;
+    font-weight: var(--ab-font-weight-semibold);
+    color: var(--ab-white);
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--ab-spacing-sm);
+}
+
+    .ab-product-title i {
+        color: var(--ab-white);
+    }
+
+/* === PRODUCT CARDS con mejor contraste === */
+.ab-product-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--ab-border-radius-lg);
+    padding: var(--ab-spacing-xl);
+    transition: all var(--ab-transition-base);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+    .ab-product-card:hover {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+.ab-product-card-type {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-spacing-sm);
+    font-size: var(--ab-font-size-sm);
+    font-weight: var(--ab-font-weight-semibold);
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--ab-spacing-md);
+}
+
+.ab-product-card-number {
+    font-size: var(--ab-font-size-lg);
+    font-weight: var(--ab-font-weight-medium);
+    color: var(--ab-white);
+    margin-bottom: var(--ab-spacing-md);
+    font-family: 'Courier New', monospace;
+}
+
+.ab-product-card-balance {
+    font-size: 2rem;
+    font-weight: var(--ab-font-weight-bold);
+    color: var(--ab-secondary);
+    margin-bottom: var(--ab-spacing-md);
+}
+
+/* === CREDIT CARD VISUAL (mejorado) === */
+.ab-credit-card-visual {
+    background: linear-gradient(135deg, var(--ab-primary) 0%, var(--ab-primary-dark) 100%);
+    border-radius: var(--ab-border-radius-lg);
+    padding: var(--ab-spacing-xl);
+    color: var(--ab-white);
+    margin-bottom: var(--ab-spacing-lg);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(27, 59, 111, 0.3);
+}
+
+    .ab-credit-card-visual::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+        border-radius: 50%;
+    }
+
+    .ab-credit-card-visual::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -20%;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(0,191,165,0.2) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+/* === EMPTY STATE (Dark Theme) === */
+.ab-empty-state {
+    text-align: center;
+    padding: var(--ab-spacing-xxl);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ab-empty-state-icon {
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: var(--ab-spacing-lg);
+}
+
+.ab-empty-state-title {
+    font-size: 1.5rem;
+    font-weight: var(--ab-font-weight-semibold);
+    color: var(--ab-white);
+    margin-bottom: var(--ab-spacing-sm);
+}
+
+/* === LOAN CARD === */
+.ab-loan-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--ab-border-radius-lg);
+    padding: var(--ab-spacing-xl);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all var(--ab-transition-base);
+    backdrop-filter: blur(10px);
+}
+
+    .ab-loan-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+.ab-loan-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--ab-spacing-lg);
+}
+
+.ab-loan-number {
+    font-size: var(--ab-font-size-lg);
+    font-weight: var(--ab-font-weight-semibold);
+    color: var(--ab-white);
+    font-family: 'Courier New', monospace;
+}
+
+.ab-loan-status {
+    padding: 0.5rem 1rem;
+    border-radius: var(--ab-border-radius);
+    font-size: var(--ab-font-size-sm);
+    font-weight: var(--ab-font-weight-semibold);
+}
+
+    .ab-loan-status.up-to-date {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: var(--ab-success);
+    }
+
+    .ab-loan-status.overdue {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: var(--ab-danger);
+    }
+
+.ab-loan-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--ab-spacing-md);
+    margin-bottom: var(--ab-spacing-lg);
+}
+
+.ab-loan-info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.ab-loan-info-label {
+    font-size: var(--ab-font-size-sm);
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.25rem;
+}
+
+.ab-loan-info-value {
+    font-size: var(--ab-font-size-base);
+    font-weight: var(--ab-font-weight-semibold);
+    color: var(--ab-white);
+}
+
+.ab-loan-progress {
+    margin-top: var(--ab-spacing-lg);
+}
+
+.ab-loan-progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--ab-font-size-sm);
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--ab-spacing-xs);
+}
+
+/* === BADGES EN DARK THEME === */
+.ab-badge-star {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--ab-border-radius-sm);
+    font-size: var(--ab-font-size-sm);
+    font-weight: var(--ab-font-weight-semibold);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+/* === FORM CONTROLS DARK === */
+.form-control,
+.form-select,
+textarea.form-control {
+    background-color: rgba(15, 23, 42, 0.95); /* fondo oscuro */
+    border-color: rgba(148, 163, 184, 0.35); /* borde gris suave */
+    color: #F9FAFB; /* texto claro */
+}
+
+    .form-control::placeholder,
+    textarea.form-control::placeholder {
+        color: rgba(148, 163, 184, 0.7); /* placeholder más tenue */
+    }
+
+    /* Estado focus coherente con el resto del tema */
+    .form-control:focus,
+    .form-select:focus,
+    textarea.form-control:focus {
+        background-color: rgba(15, 23, 42, 0.98);
+        border-color: #22C55E; /* usa el mismo verde que tus botones */
+        box-shadow: 0 0 0 0.15rem rgba(34, 197, 94, 0.25);
+    }
+/* === RESPONSIVE DARK THEME === */
+@media (max-width: 768px) {
+    .ab-quick-actions {
+        padding: var(--ab-spacing-xl);
+    }
+
+    .ab-quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ab-section-title {
+        font-size: 1.5rem;
+    }
+
+    .ab-product-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .ab-loan-info {
+        grid-template-columns: 1fr;
+    }
+}

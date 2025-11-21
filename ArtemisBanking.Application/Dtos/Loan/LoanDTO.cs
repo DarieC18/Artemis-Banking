@@ -10,6 +10,9 @@
         public decimal MontoPendiente { get; set; }
         public decimal TasaInteres { get; set; }
         public int PlazoMeses { get; set; }
-        public string EstadoPago { get; set; }  // "Al dia" o "En mora"
+        public string EstadoPago { get; set; }
+        public decimal? ProximaCuotaMonto { get; set; }
+        public DateTime? ProximaCuotaFecha { get; set; }
+
     }
 }

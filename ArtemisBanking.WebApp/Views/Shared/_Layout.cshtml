@@ -1,265 +1,384 @@
-﻿﻿@{
-var brandController = "Account";
-var brandAction = "Login";
+﻿@{
+    var brandController = "Account";
+    var brandAction = "Login";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var hasSidebar = false;
+    var userRole = "";
+    var userName = "";
+    var userInitials = "";
 
-if (User.Identity?.IsAuthenticated == true)
-{
-    if (User.IsInRole("Cliente"))
+    if (User.Identity?.IsAuthenticated == true)
     {
-        brandController = "Cliente";
-        brandAction = "Index";
+        userName = User.Identity.Name ?? "Usuario";
+        var nameParts = userName.Split(' ');
+        userInitials = nameParts.Length > 1
+            ? $"{nameParts[0][0]}{nameParts[1][0]}"
+            : userName.Substring(0, Math.Min(2, userName.Length));
+        userInitials = userInitials.ToUpper();
+
+        if (User.IsInRole("Cliente"))
+        {
+            brandController = "Cliente";
+            brandAction = "Index";
+            userRole = "Cliente";
+        }
+        else if (User.IsInRole("Cajero"))
+        {
+            brandController = "Cajero";
+            brandAction = "Index";
+            userRole = "Cajero";
+            hasSidebar = true;
+        }
+        else if (User.IsInRole("Administrador"))
+        {
+            brandController = "Admin";
+            brandAction = "Dashboard";
+            userRole = "Administrador";
+            hasSidebar = true;
+        }
     }
-    else if (User.IsInRole("Cajero"))
-    {
-        brandController = "Cajero";
-        brandAction = "Index";
-    }
-    else if (User.IsInRole("Administrador"))
-    {
-        brandController = "Admin";
-        brandAction = "Dashboard";
-    }
-}
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ArtemisBanking.WebApp</title>
+    <title>@ViewData["Title"] - Artemis Banking</title>
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Artemis Banking CSS -->
+    <link rel="stylesheet" href="~/css/variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+    @if (hasSidebar)
+    {
+        <link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />
+    }
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dark-theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ArtemisBanking.WebApp.styles.css" asp-append-version="true" />
+
+
+    <!-- Font Awesome (para iconos) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="@Url.Action(brandAction, brandController)">
-                    ArtemisBank
-                </a>
+    <div class="ab-wrapper">
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        @if (hasSidebar)
+        {
+            <!-- ======================= SIDEBAR (Admin/Cajero) ======================= -->
+            <aside class="ab-sidebar" id="sidebar">
+                <div class="ab-sidebar-header">
+                    <a href="@Url.Action(brandAction, brandController)" class="ab-sidebar-brand">
+                        <div class="ab-sidebar-brand-logo">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <span class="ab-sidebar-brand-text">Artemis</span>
+                    </a>
+                    <button class="ab-sidebar-toggle" id="sidebarToggle" type="button">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            @* ======================= CLIENTE ======================= *@
-                            if (User.IsInRole("Cliente"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="Cliente" asp-action="Index">
-                                        Home
+                <div class="ab-sidebar-user">
+                    <div class="ab-sidebar-user-avatar">@userInitials</div>
+                    <div class="ab-sidebar-user-info">
+                        <div class="ab-sidebar-user-name">@userName</div>
+                        <div class="ab-sidebar-user-role">@userRole</div>
+                    </div>
+                </div>
+
+                <nav class="ab-sidebar-menu">
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <!-- MENÚ ADMINISTRADOR -->
+                        <div class="ab-sidebar-menu-section">
+                            <h6 class="ab-sidebar-menu-title">Panel Principal</h6>
+                            <ul class="ab-sidebar-menu-list">
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Dashboard", "Admin")"
+                                       class="ab-sidebar-menu-link @(currentController == "Admin" && currentAction == "Dashboard" ? "active" : "")"
+                                       data-tooltip="Dashboard">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-chart-line"></i></span>
+                                        <span class="ab-sidebar-menu-text">Dashboard</span>
                                     </a>
                                 </li>
+                            </ul>
+                        </div>
 
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="transaccionesDropdown"
-                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Transacciones
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="transaccionesDropdown">
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Transacciones" asp-action="Express">
-                                                Express
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Transacciones" asp-action="PagarTarjeta">
-                                                Tarjeta de crédito
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Transacciones" asp-action="PagarPrestamo">
-                                                Préstamo
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Transacciones" asp-action="Beneficiario">
-                                                Beneficiarios
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="Beneficiarios" asp-action="Index">
-                                        Beneficiarios
+                        <div class="ab-sidebar-menu-section">
+                            <h6 class="ab-sidebar-menu-title">Gestión</h6>
+                            <ul class="ab-sidebar-menu-list">
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Index", "AdminUsers")"
+                                       class="ab-sidebar-menu-link @(currentController == "AdminUsers" ? "active" : "")"
+                                       data-tooltip="Usuarios">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-users"></i></span>
+                                        <span class="ab-sidebar-menu-text">Usuarios</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="Transacciones" asp-action="AvanceEfectivo">
-                                        Avance de efectivo
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Index", "AdminLoans")"
+                                       class="ab-sidebar-menu-link @(currentController == "AdminLoans" ? "active" : "")"
+                                       data-tooltip="Préstamos">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-hand-holding-usd"></i></span>
+                                        <span class="ab-sidebar-menu-text">Préstamos</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="Transacciones" asp-action="EntreCuentas">
-                                        Transferencia
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Index", "AdminCreditCards")"
+                                       class="ab-sidebar-menu-link @(currentController == "AdminCreditCards" ? "active" : "")"
+                                       data-tooltip="Tarjetas">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-credit-card"></i></span>
+                                        <span class="ab-sidebar-menu-text">Tarjetas</span>
                                     </a>
                                 </li>
-                            }
-                            @* ======================= CAJERO ======================= *@
-                            else if (User.IsInRole("Cajero"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="Cajero" asp-action="Index">
-                                        Home
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Index", "AdminSavings")"
+                                       class="ab-sidebar-menu-link @(currentController == "AdminSavings" ? "active" : "")"
+                                       data-tooltip="Cuentas">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-piggy-bank"></i></span>
+                                        <span class="ab-sidebar-menu-text">Cuentas</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="operacionesCajeroDropdown"
-                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Operaciones
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="operacionesCajeroDropdown">
-
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="Deposito">
-                                                Depósitos
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="Retiro">
-                                                Retiros
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="PagoPrestamo">
-                                                Pagos de préstamos
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="PagoTarjeta">
-                                                Pagos de tarjeta
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Cajero" asp-action="TransferenciaTerceros">
-                                                Transferencias a terceros
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                            }
-                            @* ======================= ADMINISTRADOR ======================= *@
-                            else if (User.IsInRole("Administrador"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="Admin" asp-action="Dashboard">
-                                        Dashboard
+                            </ul>
+                        </div>
+                    }
+                    else if (User.IsInRole("Cajero"))
+                    {
+                        <!-- MENÚ CAJERO -->
+                        <div class="ab-sidebar-menu-section">
+                            <h6 class="ab-sidebar-menu-title">Panel Principal</h6>
+                            <ul class="ab-sidebar-menu-list">
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Index", "Cajero")"
+                                       class="ab-sidebar-menu-link @(currentController == "Cajero" && currentAction == "Index" ? "active" : "")"
+                                       data-tooltip="Home">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-home"></i></span>
+                                        <span class="ab-sidebar-menu-text">Home</span>
                                     </a>
                                 </li>
+                            </ul>
+                        </div>
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="AdminUsers" asp-action="Index">
-                                        Gestionar usuarios
+                        <div class="ab-sidebar-menu-section">
+                            <h6 class="ab-sidebar-menu-title">Operaciones</h6>
+                            <ul class="ab-sidebar-menu-list">
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Deposito", "Cajero")"
+                                       class="ab-sidebar-menu-link @(currentAction == "Deposito" ? "active" : "")"
+                                       data-tooltip="Depósitos">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-arrow-down"></i></span>
+                                        <span class="ab-sidebar-menu-text">Depósitos</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="AdminLoans" asp-action="Index">
-                                        Gestionar préstamos
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("Retiro", "Cajero")"
+                                       class="ab-sidebar-menu-link @(currentAction == "Retiro" ? "active" : "")"
+                                       data-tooltip="Retiros">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-arrow-up"></i></span>
+                                        <span class="ab-sidebar-menu-text">Retiros</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="AdminCreditCards" asp-action="Index">
-                                        Gestionar tarjetas
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("PagoPrestamo", "Cajero")"
+                                       class="ab-sidebar-menu-link @(currentAction == "PagoPrestamo" ? "active" : "")"
+                                       data-tooltip="Pago Préstamo">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-file-invoice-dollar"></i></span>
+                                        <span class="ab-sidebar-menu-text">Pago Préstamo</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark"
-                                       asp-controller="AdminSavings" asp-action="Index">
-                                        Gestionar cuentas
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("PagoTarjeta", "Cajero")"
+                                       class="ab-sidebar-menu-link @(currentAction == "PagoTarjeta" ? "active" : "")"
+                                       data-tooltip="Pago Tarjeta">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-money-check-alt"></i></span>
+                                        <span class="ab-sidebar-menu-text">Pago Tarjeta</span>
                                     </a>
                                 </li>
-                            }
-                        }
-                        else
-                        {
-                            @* Usuario no autenticado: menú básico *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Account" asp-action="Login">
-                                    Iniciar sesión
+                                <li class="ab-sidebar-menu-item">
+                                    <a href="@Url.Action("TransferenciaTerceros", "Cajero")"
+                                       class="ab-sidebar-menu-link @(currentAction == "TransferenciaTerceros" ? "active" : "")"
+                                       data-tooltip="Transferencias">
+                                        <span class="ab-sidebar-menu-icon"><i class="fas fa-exchange-alt"></i></span>
+                                        <span class="ab-sidebar-menu-text">Transferencias</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                </nav>
+
+                <div class="ab-sidebar-footer">
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="ab-sidebar-logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span class="ab-sidebar-logout-text">Cerrar sesión</span>
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Overlay para mobile -->
+            <div class="ab-sidebar-overlay" id="sidebarOverlay"></div>
+        }
+
+        <!-- ======================= NAVBAR ======================= -->
+        <nav class="ab-navbar @(hasSidebar ? "has-sidebar" : "")" id="navbar">
+            <div class="ab-navbar-container">
+                <div class="d-flex align-items-center gap-3">
+                    @if (hasSidebar)
+                    {
+                        <button class="ab-navbar-toggle" id="mobileMenuToggle" type="button">
+                            <div class="ab-navbar-toggle-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
+                    }
+
+                    @if (!hasSidebar)
+                    {
+                        <a href="@Url.Action(brandAction, brandController)" class="ab-navbar-brand">
+                            <i class="fas fa-university"></i> Artemis Banking
+                        </a>
+                    }
+
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Cliente"))
+                    {
+                        <!-- MENÚ CLIENTE (en navbar) -->
+                        <ul class="ab-navbar-nav" id="clientMenu">
+                            <li class="ab-nav-item">
+                                <a href="@Url.Action("Index", "Cliente")"
+                                   class="ab-nav-link @(currentController == "Cliente" && currentAction == "Index" ? "active" : "")">
+                                    <i class="fas fa-home"></i> Home
                                 </a>
                             </li>
-                        }
-                    </ul>
 
-                    <!-- Sección derecha: usuario + logout -->
-                    <ul class="navbar-nav">
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item d-flex align-items-center me-2">
-                                <span class="navbar-text">
-                                    @User.Identity.Name
-                                </span>
+                            <li class="ab-nav-item dropdown" id="transaccionesDropdown">
+                                <a href="#" class="ab-nav-link">
+                                    <i class="fas fa-exchange-alt"></i> Transacciones
+                                </a>
+                                <ul class="ab-dropdown-menu">
+                                    <li>
+                                        <a href="@Url.Action("Express", "Transacciones")" class="ab-dropdown-item">
+                                            <i class="fas fa-bolt"></i> Express
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("PagarTarjeta", "Transacciones")" class="ab-dropdown-item">
+                                            <i class="fas fa-credit-card"></i> Tarjeta de crédito
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("PagarPrestamo", "Transacciones")" class="ab-dropdown-item">
+                                            <i class="fas fa-file-invoice-dollar"></i> Préstamo
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Beneficiario", "Transacciones")" class="ab-dropdown-item">
+                                            <i class="fas fa-user-friends"></i> Beneficiarios
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout"
-                                      method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="nav-link btn btn-link text-dark text-decoration-none">
-                                        Cerrar sesión
-                                    </button>
-                                </form>
+
+                            <li class="ab-nav-item">
+                                <a href="@Url.Action("Index", "Beneficiarios")"
+                                   class="ab-nav-link @(currentController == "Beneficiarios" ? "active" : "")">
+                                    <i class="fas fa-users"></i> Beneficiarios
+                                </a>
                             </li>
-                        }
-                    </ul>
+
+                            <li class="ab-nav-item">
+                                <a href="@Url.Action("AvanceEfectivo", "Transacciones")"
+                                   class="ab-nav-link @(currentAction == "AvanceEfectivo" ? "active" : "")">
+                                    <i class="fas fa-money-bill-wave"></i> Avance
+                                </a>
+                            </li>
+
+                            <li class="ab-nav-item">
+                                <a href="@Url.Action("EntreCuentas", "Transacciones")"
+                                   class="ab-nav-link @(currentAction == "EntreCuentas" ? "active" : "")">
+                                    <i class="fas fa-random"></i> Transferir
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+
+                <div class="ab-navbar-right">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <!-- Notificaciones (opcional) -->
+                        <div class="ab-nav-notification">
+                            <i class="fas fa-bell"></i>
+                            <!-- <span class="ab-notification-badge">3</span> -->
+                        </div>
+
+                        <!-- Usuario -->
+                        <div class="ab-nav-item dropdown" id="userDropdown">
+                            <div class="ab-nav-user">
+                                <div class="ab-nav-user-avatar">@userInitials</div>
+                                <div class="ab-nav-user-info">
+                                    <div class="ab-nav-user-name">@userName</div>
+                                    <div class="ab-nav-user-role">@userRole</div>
+                                </div>
+                                <span class="ab-nav-user-dropdown">▼</span>
+                            </div>
+                            <ul class="ab-dropdown-menu">
+                                <li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="ab-dropdown-item w-100 border-0 bg-transparent text-start">
+                                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
-    </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+        <!-- ======================= MAIN CONTENT ======================= -->
+        <main class="ab-main-content @(hasSidebar ? "has-sidebar" : "")" id="mainContent">
             @RenderBody()
         </main>
+
+        <!-- ======================= FOOTER ======================= -->
+        <footer class="ab-footer">
+            <div class="ab-container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-0 text-muted">
+                            &copy; @DateTime.Now.Year Artemis Banking. Todos los derechos reservados.
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-shield-alt"></i> Tus transacciones están seguras y encriptadas
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - ArtemisBanking.WebApp
-        </div>
-    </footer>
-
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/layout.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

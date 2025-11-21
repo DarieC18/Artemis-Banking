@@ -34,21 +34,38 @@ namespace ArtemisBanking.Application.Services
         public async Task<HomeViewModel> GetHomeDataAsync(string userId)
         {
             var cuentas = await _savingsAccountRepository.GetByUserIdAsync(userId);
-            var prestamos = await _loanRepository.GetActiveByUserIdAsync(userId);
+            var prestamosDomain = await _loanRepository.GetActiveByUserIdAsync(userId);
             var tarjetas = await _creditCardRepository.GetActiveByUserIdAsync(userId);
 
-            foreach (var prestamo in prestamos)
+            var prestamosDto = new List<LoanDTO>();
+
+            foreach (var prestamo in prestamosDomain)
             {
                 var cuotas = await _scheduleRepository.GetByLoanIdAsync(prestamo.Id);
                 prestamo.TablaAmortizacion = cuotas;
 
                 prestamo.EstadoPago = RecalcularEstadoPrestamo(cuotas);
+
+                var dto = _mapper.Map<LoanDTO>(prestamo);
+
+                var next = cuotas
+                    .Where(c => !c.Pagada)
+                    .OrderBy(c => c.FechaPago)
+                    .FirstOrDefault();
+
+                if (next != null)
+                {
+                    dto.ProximaCuotaMonto = next.ValorCuota;
+                    dto.ProximaCuotaFecha = next.FechaPago;
+                }
+
+                prestamosDto.Add(dto);
             }
 
             return new HomeViewModel
             {
                 CuentasDeAhorro = _mapper.Map<List<SavingsAccountDTO>>(cuentas),
-                Prestamos = _mapper.Map<List<LoanDTO>>(prestamos),
+                Prestamos = prestamosDto,
                 TarjetasDeCredito = _mapper.Map<List<CreditCardDTO>>(tarjetas)
             };
         }
