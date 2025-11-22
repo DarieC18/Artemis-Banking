@@ -1,0 +1,131 @@
+﻿@model List<ArtemisBanking.Application.Dtos.Beneficiary.BeneficiaryDTO>
+
+@{
+    ViewData["Title"] = "Beneficiarios";
+}
+
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-users me-2"></i>
+                Mis Beneficiarios
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                Gestiona las cuentas de destino frecuentes para tus transferencias
+            </p>
+        </div>
+        <div>
+            <a asp-action="Create" class="ab-btn ab-btn-primary">
+                <i class="fas fa-plus me-2"></i>
+                Agregar Beneficiario
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-address-book me-2"></i>
+            Lista de Beneficiarios
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var beneficiary in Model)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="ab-card" style="background: rgba(255, 255, 255, 0.03); margin-bottom: 0;">
+                            <div class="ab-card-body">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                         style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(135deg, var(--ab-secondary) 0%, var(--ab-secondary-dark) 100%); color: white; font-weight: bold; font-size: 1.25rem;">
+                                        @if (!string.IsNullOrEmpty(beneficiary.NombreCompleto))
+                                        {
+                                            @beneficiary.NombreCompleto.Substring(0, 1).ToUpper()
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-user"></i>
+                                        }
+                                    </div>
+
+                                    <div class="flex-grow-1" style="min-width: 0;">
+                                        <h5 class="mb-2 text-white fw-semibold" style="font-size: 1.125rem;">
+                                            @beneficiary.NombreCompleto
+                                        </h5>
+                                        <div class="d-flex align-items-center gap-2 mb-3">
+                                            <i class="fas fa-hashtag" style="color: rgba(255, 255, 255, 0.5); font-size: 0.875rem;"></i>
+                                            <span style="font-family: 'Courier New', monospace; color: rgba(255, 255, 255, 0.8); font-size: 0.9rem;">
+                                                @beneficiary.NumeroCuentaBeneficiario
+                                            </span>
+                                        </div>
+
+                                        <form asp-action="Delete" method="post" asp-route-id="@beneficiary.Id" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="ab-btn ab-btn-danger ab-btn-sm w-100"
+                                                    onclick="return confirm('¿Estás seguro de eliminar a @beneficiary.NombreCompleto como beneficiario?');">
+                                                <i class="fas fa-trash me-2"></i>
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="mt-4 p-3" style="background-color: rgba(0, 191, 165, 0.1); border-left: 4px solid var(--ab-secondary); border-radius: var(--ab-border-radius);">
+                <div class="d-flex align-items-start gap-2">
+                    <i class="fas fa-info-circle" style="color: var(--ab-secondary); margin-top: 0.25rem;"></i>
+                    <div>
+                        <strong style="color: var(--ab-white); display: block; margin-bottom: 0.25rem;">
+                            Total de beneficiarios: @Model.Count
+                        </strong>
+                        <small style="color: rgba(255, 255, 255, 0.7);">
+                            Puedes agregar beneficiarios para realizar transferencias rápidamente sin tener que ingresar el número de cuenta cada vez.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="ab-empty-state">
+                <div class="ab-empty-state-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <h3 class="ab-empty-state-title">No tienes beneficiarios registrados</h3>
+                <p class="ab-empty-state-text">
+                    Agrega beneficiarios para realizar transferencias de forma más rápida y sencilla.
+                </p>
+                <a asp-action="Create" class="ab-btn ab-btn-primary mt-3">
+                    <i class="fas fa-plus me-2"></i>
+                    Agregar tu primer beneficiario
+                </a>
+            </div>
+        }
+    </div>
+</div>

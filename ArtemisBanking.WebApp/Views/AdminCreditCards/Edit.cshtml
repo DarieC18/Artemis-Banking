@@ -1,0 +1,108 @@
+@model ArtemisBanking.Application.ViewModels.UpdateCreditCardLimitViewModel
+@{
+    ViewData["Title"] = "Editar Tarjeta de Crédito";
+    var ultimos4Digitos = ViewBag.Ultimos4Digitos as string;
+    var deudaActual = (decimal?)ViewBag.DeudaActual;
+}
+
+<div class="ab-page-header">
+    <h1 class="ab-page-title">
+        <i class="fas fa-edit me-2"></i>
+        Editar Tarjeta
+    </h1>
+    <p class="ab-page-subtitle">
+        <i class="fas fa-credit-card me-1"></i>
+        <span style="font-family: 'Courier New', monospace;">**** **** **** @ultimos4Digitos</span>
+    </p>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="ab-card">
+    <form method="post" asp-action="Edit" data-loading>
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-4 p-3" style="background: rgba(0, 191, 165, 0.1); border-left: 4px solid #00BFA5; border-radius: var(--ab-border-radius);">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="text-white-50 small">Límite de Crédito Actual</label>
+                    <div class="h4 mb-0 text-success">RD$ @Model.LimiteCredito.ToString("N2")</div>
+                </div>
+                @if (deudaActual.HasValue)
+                {
+                    <div class="col-md-6">
+                        <label class="text-white-50 small">Deuda Actual</label>
+                        <div class="h4 mb-0 text-danger">RD$ @deudaActual.Value.ToString("N2")</div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-12">
+                <div class="ab-form-group">
+                    <label asp-for="LimiteCredito" class="ab-form-label">
+                        <i class="fas fa-dollar-sign me-1"></i>
+                        Nuevo Límite de Crédito <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="LimiteCredito"
+                           class="ab-form-control"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="0.00"
+                           required
+                           data-money />
+                    <span asp-validation-for="LimiteCredito" class="ab-invalid-feedback"></span>
+                    <small class="text-white-50 mt-2 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        El nuevo límite no puede ser inferior a la deuda actual
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="ab-alert ab-alert-danger mt-4">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <strong>Errores de validación:</strong>
+                <ul class="mb-0 mt-2">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <div class="ab-alert ab-alert-warning mt-4">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Importante:</strong> El nuevo límite debe ser igual o mayor a la deuda actual. El cliente será notificado por correo electrónico.
+        </div>
+
+        <div class="ab-card-footer d-flex gap-3 mt-4">
+            <button type="submit" class="ab-btn ab-btn-primary">
+                <i class="fas fa-save me-2"></i>
+                Guardar Cambios
+            </button>
+            <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>
+                Volver atrás
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

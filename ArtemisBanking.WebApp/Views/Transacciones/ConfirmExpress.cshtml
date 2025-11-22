@@ -1,0 +1,73 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cliente.ConfirmTransactionExpressViewModel
+
+@{
+    ViewData["Title"] = "Confirmar transferencia express";
+}
+
+<!-- Mensajes -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<!-- Título -->
+<h2 class="ab-section-title">
+    <i class="fas fa-bolt"></i>
+    Confirmar transferencia express
+</h2>
+
+<!-- Card con la información -->
+<div class="ab-card ab-shadow mb-4">
+    <div class="ab-card-body">
+
+        <div class="ab-alert ab-alert-info mb-4">
+            <p><strong>Cuenta origen:</strong> @Model.CuentaOrigen</p>
+            <p><strong>Cuenta destino:</strong> @Model.CuentaDestino</p>
+            <p><strong>Titular de la cuenta destino:</strong> @Model.NombreTitularDestino</p>
+            <p><strong>Monto a transferir:</strong> @Model.Monto.ToString("C")</p>
+        </div>
+
+        <p class="ab-text-primary mb-4">
+            ¿Desea confirmar esta transferencia express?
+        </p>
+
+        <!-- Formulario -->
+        <form asp-action="ConfirmExpress" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- Hidden fields -->
+            <input type="hidden" asp-for="CuentaOrigen" />
+            <input type="hidden" asp-for="CuentaDestino" />
+            <input type="hidden" asp-for="Monto" />
+            <input type="hidden" asp-for="NombreTitularDestino" />
+
+            <!-- Botones -->
+            <button type="submit" class="ab-btn ab-btn-primary ab-btn-lg">
+                <i class="fas fa-check-circle me-2"></i>
+                Confirmar
+            </button>
+
+            <a asp-action="Express"
+               class="ab-btn ab-btn-secondary ab-btn-lg ms-2">
+                <i class="fas fa-times-circle me-2"></i>
+                Cancelar
+            </a>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

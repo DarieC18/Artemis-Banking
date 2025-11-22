@@ -1,0 +1,199 @@
+@model ArtemisBanking.Application.ViewModels.Cajero.CajeroHomeViewModel
+
+@{
+    ViewData["Title"] = "Panel Cajero";
+    var userName = User.Identity.Name ?? "Cajero";
+    var currentHour = DateTime.Now.Hour;
+    var greeting = currentHour < 12 ? "Buenos días" : currentHour < 18 ? "Buenas tardes" : "Buenas noches";
+}
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-cash-register me-2"></i>
+            Panel del Cajero
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            @greeting, <strong>@userName</strong>. Aquí está el resumen de operaciones de hoy.
+        </p>
+    </div>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<!-- Estadísticas del día -->
+<div class="ab-stats-grid mb-4">
+    <div class="ab-stat-card primary">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Total de Transacciones</div>
+        <div class="ab-stat-value">@Model.TotalTransaccionesHoy</div>
+        <div class="ab-stat-change">
+            <i class="fas fa-calendar-day me-1"></i>
+            Hoy @DateTime.Now.ToString("dd/MM/yyyy")
+        </div>
+    </div>
+
+    <div class="ab-stat-card success">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Pagos Procesados</div>
+        <div class="ab-stat-value">@Model.TotalPagosHoy</div>
+        <div class="ab-stat-change">
+            <i class="fas fa-credit-card me-1"></i>
+            <span>TC y Préstamos</span>
+        </div>
+    </div>
+
+    <div class="ab-stat-card info">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Depósitos</div>
+        <div class="ab-stat-value">@Model.TotalDepositosHoy</div>
+        <div class="ab-stat-change positive">
+            <i class="fas fa-arrow-up me-1"></i>
+            <span>Ingresos del día</span>
+        </div>
+    </div>
+
+    <div class="ab-stat-card warning">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Retiros</div>
+        <div class="ab-stat-value">@Model.TotalRetirosHoy</div>
+        <div class="ab-stat-change negative">
+            <i class="fas fa-arrow-down me-1"></i>
+            <span>Egresos del día</span>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="ab-card h-100">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Información Útil
+                </h2>
+            </div>
+            <div class="ab-card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 d-flex align-items-start gap-3">
+                        <div class="ab-stat-icon" style="width: 40px; height: 40px; min-width: 40px; font-size: 1rem; background-color: rgba(27, 59, 111, 0.2);">
+                            <i class="fas fa-clock" style="color: #5A9FFF;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <strong class="d-block mb-1" style="color: var(--ab-white); font-size: 0.95rem;">Horario de operaciones</strong>
+                            <small style="color: rgba(255, 255, 255, 0.7); line-height: 1.4;">Lunes a Viernes: 8:00 AM - 5:00 PM</small>
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start gap-3">
+                        <div class="ab-stat-icon" style="width: 40px; height: 40px; min-width: 40px; font-size: 1rem; background-color: rgba(0, 191, 165, 0.2);">
+                            <i class="fas fa-dollar-sign" style="color: #00BFA5;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <strong class="d-block mb-1" style="color: var(--ab-white); font-size: 0.95rem;">Límites de transacción</strong>
+                            <small style="color: rgba(255, 255, 255, 0.7); line-height: 1.4;">Consulte con su supervisor para límites específicos</small>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start gap-3">
+                        <div class="ab-stat-icon" style="width: 40px; height: 40px; min-width: 40px; font-size: 1rem; background-color: rgba(244, 180, 0, 0.2);">
+                            <i class="fas fa-shield-alt" style="color: #F4B400;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <strong class="d-block mb-1" style="color: var(--ab-white); font-size: 0.95rem;">Seguridad</strong>
+                            <small style="color: rgba(255, 255, 255, 0.7); line-height: 1.4;">Todas las operaciones quedan registradas en el sistema</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="ab-card h-100">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-list-check me-2"></i>
+                    Operaciones Disponibles
+                </h2>
+            </div>
+            <div class="ab-card-body d-flex flex-column">
+                <div class="row g-3 flex-grow-1">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center gap-2 p-3 h-100" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
+                            <i class="fas fa-check-circle" style="color: var(--ab-success); font-size: 1.1rem;"></i>
+                            <small style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Depósitos</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center gap-2 p-3 h-100" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
+                            <i class="fas fa-check-circle" style="color: var(--ab-success); font-size: 1.1rem;"></i>
+                            <small style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Retiros</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center gap-2 p-3 h-100" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
+                            <i class="fas fa-check-circle" style="color: var(--ab-success); font-size: 1.1rem;"></i>
+                            <small style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Pagos de Préstamos</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center gap-2 p-3 h-100" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
+                            <i class="fas fa-check-circle" style="color: var(--ab-success); font-size: 1.1rem;"></i>
+                            <small style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Pagos de Tarjetas</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center gap-2 p-3 h-100" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
+                            <i class="fas fa-check-circle" style="color: var(--ab-success); font-size: 1.1rem;"></i>
+                            <small style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Transferencias</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center gap-2 p-3 h-100" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
+                            <i class="fas fa-check-circle" style="color: var(--ab-success); font-size: 1.1rem;"></i>
+                            <small style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Consultas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ab-card-body .row .col-6 > div:hover {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        border-color: rgba(0, 191, 165, 0.3) !important;
+    }
+</style>

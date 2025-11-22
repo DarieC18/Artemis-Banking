@@ -1,0 +1,108 @@
+@model ArtemisBanking.Application.ViewModels.AssignCreditCardViewModel
+@{
+    ViewData["Title"] = "Asignar Tarjeta de Crédito - Paso 2";
+    var client = ViewBag.Client as ArtemisBanking.Application.ViewModels.ClientForCreditCardViewModel;
+}
+
+<div class="ab-page-header">
+    <h1 class="ab-page-title">
+        <i class="fas fa-cogs me-2"></i>
+        Paso 2: Configuración de la Tarjeta
+    </h1>
+    <p class="ab-page-subtitle">
+        Configure el límite de crédito para @(client?.Nombre) @(client?.Apellido)
+    </p>
+</div>
+
+<div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(27, 59, 111, 0.1) 0%, rgba(244, 180, 0, 0.1) 100%); border-left: 4px solid #F4B400;">
+    <div class="ab-card-header">
+        <h3 class="ab-card-title">
+            <i class="fas fa-user-circle me-2"></i>
+            Información del Cliente
+        </h3>
+    </div>
+    <div class="ab-card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-user text-white-50"></i>
+                    <div>
+                        <small class="text-white-50 d-block">Nombre Completo</small>
+                        <strong class="text-white">@client?.Nombre @client?.Apellido</strong>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-id-card text-white-50"></i>
+                    <div>
+                        <small class="text-white-50 d-block">Cédula</small>
+                        <strong class="text-white" style="font-family: 'Courier New', monospace;">@client?.Cedula</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-envelope text-white-50"></i>
+                    <div>
+                        <small class="text-white-50 d-block">Correo Electrónico</small>
+                        <strong class="text-white">@client?.Email</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ab-card">
+    <form asp-action="AssignStep2" method="post" data-loading>
+        @Html.AntiForgeryToken()
+        <input asp-for="UserId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly" class="ab-alert ab-alert-danger mb-4"></div>
+
+        <div class="row g-4">
+            <div class="col-md-12">
+                <div class="ab-form-group">
+                    <label asp-for="LimiteCredito" class="ab-form-label">
+                        <i class="fas fa-dollar-sign me-1"></i>
+                        Límite de Crédito <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="LimiteCredito"
+                           type="number"
+                           step="0.01"
+                           min="1"
+                           class="ab-form-control"
+                           placeholder="0.00"
+                           required
+                           data-money />
+                    <span asp-validation-for="LimiteCredito" class="ab-invalid-feedback"></span>
+                    <small class="text-white-50 mt-2 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Monto máximo que el cliente podrá utilizar con esta tarjeta
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="ab-alert ab-alert-info mt-4">
+            <i class="fas fa-credit-card me-2"></i>
+            <strong>Nota:</strong> El sistema generará automáticamente el número de tarjeta (16 dígitos), CVC (3 dígitos) y fecha de expiración (3 años desde hoy).
+        </div>
+
+        <div class="ab-card-footer d-flex justify-content-between mt-4">
+            <a asp-action="AssignStep1" class="ab-btn ab-btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>
+                Volver atrás
+            </a>
+            <button type="submit" class="ab-btn ab-btn-primary">
+                <i class="fas fa-check me-2"></i>
+                Asignar Tarjeta
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

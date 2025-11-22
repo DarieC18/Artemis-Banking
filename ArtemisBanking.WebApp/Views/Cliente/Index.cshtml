@@ -1,0 +1,383 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cliente.HomeViewModel
+
+@{
+    ViewData["Title"] = "Mi Panel";
+
+    var totalAhorros = Model.CuentasDeAhorro?.Sum(c => c.Balance) ?? 0m;
+    var totalDeudaPrestamos = Model.Prestamos?.Sum(p => p.MontoPendiente) ?? 0m;
+    var totalCreditoDisponible = Model.TarjetasDeCredito?.Sum(t => t.LimiteCredito - t.DeudaActual) ?? 0m;
+    var totalCreditoUsado = Model.TarjetasDeCredito?.Sum(t => t.DeudaActual) ?? 0m;
+
+    var cuentasOrdenadas = (Model.CuentasDeAhorro ?? Enumerable.Empty<dynamic>())
+        .OrderByDescending(c => c.EsPrincipal)
+        .ThenByDescending(c => c.Balance);
+
+    var userName = User.Identity?.Name ?? "Usuario";
+    var firstName = userName.Split(' ').FirstOrDefault() ?? userName;
+
+    decimal proximoPago = 0m;
+    string proximaFecha = "";
+
+    if (Model.Prestamos != null && Model.Prestamos.Any())
+    {
+        // Buscar dentro de la lista el préstamo con próxima cuota válida
+        var nextLoan = Model.Prestamos
+            .Where(p => p.ProximaCuotaMonto.HasValue && p.ProximaCuotaMonto.Value > 0)
+            .OrderBy(p => p.ProximaCuotaFecha ?? DateTime.MaxValue)
+            .FirstOrDefault();
+
+        if (nextLoan != null)
+        {
+            proximoPago = nextLoan.ProximaCuotaMonto.Value;
+            proximaFecha = (nextLoan.ProximaCuotaFecha ?? DateTime.Today)
+                .ToString("dd MMM yyyy");
+        }
+    }
+}
+
+<div class="ab-main-content">
+    <div class="ab-container">
+
+        <!-- Alertas -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+                <i class="fas fa-check-circle me-2"></i>
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Welcome Section -->
+        <div class="ab-welcome">
+            <h1 class="ab-welcome-title">¡Hola @firstName! 👋</h1>
+            <p class="ab-welcome-text">Bienvenido de vuelta. Aquí está el resumen de tus productos financieros.</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="ab-stats-grid">
+            <div class="ab-stat-card primary">
+                <div class="ab-stat-header">
+                    <div class="ab-stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+                <div class="ab-stat-label">Balance Total</div>
+                <div class="ab-stat-value">@totalAhorros.ToString("C")</div>
+                <div class="ab-stat-change">
+                    <i class="fas fa-info-circle"></i> En cuentas de ahorro
+                </div>
+            </div>
+
+            <div class="ab-stat-card warning">
+                <div class="ab-stat-header">
+                    <div class="ab-stat-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                </div>
+                <div class="ab-stat-label">Crédito Disponible</div>
+                <div class="ab-stat-value">@totalCreditoDisponible.ToString("C")</div>
+                <div class="ab-stat-change">
+                    de @((totalCreditoDisponible + totalCreditoUsado).ToString("C"))
+                </div>
+            </div>
+
+            <div class="ab-stat-card danger">
+                <div class="ab-stat-header">
+                    <div class="ab-stat-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                </div>
+                <div class="ab-stat-label">Deuda en Préstamos</div>
+                <div class="ab-stat-value">@totalDeudaPrestamos.ToString("C")</div>
+                <div class="ab-stat-change">
+                    <i class="fas fa-info-circle"></i> Monto pendiente
+                </div>
+            </div>
+
+            @if (proximoPago > 0)
+            {
+                <div class="ab-stat-card secondary">
+                    <div class="ab-stat-header">
+                        <div class="ab-stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <div class="ab-stat-label">Próximo Pago</div>
+                    <div class="ab-stat-value">@proximoPago.ToString("C")</div>
+                    <div class="ab-stat-change">
+                        <i class="fas fa-calendar"></i> @proximaFecha
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Cuentas de Ahorro -->
+        <div class="ab-product-section">
+            <div class="ab-product-header">
+                <h2 class="ab-product-title">
+                    <i class="fas fa-piggy-bank"></i>
+                    Cuentas de Ahorro
+                </h2>
+            </div>
+
+            @if (cuentasOrdenadas.Any())
+            {
+                <div class="ab-product-grid">
+                    @foreach (var cuenta in cuentasOrdenadas)
+                    {
+                        var maskNumber = cuenta.NumeroCuenta.ToString();
+                        var lastFour = maskNumber.Length >= 4 ? maskNumber.Substring(maskNumber.Length - 4) : maskNumber;
+                        var tipo = cuenta.EsPrincipal ? "Principal" : "Secundaria";
+
+                        <div class="ab-card ab-product-card">
+                            <div class="ab-product-card-type">
+                                @if (cuenta.EsPrincipal)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span>Cuenta @tipo</span>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-wallet"></i>
+                                    <span>Cuenta @tipo</span>
+                                }
+                            </div>
+                            <div class="ab-product-card-number">
+                                •••• @lastFour
+                            </div>
+                            <div class="ab-product-card-balance">
+                                @cuenta.Balance.ToString("C")
+                            </div>
+                            <div class="ab-product-card-actions">
+                                <a href="@Url.Action("DetalleCuenta", "Cliente", new { id = cuenta.Id })"
+                                   class="ab-btn ab-btn-outline-primary ab-btn-sm">
+                                    <i class="fas fa-eye me-1"></i> Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="ab-empty-state">
+                    <div class="ab-empty-state-icon">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <h3 class="ab-empty-state-title">No tienes cuentas de ahorro</h3>
+                    <p class="ab-empty-state-text">Contacta con un administrador para abrir tu primera cuenta.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Tarjetas de Crédito -->
+        @if (Model.TarjetasDeCredito != null && Model.TarjetasDeCredito.Any())
+        {
+            <div class="ab-product-section">
+                <div class="ab-product-header">
+                    <h2 class="ab-product-title">
+                        <i class="fas fa-credit-card"></i>
+                        Tarjetas de Crédito
+                    </h2>
+                </div>
+
+                <div class="ab-product-grid ab-credit-grid">
+                    @foreach (var tarjeta in Model.TarjetasDeCredito)
+                    {
+                        var lastFour = tarjeta.NumeroTarjeta.Length >= 4
+                        ? tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4)
+                        : tarjeta.NumeroTarjeta;
+                        var creditoDisponible = tarjeta.LimiteCredito - tarjeta.DeudaActual;
+                        var porcentajeUsado = tarjeta.LimiteCredito > 0
+                        ? (tarjeta.DeudaActual / tarjeta.LimiteCredito * 100)
+                        : 0;
+
+                        <div class="ab-card ab-product-card">
+                            <!-- Visual de Tarjeta -->
+                            <div class="ab-credit-card-visual">
+                                <div class="ab-credit-card-chip"></div>
+                                <div class="ab-credit-card-number">
+                                    •••• •••• •••• @lastFour
+                                </div>
+                                <div class="ab-credit-card-info">
+                                    <div>
+                                        <div style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 0.25rem;">VÁLIDA HASTA</div>
+                                        <div style="font-size: 0.9rem; font-weight: 600;">@tarjeta.FechaExpiracion</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 0.25rem;">TITULAR</div>
+                                        <div style="font-size: 0.9rem; font-weight: 600;">@User.Identity.Name.ToUpper()</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Info de Límite -->
+                            <div class="ab-credit-card-limit">
+                                <div class="ab-credit-card-limit-text">
+                                    <strong>Disponible:</strong> @creditoDisponible.ToString("C") / @tarjeta.LimiteCredito.ToString("C")
+                                </div>
+                                <div class="ab-progress">
+                                    <div class="ab-progress-bar" style="width: @porcentajeUsado.ToString("F2")%"></div>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <strong>Adeudado:</strong> @tarjeta.DeudaActual.ToString("C") (@porcentajeUsado.ToString("F1")% usado)
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="ab-product-card-actions mt-3">
+                                <a href="@Url.Action("DetalleTarjeta", "Cliente", new { id = tarjeta.Id })"
+                                   class="ab-btn ab-btn-outline-primary ab-btn-sm">
+                                    <i class="fas fa-eye me-1"></i> Ver Movimientos
+                                </a>
+                                <a href="@Url.Action("PagarTarjeta", "Transacciones")"
+                                   class="ab-btn ab-btn-secondary ab-btn-sm">
+                                    <i class="fas fa-dollar-sign me-1"></i> Pagar
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Préstamos Activos -->
+        @if (Model.Prestamos != null && Model.Prestamos.Any())
+        {
+            <div class="ab-product-section">
+                <div class="ab-product-header">
+                    <h2 class="ab-product-title">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        Préstamos Activos
+                    </h2>
+                </div>
+
+                <div class="ab-card">
+                    <div class="table-responsive">
+                        <table class="ab-table">
+                            <thead>
+                                <tr>
+                                    <th>Préstamo</th>
+                                    <th class="text-end">Capital</th>
+                                    <th class="text-center">Cuotas</th>
+                                    <th class="text-end">Pendiente</th>
+                                    <th class="text-center">Tasa</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var prestamo in Model.Prestamos)
+                                {
+                                    var estadoBadgeClass = prestamo.EstadoPago switch
+                                    {
+                                        "Al dia" => "ab-badge ab-badge-success",
+                                        "En mora" => "ab-badge ab-badge-danger",
+                                        _ => "ab-badge ab-badge-secondary"
+                                    };
+                                    var cuotasTexto = $"{prestamo.CuotasPagadas}/{prestamo.CuotasTotales}";
+
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <div class="fw-semibold">•••• @prestamo.NumeroPrestamo.ToString().Substring(Math.Max(0, prestamo.NumeroPrestamo.ToString().Length - 4))</div>
+                                                <small class="text-muted">@prestamo.PlazoMeses meses</small>
+                                            </div>
+                                        </td>
+                                        <td class="text-end fw-semibold">@prestamo.MontoCapital.ToString("C")</td>
+                                        <td class="text-center">
+                                            <span class="ab-badge ab-badge-info">@cuotasTexto</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="fw-semibold text-danger">@prestamo.MontoPendiente.ToString("C")</div>
+                                        </td>
+                                        <td class="text-center">@prestamo.TasaInteres.ToString("F2")%</td>
+                                        <td class="text-center">
+                                            <span class="@estadoBadgeClass">
+                                                @if (prestamo.EstadoPago == "Al dia")
+                                                {
+                                                    <i class="fas fa-check-circle me-1"></i>
+                                                }
+                                                else if (prestamo.EstadoPago == "En mora")
+                                                {
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                                }
+                                                @prestamo.EstadoPago
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="ab-table-actions">
+                                                <a href="@Url.Action("DetallePrestamo", "Cliente", new { id = prestamo.Id })"
+                                                   class="ab-table-icon-btn"
+                                                   title="Ver detalles">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="@Url.Action("PagarPrestamo", "Transacciones")"
+                                                   class="ab-table-icon-btn"
+                                                   title="Pagar cuota">
+                                                    <i class="fas fa-dollar-sign"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- CSS adicional para esta vista -->
+        <style>
+            .ab-credit-card-visual {
+                background: linear-gradient(135deg, #1B3B6F 0%, #132944 100%);
+            }
+
+            /* Responsive ajustes */
+            @@media (max-width: 768px) {
+                .ab-table th,
+                .ab-table td {
+                    font-size: 0.875rem;
+                    padding: 0.75rem 0.5rem;
+                }
+
+                .ab-table-actions {
+                    flex-direction: column;
+                    gap: 0.25rem;
+                }
+            }
+        </style>
+
+        @section Scripts {
+            <script>
+                // Animación de las tarjetas al cargar
+                document.addEventListener('DOMContentLoaded', function () {
+                    const cards = document.querySelectorAll('.ab-product-card, .ab-stat-card');
+                    cards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(20px)';
+                            card.style.transition = 'all 0.3s ease-out';
+
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 50);
+                        }, index * 50);
+                    });
+                });
+            </script>
+        }
+
+    </div>
+</div>

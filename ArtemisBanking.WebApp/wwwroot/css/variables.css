@@ -1,0 +1,102 @@
+/* ============================================
+   ARTEMIS BANKING - Variables CSS
+   ============================================ */
+
+:root {
+    /* === Colores Principales === */
+    --ab-primary: #1B3B6F;
+    --ab-primary-dark: #132944;
+    --ab-primary-light: #2a5490;
+    --ab-secondary: #00BFA5;
+    --ab-secondary-dark: #00A389;
+    --ab-secondary-light: #1FCFB3;
+    --ab-accent: #F4B400;
+    --ab-accent-dark: #D99F00;
+    --ab-accent-light: #F7C333;
+    /* === Colores de Estado === */
+    --ab-success: #28A745;
+    --ab-warning: #FFC107;
+    --ab-danger: #DC3545;
+    --ab-info: #17A2B8;
+    /* === Colores Neutros === */
+    --ab-white: #FFFFFF;
+    --ab-gray-50: #F8F9FA;
+    --ab-gray-100: #F1F3F5;
+    --ab-gray-200: #E9ECEF;
+    --ab-gray-300: #DEE2E6;
+    --ab-gray-400: #CED4DA;
+    --ab-gray-500: #ADB5BD;
+    --ab-gray-600: #6C757D;
+    --ab-gray-700: #495057;
+    --ab-gray-800: #343A40;
+    --ab-gray-900: #212529;
+    /* === Fondos === */
+    --ab-bg-body: #0A0E27;
+    --ab-bg-card: #FFFFFF;
+    --ab-bg-sidebar: #1B3B6F;
+    --ab-bg-navbar: #FFFFFF;
+    /* === Texto === */
+    --ab-text-primary: #212529;
+    --ab-text-secondary: #6C757D;
+    --ab-text-light: #FFFFFF;
+    --ab-text-muted: #ADB5BD;
+    /* === Sombras === */
+    --ab-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --ab-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075);
+    --ab-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.1);
+    --ab-shadow-xl: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+    /* === Bordes === */
+    --ab-border-radius: 0.5rem;
+    --ab-border-radius-sm: 0.375rem;
+    --ab-border-radius-lg: 0.75rem;
+    --ab-border-radius-xl: 1rem;
+    --ab-border-color: #DEE2E6;
+    --ab-border-width: 1px;
+    /* === Espaciado === */
+    --ab-spacing-xs: 0.25rem;
+    --ab-spacing-sm: 0.5rem;
+    --ab-spacing-md: 1rem;
+    --ab-spacing-lg: 1.5rem;
+    --ab-spacing-xl: 2rem;
+    --ab-spacing-xxl: 3rem;
+    /* === Tipografía === */
+    --ab-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --ab-font-size-base: 1rem;
+    --ab-font-size-sm: 0.875rem;
+    --ab-font-size-lg: 1.125rem;
+    --ab-font-size-xl: 1.25rem;
+    --ab-font-weight-light: 300;
+    --ab-font-weight-normal: 400;
+    --ab-font-weight-medium: 500;
+    --ab-font-weight-semibold: 600;
+    --ab-font-weight-bold: 700;
+    --ab-line-height-base: 1.5;
+    --ab-line-height-sm: 1.25;
+    --ab-line-height-lg: 2;
+    /* === Transiciones === */
+    --ab-transition-fast: 150ms ease-in-out;
+    --ab-transition-base: 300ms ease-in-out;
+    --ab-transition-slow: 500ms ease-in-out;
+    /* === Z-Index === */
+    --ab-z-dropdown: 1000;
+    --ab-z-sticky: 1020;
+    --ab-z-fixed: 1030;
+    --ab-z-modal-backdrop: 1040;
+    --ab-z-modal: 1050;
+    --ab-z-popover: 1060;
+    --ab-z-tooltip: 1070;
+    /* === Dimensiones Navbar === */
+    --ab-navbar-height: 70px;
+    --ab-sidebar-width: 280px;
+    --ab-sidebar-collapsed-width: 70px;
+}
+
+/* === Dark Mode (opcional para futuro) === */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ab-bg-body: #1a1a1a;
+        --ab-bg-card: #2d2d2d;
+        --ab-text-primary: #f8f9fa;
+        --ab-text-secondary: #adb5bd;
+    }
+}

@@ -1,0 +1,253 @@
+@model List<ArtemisBanking.Application.ViewModels.LoanListItemViewModel>
+@{
+    ViewData["Title"] = "Gestión de Préstamos";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var statusFilter = ViewBag.StatusFilter as string;
+    var cedulaFilter = ViewBag.CedulaFilter as string;
+}
+
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                Gestión de Préstamos
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                Administra y monitorea los préstamos del sistema
+            </p>
+        </div>
+        <a asp-action="AssignStep1" class="ab-btn ab-btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>
+            Asignar Préstamo
+        </a>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="ab-filter-bar">
+    <form method="get" asp-action="Index" class="d-flex gap-3 w-100 flex-wrap align-items-end">
+        <div class="ab-filter-group flex-fill">
+            <label for="cedulaFilter" class="ab-form-label">
+                <i class="fas fa-id-card me-1"></i>
+                Buscar por Cédula
+            </label>
+            <input type="text" name="cedulaFilter" id="cedulaFilter"
+                   class="ab-form-control" value="@cedulaFilter"
+                   placeholder="000-0000000-0" style="font-family: 'Courier New', monospace;" />
+        </div>
+
+        <div class="ab-filter-group flex-fill">
+            <label for="statusFilter" class="ab-form-label">
+                <i class="fas fa-filter me-1"></i>
+                Filtrar por Estado
+            </label>
+            <select name="statusFilter" id="statusFilter" class="ab-form-control">
+                <option value="Todos" selected="@(statusFilter == "Todos" || string.IsNullOrWhiteSpace(statusFilter))">Todos</option>
+                <option value="Activos" selected="@(statusFilter == "Activos")">Activos</option>
+                <option value="Completados" selected="@(statusFilter == "Completados")">Completados</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" class="ab-btn ab-btn-secondary">
+                <i class="fas fa-search me-2"></i>
+                Buscar
+            </button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(cedulaFilter))
+        {
+            <div>
+                <a asp-action="Index"
+                   asp-route-statusFilter="@statusFilter"
+                   class="ab-btn ab-btn-outline-primary">
+                    <i class="fas fa-times me-2"></i>
+                    Limpiar
+                </a>
+            </div>
+        }
+    </form>
+</div>
+
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-list me-2"></i>
+            Lista de Préstamos
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
+        <div class="table-responsive">
+            <table class="ab-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag me-1"></i> Número</th>
+                        <th><i class="fas fa-user me-1"></i> Cliente</th>
+                        <th class="text-end"><i class="fas fa-coins me-1"></i> Capital</th>
+                        <th class="text-center"><i class="fas fa-list-ol me-1"></i> Cuotas</th>
+                        <th class="text-center"><i class="fas fa-check me-1"></i> Pagadas</th>
+                        <th class="text-end"><i class="fas fa-exclamation-circle me-1"></i> Pendiente</th>
+                        <th><i class="fas fa-percent me-1"></i> Interés</th>
+                        <th class="text-center"><i class="fas fa-calendar me-1"></i> Plazo</th>
+                        <th class="text-center"><i class="fas fa-info-circle me-1"></i> Estado</th>
+                        <th class="text-center"><i class="fas fa-cog me-1"></i> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var loan in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge" style="background: rgba(0, 191, 165, 0.2); color: #00BFA5; font-family: 'Courier New', monospace;">
+                                        #@loan.NumeroPrestamo
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                             style="width: 35px; height: 35px; background: linear-gradient(135deg, #1B3B6F 0%, #2A5490 100%); color: white; font-weight: bold; flex-shrink: 0;">
+                                            @loan.ClienteNombre?.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span class="fw-medium">@loan.ClienteNombre @loan.ClienteApellido</span>
+                                    </div>
+                                </td>
+                                <td class="text-end fw-bold text-white">
+                                    @loan.MontoCapital.ToString("C")
+                                </td>
+                                <td class="text-center">
+                                    <span class="ab-badge ab-badge-info">@loan.CuotasTotales</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="ab-badge ab-badge-success">@loan.CuotasPagadas</span>
+                                </td>
+                                <td class="text-end fw-bold text-warning">
+                                    @loan.MontoPendiente.ToString("C")
+                                </td>
+                                <td>
+                                    <span class="text-white-50">@loan.TasaInteres.ToString("N2")%</span>
+                                </td>
+                                <td class="text-center">
+                                    @loan.PlazoMeses <small class="text-white-50">meses</small>
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        var estadoBadge = loan.EstadoPago?.ToLower() switch
+                                        {
+                                            "en mora" => "ab-badge-danger",
+                                            "completado" => "ab-badge-secondary",
+                                            _ => "ab-badge-success"
+                                        };
+                                        var estadoIcon = loan.EstadoPago?.ToLower() switch
+                                        {
+                                            "en mora" => "fa-exclamation-triangle",
+                                            "completado" => "fa-check-circle",
+                                            _ => "fa-thumbs-up"
+                                        };
+                                    }
+                                    <span class="ab-badge @estadoBadge">
+                                        <i class="fas @estadoIcon me-1"></i>
+                                        @loan.EstadoPago
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="ab-table-actions justify-content-center">
+                                        <a asp-action="Detail" asp-route-id="@loan.Id"
+                                           class="ab-table-icon-btn"
+                                           style="background-color: rgba(0, 191, 165, 0.1); color: #00BFA5;"
+                                           title="Ver detalle">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@loan.Id"
+                                           class="ab-table-icon-btn"
+                                           title="Editar préstamo">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10">
+                                <div class="ab-empty-state">
+                                    <div class="ab-empty-state-icon">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                    </div>
+                                    <h3 class="ab-empty-state-title">No hay préstamos</h3>
+                                    <p class="ab-empty-state-text">
+                                        No se encontraron préstamos con los filtros aplicados.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <div class="ab-pagination">
+                @if (currentPage > 1)
+                {
+                    <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-statusFilter="@statusFilter" asp-route-cedulaFilter="@cedulaFilter">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                }
+                else
+                {
+                    <button class="ab-pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == currentPage)
+                    {
+                        <button class="ab-pagination-btn active">@i</button>
+                    }
+                    else
+                    {
+                        <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@i" asp-route-statusFilter="@statusFilter" asp-route-cedulaFilter="@cedulaFilter">@i</a>
+                    }
+                }
+
+                @if (currentPage < totalPages)
+                {
+                    <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-statusFilter="@statusFilter" asp-route-cedulaFilter="@cedulaFilter">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <button class="ab-pagination-btn" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,196 @@
+@model ArtemisBanking.Application.ViewModels.Cliente.DetallePrestamoViewModel
+
+@{
+    ViewData["Title"] = "Detalle de préstamo";
+}
+
+<!-- Header con diseño moderno -->
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-hand-holding-usd me-2"></i>
+                Detalle de Préstamo
+            </h1>
+            <p class="text-white-50 mb-0">
+                <i class="fas fa-hashtag"></i>
+                <span style="font-family: 'Courier New', monospace;">@Model.NumeroPrestamo</span>
+            </p>
+        </div>
+        <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver
+        </a>
+    </div>
+</div>
+
+<!-- Stats Grid del préstamo -->
+<div class="ab-stats-grid mb-4">
+    <div class="ab-stat-card primary">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-coins"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Monto Capital</div>
+        <div class="ab-stat-value">@Model.MontoCapital.ToString("C")</div>
+    </div>
+
+    <div class="ab-stat-card danger">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Monto Pendiente</div>
+        <div class="ab-stat-value">@Model.MontoPendiente.ToString("C")</div>
+    </div>
+
+    <div class="ab-stat-card warning">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-percent"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Tasa de Interés</div>
+        <div class="ab-stat-value">@($"{Model.TasaInteres}%")</div>
+    </div>
+
+    <div class="ab-stat-card success">
+        <div class="ab-stat-header">
+            <div class="ab-stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+        </div>
+        <div class="ab-stat-label">Cuotas Pagadas</div>
+        <div class="ab-stat-value">@Model.CuotasPagadas / @Model.CuotasTotales</div>
+        <div class="ab-stat-change">
+            Plazo: @Model.PlazoMeses meses
+        </div>
+    </div>
+</div>
+
+<!-- Estado del préstamo -->
+<div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(27, 59, 111, 0.1) 0%, rgba(0, 191, 165, 0.1) 100%);">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="text-white mb-2">
+                <i class="fas fa-chart-line me-2"></i>
+                Estado del Préstamo
+            </h5>
+            <p class="text-white-50 mb-0">Progreso de pago</p>
+        </div>
+        <div>
+            @{
+                var estadoClass = Model.EstadoPago?.Trim().ToLower() switch
+                {
+                    "al dia" => "ab-badge-success",
+                    "en mora" => "ab-badge-danger",
+                    _ => "ab-badge-info"
+                };
+                var estadoIcon = Model.EstadoPago?.Trim().ToLower() switch
+                {
+                    "al dia" => "fa-check-circle",
+                    "en mora" => "fa-exclamation-triangle",
+                    _ => "fa-info-circle"
+                };
+            }
+            <span class="ab-badge @estadoClass" style="font-size: 1.1rem; padding: 0.6rem 1.2rem;">
+                <i class="fas @estadoIcon me-2"></i>
+                @Model.EstadoPago
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de amortización -->
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-list-ol me-2"></i>
+            Tabla de Amortización
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
+        @if (Model.Cuotas.Any())
+        {
+            <div class="table-responsive">
+                <table class="ab-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag me-1"></i> # Cuota</th>
+                            <th><i class="fas fa-calendar me-1"></i> Fecha de pago</th>
+                            <th class="text-end"><i class="fas fa-money-bill me-1"></i> Valor cuota</th>
+                            <th class="text-end"><i class="fas fa-dollar-sign me-1"></i> Pendiente</th>
+                            <th class="text-center"><i class="fas fa-check-circle me-1"></i> Estado</th>
+                            <th class="text-center"><i class="fas fa-clock me-1"></i> Atraso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model.Cuotas)
+                        {
+                            var esParcial = !c.Pagada && c.SaldoPendiente > 0 && c.SaldoPendiente < c.ValorCuota;
+                            var estadoPagoClass = c.Pagada
+                            ? "ab-badge-success"
+                            : (esParcial ? "ab-badge-info" : "ab-badge-warning");
+                            var estadoPagoTexto = c.Pagada
+                            ? "Pagada"
+                            : (esParcial ? "Parcial" : "Pendiente");
+                            var estadoPagoIcon = c.Pagada
+                            ? "fa-check-circle"
+                            : (esParcial ? "fa-clock" : "fa-hourglass-half");
+
+                            <tr style="@(c.Pagada ? "opacity: 0.7;" : "")">
+                                <td class="fw-bold">
+                                    <span class="badge" style="background: rgba(0, 191, 165, 0.2); color: #00BFA5;">
+                                        #@c.NumeroCuota
+                                    </span>
+                                </td>
+                                <td>@c.FechaPago.ToString("dd/MM/yyyy")</td>
+                                <td class="text-end fw-bold text-white">@c.ValorCuota.ToString("C")</td>
+                                <td class="text-end @(c.SaldoPendiente > 0 ? "text-warning" : "text-success")">
+                                    @c.SaldoPendiente.ToString("C")
+                                </td>
+                                <td class="text-center">
+                                    <span class="ab-badge @estadoPagoClass">
+                                        <i class="fas @estadoPagoIcon me-1"></i>
+                                        @estadoPagoTexto
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    @if (c.Atrasada)
+                                    {
+                                        <span class="ab-badge ab-badge-danger">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                            Atrasada
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ab-badge ab-badge-success">
+                                            <i class="fas fa-check me-1"></i>
+                                            En tiempo
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="ab-empty-state">
+                <div class="ab-empty-state-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <h3 class="ab-empty-state-title">No hay cuotas</h3>
+                <p class="ab-empty-state-text">
+                    No se encontraron cuotas registradas para este préstamo.
+                </p>
+            </div>
+        }
+    </div>
+</div>

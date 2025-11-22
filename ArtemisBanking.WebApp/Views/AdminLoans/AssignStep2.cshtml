@@ -1,0 +1,192 @@
+@model ArtemisBanking.Application.ViewModels.AssignLoanViewModel
+@{
+    ViewData["Title"] = "Asignar Préstamo - Paso 2";
+    var client = ViewBag.Client as ArtemisBanking.Application.ViewModels.ClientForLoanViewModel;
+
+    decimal averageDebt = 0m;
+    if (ViewBag.AverageDebt is decimal ad) averageDebt = ad;
+
+    decimal currentDebt = 0m;
+    if (ViewBag.CurrentDebt is decimal cd) currentDebt = cd;
+
+    var needsWarning = ViewBag.NeedsWarning as bool? ?? false;
+    var warningMessage = ViewBag.WarningMessage as string;
+}
+
+<!-- Header -->
+<div class="ab-page-header">
+    <h1 class="ab-page-title">
+        <i class="fas fa-cogs me-2"></i>
+        Paso 2: Configuración del Préstamo
+    </h1>
+    <p class="ab-page-subtitle">
+        Configure los detalles del préstamo para @(client?.Nombre) @(client?.Apellido)
+    </p>
+</div>
+
+@if (needsWarning && !string.IsNullOrEmpty(warningMessage))
+{
+    <div class="ab-alert ab-alert-warning mb-4">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <strong>Advertencia:</strong> @warningMessage
+    </div>
+}
+
+<div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(27, 59, 111, 0.1) 0%, rgba(0, 191, 165, 0.1) 100%); border-left: 4px solid #00BFA5;">
+    <div class="ab-card-header">
+        <h3 class="ab-card-title">
+            <i class="fas fa-user-circle me-2"></i>
+            Información del Cliente
+        </h3>
+    </div>
+    <div class="ab-card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-user text-white-50"></i>
+                    <div>
+                        <small class="text-white-50 d-block">Nombre Completo</small>
+                        <strong class="text-white">@client?.Nombre @client?.Apellido</strong>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-id-card text-white-50"></i>
+                    <div>
+                        <small class="text-white-50 d-block">Cédula</small>
+                        <strong class="text-white" style="font-family: 'Courier New', monospace;">@client?.Cedula</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-envelope text-white-50"></i>
+                    <div>
+                        <small class="text-white-50 d-block">Correo Electrónico</small>
+                        <strong class="text-white">@client?.Email</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="ab-stat-card warning" style="padding: 1rem;">
+                    <div class="ab-stat-label">Deuda Actual</div>
+                    <div class="ab-stat-value" style="font-size: 1.5rem;">RD$ @currentDebt.ToString("N2")</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="ab-stat-card info" style="padding: 1rem;">
+                    <div class="ab-stat-label">Promedio del Sistema</div>
+                    <div class="ab-stat-value" style="font-size: 1.5rem;">RD$ @averageDebt.ToString("N2")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ab-card">
+    <form asp-action="@(needsWarning ? "ConfirmAssign" : "AssignStep2")" method="post" data-loading>
+        @Html.AntiForgeryToken()
+        <input asp-for="UserId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly" class="ab-alert ab-alert-danger mb-4"></div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="PlazoMeses" class="ab-form-label">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        Plazo del Préstamo (meses) <span class="text-danger">*</span>
+                    </label>
+                    <select asp-for="PlazoMeses" class="ab-form-control" required>
+                        <option value="">-- Seleccione un plazo --</option>
+                        @for (int i = 6; i <= 60; i += 6)
+                        {
+                            if (Model.PlazoMeses == i)
+                            {
+                                <option value="@i" selected="selected">@i meses (@((i / 12.0).ToString("F1")) años)</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i meses (@((i / 12.0).ToString("F1")) años)</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="PlazoMeses" class="ab-invalid-feedback"></span>
+                    <small class="text-white-50 mt-2 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Solo múltiplos de 6 meses (mínimo 6, máximo 60)
+                    </small>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="MontoCapital" class="ab-form-label">
+                        <i class="fas fa-dollar-sign me-1"></i>
+                        Monto a Prestar <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="MontoCapital"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           class="ab-form-control"
+                           placeholder="0.00"
+                           required
+                           data-money />
+                    <span asp-validation-for="MontoCapital" class="ab-invalid-feedback"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="ab-form-group">
+                    <label asp-for="TasaInteres" class="ab-form-label">
+                        <i class="fas fa-percent me-1"></i>
+                        Tasa de Interés Anual (%) <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="TasaInteres"
+                           type="number"
+                           step="0.01"
+                           min="0"
+                           max="100"
+                           class="ab-form-control"
+                           placeholder="12.50"
+                           required />
+                    <span asp-validation-for="TasaInteres" class="ab-invalid-feedback"></span>
+                    <small class="text-white-50 mt-2 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Tasa de interés anual expresada en porcentaje
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="ab-alert ab-alert-info mt-4">
+            <i class="fas fa-calculator me-2"></i>
+            <strong>Nota:</strong> El sistema calculará automáticamente la tabla de amortización usando el método francés de cuota fija.
+        </div>
+
+        <div class="ab-card-footer d-flex justify-content-between mt-4">
+            <a asp-action="AssignStep1" class="ab-btn ab-btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>
+                Volver atrás
+            </a>
+            <button type="submit" class="ab-btn ab-btn-primary">
+                @if (needsWarning)
+                {
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <text>Confirmar y asignar</text>
+                }
+                else
+                {
+                    <i class="fas fa-check me-2"></i>
+                    <text>Asignar préstamo</text>
+                }
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

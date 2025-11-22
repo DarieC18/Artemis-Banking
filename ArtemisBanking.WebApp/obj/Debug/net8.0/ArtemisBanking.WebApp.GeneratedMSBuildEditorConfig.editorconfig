@@ -38,6 +38,82 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminCreditCards/AssignStep1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5DcmVkaXRDYXJkc1xBc3NpZ25TdGVwMS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminCreditCards/AssignStep2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5DcmVkaXRDYXJkc1xBc3NpZ25TdGVwMi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminCreditCards/Cancel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5DcmVkaXRDYXJkc1xDYW5jZWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminCreditCards/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5DcmVkaXRDYXJkc1xEZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminCreditCards/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5DcmVkaXRDYXJkc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminCreditCards/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5DcmVkaXRDYXJkc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminLoans/AssignStep1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Mb2Fuc1xBc3NpZ25TdGVwMS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminLoans/AssignStep2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Mb2Fuc1xBc3NpZ25TdGVwMi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminLoans/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Mb2Fuc1xEZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminLoans/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Mb2Fuc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminLoans/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Mb2Fuc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminSavings/AssignStep1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5TYXZpbmdzXEFzc2lnblN0ZXAxLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminSavings/AssignStep2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5TYXZpbmdzXEFzc2lnblN0ZXAyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminSavings/Cancel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5TYXZpbmdzXENhbmNlbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminSavings/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5TYXZpbmdzXERldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminSavings/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5TYXZpbmdzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminUsers/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Vc2Vyc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminUsers/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Vc2Vyc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/AdminUsers/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Vc2Vyc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/Admin/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -84,14 +160,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/Cajero/RetiroConfirmacion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FqZXJvXFJldGlyb0NvbmZpcm1hY2lvbi5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/Cajero/Transferencia.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FqZXJvXFRyYW5zZmVyZW5jaWEuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/Cajero/TransferenciaConfirmacion.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FqZXJvXFRyYW5zZmVyZW5jaWFDb25maXJtYWNpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/la/Desktop/Programacion/Itla/Programacion 3/ArtemisBanking/ArtemisBanking.WebApp/Views/Cajero/TransferenciaTerceros.cshtml]

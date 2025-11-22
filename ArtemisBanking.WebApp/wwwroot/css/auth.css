@@ -1,0 +1,373 @@
+﻿/* auth.css - Estilos para autenticación con especificidad alta */
+
+/* Reset básico para evitar conflictos */
+body.auth-page {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+/* === Auth Container con imagen de fondo === */
+html body div.ab-auth-container {
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2rem 1rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+}
+/* === Auth Container con imagen de fondo === */
+html body div.ab-auth-container {
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2rem 1rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+}
+
+    /* Imagen de fondo con blur */
+    html body div.ab-auth-container::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background-image: url('/images/auth-background.png') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        filter: blur(3.5px) brightness(0.55) !important;
+        transform: scale(1.05) !important;
+        z-index: 0 !important;
+    }
+
+    /* Overlay oscuro adicional */
+    html body div.ab-auth-container::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+        z-index: 0 !important;
+    }
+
+/* === Auth Card === */
+.ab-auth-card {
+    background: rgba(15, 23, 42, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(20px) !important;
+    width: 100% !important;
+    max-width: 450px !important;
+    position: relative !important;
+    z-index: 1 !important;
+    overflow: hidden !important;
+}
+
+    .ab-auth-card::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 4px !important;
+        background: linear-gradient(90deg, #00BFA5 0%, #1B3B6F 100%) !important;
+    }
+
+/* === Auth Header === */
+.ab-auth-header {
+    padding: 2rem 2rem 1.5rem !important;
+    text-align: center !important;
+    position: relative !important;
+}
+
+/* === Logo Personalizado en Login === */
+html body div.ab-auth-container div.ab-auth-card div.ab-auth-header div.ab-auth-logo {
+    width: 160px !important;
+    height: 160px !important;
+    margin: 0 auto 1.5rem !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+    html body div.ab-auth-container div.ab-auth-card div.ab-auth-header div.ab-auth-logo img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+
+    html body div.ab-auth-container div.ab-auth-card div.ab-auth-header div.ab-auth-logo i {
+        display: none !important;
+    }
+
+.ab-auth-title {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: #F9FAFB !important;
+    margin-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+}
+
+.ab-auth-subtitle {
+    font-size: 0.95rem !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin: 0 !important;
+}
+
+.ab-auth-body {
+    padding: 0 2rem 2rem !important;
+}
+
+/* === Auth Form === */
+.ab-auth-form .ab-form-group {
+    margin-bottom: 1.5rem !important;
+}
+
+.ab-auth-form .ab-form-label {
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    display: block !important;
+    font-size: 0.95rem !important;
+}
+
+.ab-auth-form .ab-form-control {
+    width: 100% !important;
+    height: 48px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    color: #F9FAFB !important;
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    border: 1px solid rgba(148, 163, 184, 0.35) !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
+}
+
+    .ab-auth-form .ab-form-control:focus {
+        outline: none !important;
+        border-color: #00BFA5 !important;
+        box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.1) !important;
+        background-color: rgba(15, 23, 42, 1) !important;
+    }
+
+    .ab-auth-form .ab-form-control::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+/* === Password Toggle === */
+.ab-password-wrapper {
+    position: relative !important;
+}
+
+.ab-password-toggle {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: none !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    cursor: pointer !important;
+    padding: 0 15px !important;
+    text-decoration: none !important;
+    z-index: 10 !important;
+}
+
+    .ab-password-toggle:hover {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+/* === Auth Button === */
+.ab-auth-btn {
+    width: 100% !important;
+    height: 50px !important;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 1.5rem !important;
+}
+
+.ab-auth-btn-primary {
+    background: linear-gradient(135deg, #00BFA5 0%, #1B3B6F 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0, 191, 165, 0.3) !important;
+}
+
+    .ab-auth-btn-primary:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(0, 191, 165, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+.ab-auth-btn:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+/* === Auth Links === */
+.ab-auth-links {
+    margin-top: 1.5rem !important;
+    padding-top: 1.5rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    text-align: center !important;
+}
+
+.ab-auth-link {
+    color: #00BFA5 !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+    .ab-auth-link:hover {
+        color: #F9FAFB !important;
+    }
+
+/* === Alerts === */
+.ab-auth-form .ab-alert {
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    margin-bottom: 1rem !important;
+    display: flex !important;
+    align-items: start !important;
+}
+
+.ab-auth-form .ab-alert-success {
+    background-color: rgba(40, 167, 69, 0.15) !important;
+    border: 1px solid rgba(40, 167, 69, 0.3) !important;
+    color: #28A745 !important;
+}
+
+.ab-auth-form .ab-alert-warning {
+    background-color: rgba(255, 193, 7, 0.15) !important;
+    border: 1px solid rgba(255, 193, 7, 0.3) !important;
+    color: #FFC107 !important;
+}
+
+.ab-auth-form .ab-alert-danger {
+    background-color: rgba(220, 53, 69, 0.15) !important;
+    border: 1px solid rgba(220, 53, 69, 0.3) !important;
+    color: #DC3545 !important;
+}
+
+.ab-auth-form .ab-invalid-feedback {
+    color: #DC3545 !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.25rem !important;
+    display: block !important;
+}
+
+/* === Error Pages === */
+.ab-error-container {
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2rem !important;
+    background: linear-gradient(135deg, #0F172A 0%, #1B3B6F 50%, #0F172A 100%) !important;
+}
+
+.ab-error-card {
+    text-align: center !important;
+    max-width: 600px !important;
+}
+
+.ab-error-icon {
+    width: 120px !important;
+    height: 120px !important;
+    margin: 0 auto 2rem !important;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2) 0%, rgba(220, 53, 69, 0.05) 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+    .ab-error-icon i {
+        font-size: 4rem !important;
+        color: #DC3545 !important;
+    }
+
+.ab-error-title {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #F9FAFB !important;
+    margin-bottom: 1rem !important;
+}
+
+.ab-error-text {
+    font-size: 1.1rem !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    margin-bottom: 2rem !important;
+}
+
+.ab-error-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    justify-content: center !important;
+}
+
+/* === Success Icon === */
+.ab-success-icon {
+    width: 120px !important;
+    height: 120px !important;
+    margin: 0 auto 2rem !important;
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(40, 167, 69, 0.05) 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+    .ab-success-icon i {
+        font-size: 4rem !important;
+        color: #28A745 !important;
+    }
+
+/* === Responsive === */
+@media (max-width: 576px) {
+    .ab-auth-card {
+        max-width: 100% !important;
+    }
+
+    .ab-auth-header {
+        padding: 1.5rem 1.5rem 1rem !important;
+    }
+
+    .ab-auth-body {
+        padding: 0 1.5rem 1.5rem !important;
+    }
+
+    .ab-auth-title {
+        font-size: 1.5rem !important;
+    }
+
+    .ab-error-actions {
+        flex-direction: column !important;
+    }
+}

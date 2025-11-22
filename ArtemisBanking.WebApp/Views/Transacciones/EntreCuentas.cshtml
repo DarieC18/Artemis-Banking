@@ -1,0 +1,101 @@
+﻿@using ArtemisBanking.Application.ViewModels.Cliente
+@model TransferBetweenAccountsViewModel
+
+@{
+    ViewData["Title"] = "Transferencia entre cuentas";
+}
+
+<!-- Mensajes -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<!-- Título -->
+<h2 class="ab-section-title">
+    <i class="fas fa-random"></i>
+    Transferencia entre cuentas propias
+</h2>
+
+<!-- Card contenedor -->
+<div class="ab-card ab-shadow">
+    <form asp-action="EntreCuentas" method="post" class="needs-validation" novalidate>
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- Cuenta origen -->
+        <div class="ab-form-group">
+            <label asp-for="CuentaOrigen" class="ab-form-label"></label>
+            <select asp-for="CuentaOrigen" class="ab-form-control">
+                <option value="">-- Seleccione una cuenta de origen --</option>
+                @if (Model.CuentasDisponibles != null)
+                {
+                    foreach (var cuenta in Model.CuentasDisponibles)
+                    {
+                        <option value="@cuenta.NumeroCuenta">
+                            @cuenta.NumeroCuenta
+                        </option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="CuentaOrigen" class="ab-invalid-feedback"></span>
+        </div>
+
+        <!-- Cuenta destino -->
+        <div class="ab-form-group">
+            <label asp-for="CuentaDestino" class="ab-form-label"></label>
+            <select asp-for="CuentaDestino" class="ab-form-control">
+                <option value="">-- Seleccione una cuenta de destino --</option>
+                @if (Model.CuentasDisponibles != null)
+                {
+                    foreach (var cuenta in Model.CuentasDisponibles)
+                    {
+                        <option value="@cuenta.NumeroCuenta">
+                            @cuenta.NumeroCuenta
+                        </option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="CuentaDestino" class="ab-invalid-feedback"></span>
+        </div>
+
+        <!-- Monto -->
+        <div class="ab-form-group">
+            <label asp-for="Monto" class="ab-form-label"></label>
+            <input asp-for="Monto" class="ab-form-control" type="number" step="0.01" data-money />
+            <span asp-validation-for="Monto" class="ab-invalid-feedback"></span>
+        </div>
+
+        <!-- Botones -->
+        <div class="mt-4">
+            <button type="submit" class="ab-btn ab-btn-primary ab-btn-lg">
+                <i class="fas fa-paper-plane me-2"></i>
+                Transferir
+            </button>
+
+            <a asp-controller="Cliente" asp-action="Index"
+               class="ab-btn ab-btn-secondary ab-btn-lg ms-2">
+                <i class="fas fa-times-circle me-2"></i>
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

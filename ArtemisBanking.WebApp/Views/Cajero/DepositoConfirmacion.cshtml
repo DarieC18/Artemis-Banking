@@ -1,0 +1,133 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cajero.DepositoConfirmViewModel
+
+@{
+    ViewData["Title"] = "Confirmar depósito";
+}
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-check-circle me-2"></i>
+            Confirmar depósito
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Revise los datos antes de procesar la operación
+        </p>
+    </div>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success mb-4" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Resumen de la operación -->
+        <div class="ab-card mb-4" style="background: linear-gradient(135deg, rgba(0, 191, 165, 0.1) 0%, rgba(27, 59, 111, 0.1) 100%); border-left: 4px solid var(--ab-secondary);">
+            <div class="ab-card-body">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--ab-secondary) 0%, var(--ab-secondary-dark) 100%); border-radius: 50%; box-shadow: 0 8px 24px rgba(0, 191, 165, 0.3);">
+                        <i class="fas fa-arrow-down" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h3 class="mb-2" style="color: var(--ab-white); font-weight: 600;">
+                        Depósito de @Model.Amount.ToString("C")
+                    </h3>
+                    <p class="mb-0" style="color: rgba(255, 255, 255, 0.7);">
+                        Verifique los datos antes de confirmar
+                    </p>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-hashtag me-1"></i>
+                                Cuenta destino
+                            </small>
+                            <strong style="color: var(--ab-white); font-family: 'Courier New', monospace; font-size: 1.1rem;">
+                                @Model.AccountNumber
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3" style="background-color: rgba(255, 255, 255, 0.05); border-radius: var(--ab-border-radius);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-user me-1"></i>
+                                Titular de la cuenta
+                            </small>
+                            <strong style="color: var(--ab-white); font-size: 1.1rem;">
+                                @Model.HolderFullName
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="p-3 text-center" style="background-color: rgba(0, 191, 165, 0.15); border-radius: var(--ab-border-radius); border: 1px solid rgba(0, 191, 165, 0.3);">
+                            <small class="d-block mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-dollar-sign me-1"></i>
+                                Monto a depositar
+                            </small>
+                            <strong style="color: var(--ab-secondary); font-size: 2rem; font-weight: bold;">
+                                @Model.Amount.ToString("C")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmación -->
+        <div class="ab-card">
+            <div class="ab-card-body text-center py-4">
+                <h5 class="mb-4" style="color: var(--ab-white);">
+                    ¿Desea confirmar este depósito?
+                </h5>
+
+                <form asp-action="ConfirmarDeposito" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="AccountNumber" />
+                    <input type="hidden" asp-for="Amount" />
+
+                    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                        <a asp-action="Deposito" class="ab-btn ab-btn-outline-primary" style="min-width: 180px;">
+                            <i class="fas fa-times me-2"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="ab-btn ab-btn-primary" style="min-width: 180px;">
+                            <i class="fas fa-check me-2"></i>
+                            Confirmar Depósito
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-4 p-3" style="background-color: rgba(244, 180, 0, 0.1); border-radius: var(--ab-border-radius); border: 1px solid rgba(244, 180, 0, 0.3);">
+                    <small style="color: rgba(255, 255, 255, 0.8);">
+                        <i class="fas fa-shield-alt me-1" style="color: #F4B400;"></i>
+                        Esta operación será procesada de forma inmediata y quedará registrada en el sistema
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

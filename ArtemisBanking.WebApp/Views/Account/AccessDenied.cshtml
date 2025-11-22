@@ -1,0 +1,99 @@
+@{
+    ViewData["Title"] = "Acceso Denegado";
+    Layout = "_Layout";
+}
+
+@{
+    var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+    var homeController = "Home";
+    var homeAction = "Index";
+
+    if (isAuthenticated)
+    {
+        if (User.IsInRole("Administrador"))
+        {
+            homeController = "Admin";
+            homeAction = "Dashboard";
+        }
+        else if (User.IsInRole("Cajero"))
+        {
+            homeController = "Cajero";
+            homeAction = "Index";
+        }
+        else if (User.IsInRole("Cliente"))
+        {
+            homeController = "Cliente";
+            homeAction = "Home";
+        }
+        else if (User.IsInRole("Comercio"))
+        {
+            homeController = "Comercio";
+            homeAction = "Home";
+        }
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+}
+
+<div class="ab-error-container">
+    <div class="ab-error-card">
+        <div class="ab-error-icon">
+            <i class="fas fa-ban"></i>
+        </div>
+
+        <h1 class="ab-error-title">Acceso Denegado</h1>
+        <p class="ab-error-text">
+            Lo sentimos, no tiene los permisos necesarios para acceder a este recurso.
+        </p>
+
+        @if (isAuthenticated)
+        {
+            <div class="ab-card mb-4">
+                <div class="ab-card-body text-center">
+                    <p class="mb-2" style="color: rgba(255, 255, 255, 0.7);">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Sesión iniciada como: <strong style="color: var(--ab-white);">@User.Identity.Name</strong>
+                    </p>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="ab-btn ab-btn-sm ab-btn-outline-secondary mt-2">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            ¿No es @User.Identity.Name? Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="ab-alert ab-alert-info mb-4">
+                <i class="fas fa-info-circle me-2"></i>
+                No ha iniciado sesión. Inicie sesión con una cuenta autorizada para acceder.
+            </div>
+        }
+
+        <div class="ab-error-actions">
+            <a asp-controller="@homeController" asp-action="@homeAction" class="ab-btn ab-btn-primary">
+                <i class="fas fa-home me-2"></i>
+                Ir a mi inicio
+            </a>
+
+            @if (!isAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Login" class="ab-btn ab-btn-secondary">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Iniciar sesión
+                </a>
+            }
+            else
+            {
+                <a href="javascript:history.back()" class="ab-btn ab-btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Volver atrás
+                </a>
+            }
+        </div>
+    </div>
+</div>

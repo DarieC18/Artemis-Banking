@@ -1,0 +1,146 @@
+﻿@model ArtemisBanking.Application.ViewModels.Cajero.PagoTarjetaFormViewModel
+
+@{
+    ViewData["Title"] = "Pago de tarjeta de crédito";
+}
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-credit-card me-2"></i>
+            Pago de Tarjeta de Crédito
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Procese el pago de tarjetas de crédito desde una cuenta de ahorros
+        </p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        @if (!string.IsNullOrWhiteSpace(Model?.ErrorMessage))
+        {
+            <div class="ab-alert ab-alert-danger mb-4" data-auto-dismiss="5000">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                @Model.ErrorMessage
+            </div>
+        }
+
+        <div class="ab-card">
+            <div class="ab-card-header">
+                <h2 class="ab-card-title">
+                    <i class="fas fa-edit me-2"></i>
+                    Datos del pago
+                </h2>
+            </div>
+
+            <div class="ab-card-body">
+                <form asp-action="PagoTarjeta" method="post">
+                    @Html.AntiForgeryToken()
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="ab-alert ab-alert-danger mb-4">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="fas fa-exclamation-circle" style="margin-top: 0.125rem;"></i>
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="ab-form-group">
+                        <label class="ab-form-label d-flex align-items-center">
+                            <img src="~/images/artemis-logo-icon.png"
+                                 alt="Icono"
+                                 class="me-2"
+                                 style="height: 1.2em; width: auto;" />
+                            Número de cuenta origen
+                        </label>
+                        <input asp-for="CuentaOrigen"
+                               class="ab-form-control"
+                               placeholder="Ingrese la cuenta origen"
+                               style="font-family: 'Courier New', monospace;"
+                               autofocus />
+                        <span asp-validation-for="CuentaOrigen" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Cuenta de ahorros desde donde se debitará el pago
+                        </small>
+                    </div>
+
+                    <div class="ab-form-group">
+                        <label class="ab-form-label">
+                            <i class="fas fa-credit-card me-1"></i>
+                            Número de la tarjeta de crédito
+                        </label>
+                        <input asp-for="CardNumber"
+                               class="ab-form-control"
+                               maxlength="16"
+                               minlength="16"
+                               placeholder="Ingrese los 16 dígitos"
+                               style="font-family: 'Courier New', monospace;" />
+                        <span asp-validation-for="CardNumber" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Ingrese los 16 dígitos de la tarjeta sin espacios
+                        </small>
+                    </div>
+
+                    <div class="ab-form-group">
+                        <label class="ab-form-label">
+                            <i class="fas fa-dollar-sign me-1"></i>
+                            Monto a pagar
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="background-color: rgba(15, 23, 42, 0.95); border-color: rgba(148, 163, 184, 0.35); color: #F9FAFB;">
+                                RD$
+                            </span>
+                            <input asp-for="Monto"
+                                   class="ab-form-control"
+                                   type="number"
+                                   min="1"
+                                   step="0.01"
+                                   placeholder="0.00" />
+                        </div>
+                        <span asp-validation-for="Monto" class="ab-invalid-feedback"></span>
+                        <small class="form-text" style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Monto que se aplicará al pago de la tarjeta
+                        </small>
+                    </div>
+
+                    <div class="ab-alert ab-alert-info">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fas fa-lightbulb" style="margin-top: 0.125rem;"></i>
+                            <div>
+                                <strong style="display: block; margin-bottom: 0.5rem;">Información sobre el pago</strong>
+                                <ul class="mb-0" style="padding-left: 1.25rem;">
+                                    <li class="mb-2">El pago se aplicará inmediatamente a la deuda de la tarjeta</li>
+                                    <li class="mb-2">Si el monto excede la deuda, se ajustará automáticamente</li>
+                                    <li>Verifique que la cuenta tenga fondos suficientes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+                        <a asp-action="Index" class="ab-btn ab-btn-outline-primary w-100 w-md-auto">
+                            <i class="fas fa-times me-2"></i>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="ab-btn ab-btn-primary w-100 w-md-auto">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Continuar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

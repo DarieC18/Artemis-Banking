@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ArtemisBanking.WebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+affe462fa8fbec9ac6f63cdf6a270081c0c4a4fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78db6cbcff0bd2e3cc098c5c0fe5865ed7f359d8")]
 [assembly: System.Reflection.AssemblyProductAttribute("ArtemisBanking.WebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ArtemisBanking.WebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

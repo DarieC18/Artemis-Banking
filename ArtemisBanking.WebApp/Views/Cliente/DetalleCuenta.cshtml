@@ -1,0 +1,131 @@
+﻿@using ArtemisBanking.Application.ViewModels.Cliente
+@model DetalleCuentaViewModel
+@{
+    ViewData["Title"] = "Detalle de cuenta";
+}
+
+<!-- Header con diseño moderno -->
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-piggy-bank me-2"></i>
+                Detalle de Cuenta
+            </h1>
+            <p class="text-white-50 mb-0">
+                <span class="me-3">
+                    <i class="fas fa-hashtag"></i>
+                    <span style="font-family: 'Courier New', monospace;">@Model.NumeroCuenta</span>
+                </span>
+                <span>
+                    <i class="fas fa-wallet"></i>
+                    Balance: <strong style="color: #00BFA5;">@Model.BalanceActual.ToString("C")</strong>
+                </span>
+            </p>
+        </div>
+        <a asp-action="Index" class="ab-btn ab-btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver
+        </a>
+    </div>
+</div>
+
+<!-- Sección de transacciones -->
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-exchange-alt me-2"></i>
+            Historial de Transacciones
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
+        @if (Model.Transacciones.Any())
+        {
+            <div class="table-responsive">
+                <table class="ab-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-calendar me-1"></i> Fecha</th>
+                            <th class="text-end"><i class="fas fa-dollar-sign me-1"></i> Monto</th>
+                            <th><i class="fas fa-tag me-1"></i> Tipo</th>
+                            <th><i class="fas fa-user-check me-1"></i> Beneficiario</th>
+                            <th><i class="fas fa-arrow-right me-1"></i> Origen</th>
+                            <th class="text-center"><i class="fas fa-info-circle me-1"></i> Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in Model.Transacciones)
+                        {
+                            string FormatearTC(string valor)
+                            {
+                                if (string.IsNullOrWhiteSpace(valor))
+                                    return valor;
+
+                                var digits = new string(valor.Where(char.IsDigit).ToArray());
+
+                                if (digits.Length >= 12 && digits.Length <= 19)
+                                    return "•••• " + digits[^4..];
+
+                                return valor;
+                            }
+
+                            var beneficiarioFmt = FormatearTC(t.Beneficiario);
+                            var origenFmt = FormatearTC(t.Origen);
+
+                            var montoClass = t.Tipo?.ToUpper() == "DÉBITO" ? "text-danger" : "text-success";
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span>@t.Fecha.ToString("dd/MM/yyyy")</span>
+                                        <small class="text-white-50">@t.Fecha.ToString("hh:mm tt")</small>
+                                    </div>
+                                </td>
+                                <td class="text-end fw-bold @montoClass">
+                                    @(t.Tipo?.ToUpper() == "DÉBITO" ? "-" : "+")@t.Monto.ToString("C")
+                                </td>
+                                <td>
+                                    <span class="ab-badge ab-badge-@(t.Tipo?.ToUpper() == "DÉBITO" ? "danger" : "success")">
+                                        @t.Tipo
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="font-family: 'Courier New', monospace;">@beneficiarioFmt</span>
+                                </td>
+                                <td>
+                                    <span style="font-family: 'Courier New', monospace;">@origenFmt</span>
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        var estadoClass = t.Estado.Trim().ToUpper() switch
+                                        {
+                                            "APROBADA" => "ab-badge-success",
+                                            "RECHAZADA" => "ab-badge-danger",
+                                            _ => "ab-badge-info"
+                                        };
+                                    }
+                                    <span class="ab-badge @estadoClass">
+                                        @t.Estado
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="ab-empty-state">
+                <div class="ab-empty-state-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <h3 class="ab-empty-state-title">No hay transacciones</h3>
+                <p class="ab-empty-state-text">
+                    No se han registrado transacciones para esta cuenta.
+                </p>
+            </div>
+        }
+    </div>
+</div>

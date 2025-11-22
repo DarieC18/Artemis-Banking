@@ -1,0 +1,239 @@
+@model List<ArtemisBanking.Application.ViewModels.AdminUserListItemViewModel>
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var roleFilter = ViewBag.RoleFilter as string;
+}
+
+<div class="ab-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="ab-page-title mb-2">
+                <i class="fas fa-users-cog me-2"></i>
+                Gestión de Usuarios
+            </h1>
+            <p class="ab-page-subtitle mb-0">
+                Administra los usuarios del sistema y sus roles
+            </p>
+        </div>
+        <a asp-action="Create" class="ab-btn ab-btn-primary">
+            <i class="fas fa-user-plus me-2"></i>
+            Crear Usuario
+        </a>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="ab-alert ab-alert-success" data-auto-dismiss="5000">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="ab-alert ab-alert-danger" data-auto-dismiss="5000">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="ab-filter-bar">
+    <form method="get" asp-action="Index" class="d-flex gap-3 w-100 align-items-end">
+        @Html.AntiForgeryToken()
+        <div class="ab-filter-group">
+            <label for="roleFilter" class="ab-form-label">
+                <i class="fas fa-filter me-1"></i>
+                Filtrar por Rol
+            </label>
+            <select name="roleFilter" id="roleFilter" class="ab-form-control">
+                <option value="">Todos los roles</option>
+                <option value="Administrador" selected="@(roleFilter == "Administrador")">Administrador</option>
+                <option value="Cajero" selected="@(roleFilter == "Cajero")">Cajero</option>
+                <option value="Cliente" selected="@(roleFilter == "Cliente")">Cliente</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="ab-btn ab-btn-secondary">
+                <i class="fas fa-search me-2"></i>
+                Filtrar
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-list me-2"></i>
+            Lista de Usuarios
+        </h2>
+    </div>
+
+    <div class="ab-card-body">
+        <div class="table-responsive">
+            <table class="ab-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-user me-1"></i> Usuario</th>
+                        <th><i class="fas fa-id-card me-1"></i> Cédula</th>
+                        <th><i class="fas fa-address-card me-1"></i> Nombre Completo</th>
+                        <th><i class="fas fa-envelope me-1"></i> Correo</th>
+                        <th><i class="fas fa-user-tag me-1"></i> Rol</th>
+                        <th class="text-center"><i class="fas fa-toggle-on me-1"></i> Estado</th>
+                        <th class="text-center"><i class="fas fa-cog me-1"></i> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                             style="width: 35px; height: 35px; background: linear-gradient(135deg, var(--ab-secondary) 0%, var(--ab-secondary-dark) 100%); color: white; font-weight: bold;">
+                                            @user.UserName?.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span class="fw-medium">@user.UserName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="font-family: 'Courier New', monospace;">@user.Cedula</span>
+                                </td>
+                                <td>@user.Nombre @user.Apellido</td>
+                                <td>
+                                    <i class="fas fa-envelope text-white-50 me-1"></i>
+                                    @user.Email
+                                </td>
+                                <td>
+                                    @{
+                                        var roleBadge = user.Role?.ToLower() switch
+                                        {
+                                            "administrador" => "ab-badge-danger",
+                                            "cajero" => "ab-badge-warning",
+                                            "cliente" => "ab-badge-info",
+                                            _ => "ab-badge-primary"
+                                        };
+                                        var roleIcon = user.Role?.ToLower() switch
+                                        {
+                                            "administrador" => "fa-user-shield",
+                                            "cajero" => "fa-cash-register",
+                                            "cliente" => "fa-user",
+                                            _ => "fa-user-tag"
+                                        };
+                                    }
+                                    <span class="ab-badge @roleBadge">
+                                        <i class="fas @roleIcon me-1"></i>
+                                        @user.Role
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="ab-badge ab-badge-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Activo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ab-badge" style="background-color: rgba(108, 117, 125, 0.2); color: #6C757D;">
+                                            <i class="fas fa-times-circle me-1"></i>
+                                            Inactivo
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="ab-table-actions justify-content-center">
+                                        <a asp-action="Edit" asp-route-id="@user.Id"
+                                           class="ab-table-icon-btn"
+                                           title="Editar usuario">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="ToggleStatus"
+                                              method="post"
+                                              asp-route-id="@user.Id"
+                                              asp-route-activate="@(!user.IsActive)"
+                                              style="display: inline;"
+                                              data-confirm="¿Está seguro que desea @(user.IsActive ? "inactivar" : "activar") este usuario?">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="ab-table-icon-btn"
+                                                    style="background-color: @(user.IsActive ? "rgba(220, 53, 69, 0.1)" : "rgba(40, 167, 69, 0.1)"); color: @(user.IsActive ? "#DC3545" : "#28A745");"
+                                                    title="@(user.IsActive ? "Inactivar" : "Activar") usuario">
+                                                <i class="fas @(user.IsActive ? "fa-ban" : "fa-check")"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">
+                                <div class="ab-empty-state">
+                                    <div class="ab-empty-state-icon">
+                                        <i class="fas fa-users-slash"></i>
+                                    </div>
+                                    <h3 class="ab-empty-state-title">No hay usuarios</h3>
+                                    <p class="ab-empty-state-text">
+                                        No se encontraron usuarios con los filtros aplicados.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <div class="ab-pagination">
+                @if (currentPage > 1)
+                {
+                    <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-roleFilter="@roleFilter">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                }
+                else
+                {
+                    <button class="ab-pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == currentPage)
+                    {
+                        <button class="ab-pagination-btn active">@i</button>
+                    }
+                    else
+                    {
+                        <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@i" asp-route-roleFilter="@roleFilter">@i</a>
+                    }
+                }
+
+                @if (currentPage < totalPages)
+                {
+                    <a class="ab-pagination-btn" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-roleFilter="@roleFilter">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <button class="ab-pagination-btn" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</div>

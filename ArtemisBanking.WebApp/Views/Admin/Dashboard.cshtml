@@ -1,0 +1,261 @@
+@model ArtemisBanking.Application.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Welcome Section -->
+<div class="ab-welcome">
+    <h1 class="ab-welcome-title">
+        <i class="fas fa-chart-line me-3"></i>
+        Panel de Administrador
+    </h1>
+    <p class="ab-welcome-text">
+        Monitorea la actividad general del banco y las métricas operativas clave en tiempo real.
+    </p>
+</div>
+
+<!-- Actividad de Transacciones -->
+<div class="ab-product-section">
+    <div class="ab-product-header">
+        <h2 class="ab-product-title">
+            <i class="fas fa-exchange-alt"></i>
+            Actividad de Transacciones
+        </h2>
+    </div>
+
+    <div class="ab-stats-grid">
+        <div class="ab-stat-card primary">
+            <div class="ab-stat-header">
+                <div class="ab-stat-icon">
+                    <i class="fas fa-infinity"></i>
+                </div>
+            </div>
+            <div class="ab-stat-label">Transacciones Totales</div>
+            <div class="ab-stat-value">@Model.TotalTransactions.ToString("N0")</div>
+            <div class="ab-stat-change">
+                <i class="fas fa-calendar-alt"></i> Desde el inicio
+            </div>
+        </div>
+
+        <div class="ab-stat-card success">
+            <div class="ab-stat-header">
+                <div class="ab-stat-icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+            </div>
+            <div class="ab-stat-label">Transacciones Hoy</div>
+            <div class="ab-stat-value">@Model.TodayTransactions.ToString("N0")</div>
+            <div class="ab-stat-change">
+                <i class="fas fa-clock"></i> Movimientos del día
+            </div>
+        </div>
+
+        <div class="ab-stat-card secondary">
+            <div class="ab-stat-header">
+                <div class="ab-stat-icon">
+                    <i class="fas fa-money-check-alt"></i>
+                </div>
+            </div>
+            <div class="ab-stat-label">Pagos Procesados Hoy</div>
+            <div class="ab-stat-value">@Model.TodayPayments.ToString("N0")</div>
+            <div class="ab-stat-change">
+                <i class="fas fa-check-circle"></i> Pagos exitosos
+            </div>
+        </div>
+
+        <div class="ab-stat-card warning">
+            <div class="ab-stat-header">
+                <div class="ab-stat-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+            </div>
+            <div class="ab-stat-label">Total Pagos Históricos</div>
+            <div class="ab-stat-value">@Model.TotalPayments.ToString("N0")</div>
+            <div class="ab-stat-change">
+                <i class="fas fa-database"></i> Desde apertura
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estado de Clientes -->
+<div class="ab-product-section">
+    <div class="ab-product-header">
+        <h2 class="ab-product-title">
+            <i class="fas fa-users"></i>
+            Estado de Clientes
+        </h2>
+        <a asp-controller="AdminUsers" asp-action="Index" class="ab-btn ab-btn-outline-primary ab-btn-sm">
+            <i class="fas fa-user-cog me-2"></i>
+            Gestionar Clientes
+        </a>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="ab-card" style="border-left: 4px solid #28A745;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="ab-stat-icon" style="background-color: rgba(40, 167, 69, 0.2); color: #4ADE80;">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <span class="ab-badge ab-badge-success">Activo</span>
+                </div>
+                <div class="ab-stat-label">Clientes Activos</div>
+                <div class="ab-stat-value text-success">@Model.ActiveClients.ToString("N0")</div>
+                <p class="text-white-50 small mb-0 mt-2">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Usuarios con acceso vigente
+                </p>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="ab-card" style="border-left: 4px solid #DC3545;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="ab-stat-icon" style="background-color: rgba(220, 53, 69, 0.2); color: #F87171;">
+                        <i class="fas fa-user-times"></i>
+                    </div>
+                    <span class="ab-badge ab-badge-danger">Inactivo</span>
+                </div>
+                <div class="ab-stat-label">Clientes Inactivos</div>
+                <div class="ab-stat-value text-danger">@Model.InactiveClients.ToString("N0")</div>
+                <p class="text-white-50 small mb-0 mt-2">
+                    <i class="fas fa-clock me-1"></i>
+                    Pendientes de activación
+                </p>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="ab-card" style="border-left: 4px solid #F4B400;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="ab-stat-icon" style="background-color: rgba(244, 180, 0, 0.2); color: #F4B400;">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <span class="ab-badge ab-badge-warning">Total</span>
+                </div>
+                <div class="ab-stat-label">Productos Financieros</div>
+                <div class="ab-stat-value" style="color: #F4B400;">@Model.TotalProducts.ToString("N0")</div>
+                <p class="text-white-50 small mb-0 mt-2">
+                    <i class="fas fa-layer-group me-1"></i>
+                    Cuentas + Préstamos + Tarjetas
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Productos Activos -->
+<div class="ab-product-section">
+    <div class="ab-product-header">
+        <h2 class="ab-product-title">
+            <i class="fas fa-shopping-bag"></i>
+            Productos Activos
+        </h2>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-md-4">
+            <div class="ab-card" style="background: linear-gradient(135deg, rgba(27, 59, 111, 0.15) 0%, rgba(42, 84, 144, 0.05) 100%);">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <div class="ab-stat-icon mx-auto" style="width: 70px; height: 70px; background-color: rgba(27, 59, 111, 0.3); color: #5A9FFF;">
+                            <i class="fas fa-hand-holding-usd" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="ab-stat-label">Préstamos Vigentes</div>
+                    <div class="ab-stat-value" style="color: #5A9FFF;">@Model.ActiveLoans.ToString("N0")</div>
+                    <p class="text-white-50 small mb-0 mt-2">
+                        Préstamos actualmente activos
+                    </p>
+                    <a asp-controller="AdminLoans" asp-action="Index" class="ab-btn ab-btn-outline-primary ab-btn-sm mt-3">
+                        <i class="fas fa-eye me-1"></i> Ver Todos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="ab-card" style="background: linear-gradient(135deg, rgba(0, 191, 165, 0.15) 0%, rgba(0, 163, 137, 0.05) 100%);">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <div class="ab-stat-icon mx-auto" style="width: 70px; height: 70px; background-color: rgba(0, 191, 165, 0.3); color: #00BFA5;">
+                            <i class="fas fa-credit-card" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="ab-stat-label">Tarjetas Activas</div>
+                    <div class="ab-stat-value" style="color: #00BFA5;">@Model.ActiveCreditCards.ToString("N0")</div>
+                    <p class="text-white-50 small mb-0 mt-2">
+                        Tarjetas de crédito habilitadas
+                    </p>
+                    <a asp-controller="AdminCreditCards" asp-action="Index" class="ab-btn ab-btn-outline-primary ab-btn-sm mt-3">
+                        <i class="fas fa-eye me-1"></i> Ver Todas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="ab-card" style="background: linear-gradient(135deg, rgba(244, 180, 0, 0.15) 0%, rgba(217, 159, 0, 0.05) 100%);">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <div class="ab-stat-icon mx-auto" style="width: 70px; height: 70px; background-color: rgba(244, 180, 0, 0.3); color: #F4B400;">
+                            <i class="fas fa-piggy-bank" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="ab-stat-label">Cuentas de Ahorro</div>
+                    <div class="ab-stat-value" style="color: #F4B400;">@Model.OpenSavingsAccounts.ToString("N0")</div>
+                    <p class="text-white-50 small mb-0 mt-2">
+                        Principales y secundarias
+                    </p>
+                    <a asp-controller="AdminSavings" asp-action="Index" class="ab-btn ab-btn-outline-primary ab-btn-sm mt-3">
+                        <i class="fas fa-eye me-1"></i> Ver Todas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Indicadores Financieros -->
+<div class="ab-product-section">
+    <div class="ab-product-header">
+        <h2 class="ab-product-title">
+            <i class="fas fa-chart-pie"></i>
+            Indicadores Financieros
+        </h2>
+    </div>
+
+    <div class="ab-card" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(185, 28, 28, 0.05) 100%); border-left: 5px solid #DC3545;">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center mb-3 mb-md-0">
+                <div class="ab-stat-icon mx-auto" style="width: 80px; height: 80px; background-color: rgba(220, 53, 69, 0.2); color: #F87171;">
+                    <i class="fas fa-calculator" style="font-size: 2.5rem;"></i>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="ab-stat-label mb-2">Monto Promedio de Deuda por Cliente</div>
+                <div class="ab-stat-value mb-2" style="font-size: 2.5rem; color: #DC3545;">
+                    RD$ @Model.AverageDebtPerClient.ToString("N2")
+                </div>
+                <p class="text-white-50 small mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Deuda total dividida entre clientes activos
+                </p>
+            </div>
+            <div class="col-md-3 text-center">
+                @{
+                    var debtLevel = Model.AverageDebtPerClient < 50000 ? "Bajo" : (Model.AverageDebtPerClient < 100000 ? "Moderado" : "Alto");
+                    var debtBadgeClass = Model.AverageDebtPerClient < 50000 ? "ab-badge-success" : (Model.AverageDebtPerClient < 100000 ? "ab-badge-warning" : "ab-badge-danger");
+                }
+                <div class="mb-2">
+                    <small class="text-white-50 d-block mb-2">Nivel de Riesgo</small>
+                    <span class="ab-badge @debtBadgeClass" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        @debtLevel
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

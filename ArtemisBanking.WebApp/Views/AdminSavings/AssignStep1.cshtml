@@ -1,0 +1,163 @@
+@model List<ArtemisBanking.Application.ViewModels.ClientForSavingsAccountViewModel>
+@{
+    ViewData["Title"] = "Asignar cuenta - Paso 1";
+    var cedulaFilter = ViewBag.CedulaFilter as string;
+}
+
+<div class="ab-page-header">
+    <div class="mb-4">
+        <h1 class="ab-page-title mb-2">
+            <i class="fas fa-user-plus me-2"></i>
+            Paso 1 · Seleccionar cliente
+        </h1>
+        <p class="ab-page-subtitle mb-0">
+            Elige un cliente activo para asignarle una nueva cuenta secundaria.
+        </p>
+    </div>
+</div>
+
+<div class="ab-card mb-4">
+    <div class="ab-card-body">
+        <form asp-action="AssignStep1" method="get" class="row g-3 align-items-end">
+            <div class="col-md-8">
+                <label for="cedulaFilter" class="ab-form-label">
+                    Buscar por cédula
+                </label>
+                <div class="input-group">
+                    <input type="text" class="ab-form-control" id="cedulaFilter" name="cedulaFilter" value="@cedulaFilter" placeholder="001-1234567-8" />
+                </div>
+            </div>
+            <div class="col-md-4 d-grid">
+                <button type="submit" class="ab-btn ab-btn-primary">
+                    <i class="fas fa-search me-2"></i>
+                    Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="ab-card">
+    <div class="ab-card-header">
+        <h2 class="ab-card-title">
+            <i class="fas fa-users me-2"></i>
+            Clientes disponibles
+        </h2>
+    </div>
+    <div class="ab-card-body">
+        <form asp-action="AssignStep1" method="post">
+            <div class="table-responsive">
+                <table class="ab-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-id-card me-1"></i> Cédula</th>
+                            <th><i class="fas fa-user me-1"></i> Cliente</th>
+                            <th><i class="fas fa-envelope me-1"></i> Correo electrónico</th>
+                            <th class="text-end"><i class="fas fa-exclamation-triangle me-1"></i> Deuda total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var cliente in Model)
+                            {
+                                <tr style="cursor: pointer;" onclick="selectClient(this, '@cliente.UserId')">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input class="form-check-input client-radio"
+                                                   type="radio"
+                                                   name="userId"
+                                                   value="@cliente.UserId"
+                                                   id="user_@cliente.UserId"
+                                                   style="cursor: pointer;" />
+                                            <label for="user_@cliente.UserId" style="cursor: pointer; margin: 0; font-family: 'Courier New', monospace;">
+                                                @cliente.Cedula
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-white">@cliente.Nombre @cliente.Apellido</span>
+                                    </td>
+                                    <td>
+                                        <span style="color: rgba(255, 255, 255, 0.7);">@cliente.Email</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="fw-bold @(cliente.DeudaTotal > 0 ? "text-danger" : "text-success")">
+                                            RD$ @cliente.DeudaTotal.ToString("N2")
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">
+                                    <div class="ab-empty-state">
+                                        <div class="ab-empty-state-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <h3 class="ab-empty-state-title">No hay clientes que coincidan con la búsqueda</h3>
+                                        <p class="ab-empty-state-text">
+                                            Intente con otra cédula o verifique que el cliente esté activo.
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+                <a asp-action="Index" class="ab-btn ab-btn-outline-primary w-100 w-md-auto">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Volver atrás
+                </a>
+                <button type="submit" class="ab-btn ab-btn-primary w-100 w-md-auto">
+                    Siguiente paso
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .ab-table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+        .ab-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            transform: translateX(4px);
+        }
+
+        .ab-table tbody tr:has(.client-radio:checked) {
+            background-color: rgba(0, 191, 165, 0.15) !important;
+            border-left: 4px solid var(--ab-secondary);
+        }
+</style>
+
+<script>
+    function selectClient(row, userId) {
+        const radio = document.getElementById('user_' + userId);
+        if (radio) {
+            radio.checked = true;
+
+            document.querySelectorAll('.ab-table tbody tr').forEach(tr => {
+                tr.style.backgroundColor = '';
+                tr.style.borderLeft = '';
+            });
+
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.client-radio').forEach(radio => {
+            radio.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    });
+</script>
