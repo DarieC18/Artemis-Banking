@@ -6,6 +6,6 @@
         "DefaultConnection": "Server=;Initial Catalog=ArtemisBanking;Integrated Security=True;TrustServerCertificate=True"
     },
     "ConnectionStrings": {
-        "DefaultConnection": "Server=;Initial Catalog=ArtemisBanking;Integrated Security=True;TrustServerCertificate=True"
+        "DefaultConnection": "Server= Joel;Initial Catalog=ArtemisBanking;Integrated Security=True;TrustServerCertificate=True"
     }
 }

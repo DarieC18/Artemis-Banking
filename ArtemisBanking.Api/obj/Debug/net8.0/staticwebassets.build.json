@@ -1,11 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "A7JF3+Qi6qgSTASmjh0MxCgV9GI5RLQB/tw38XIMKp4=",
-  "Source": "ArtemisBanking.Api",
-  "BasePath": "_content/ArtemisBanking.Api",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
-}
+{"Version":1,"Hash":"EnFry5y7eXiKu4lJpgXEPJwD6b/zNfZZtZVdZQ2rEZo=","Source":"ArtemisBanking.Api","BasePath":"_content/ArtemisBanking.Api","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

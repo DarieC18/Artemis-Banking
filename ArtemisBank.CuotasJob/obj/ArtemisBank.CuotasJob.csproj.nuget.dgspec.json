@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj": {}
+    "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj": {}
   },
   "projects": {
-    "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj": {
+    "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
+        "projectUniqueName": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
         "projectName": "ArtemisBank.CuotasJob",
-        "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
-        "packagesPath": "C:\\Users\\la\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\obj\\",
+        "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
+        "packagesPath": "C:\\Users\\darie\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\la\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\darie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,18 +26,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
-                "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
+              "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
+                "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
               },
-              "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj": {
-                "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj"
+              "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj": {
+                "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj"
               }
             }
           }
@@ -47,7 +50,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -113,21 +117,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj": {
+    "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj",
+        "projectUniqueName": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj",
         "projectName": "ArtemisBanking.Application",
-        "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj",
-        "packagesPath": "C:\\Users\\la\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\obj\\",
+        "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj",
+        "packagesPath": "C:\\Users\\darie\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\la\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\darie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -135,15 +143,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
-                "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
+              "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
+                "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
               }
             }
           }
@@ -157,7 +164,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -244,21 +252,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
+    "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj",
         "projectName": "ArtemisBanking.Domain",
-        "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj",
-        "packagesPath": "C:\\Users\\la\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\obj\\",
+        "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj",
+        "packagesPath": "C:\\Users\\darie\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\la\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\darie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -266,7 +278,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -284,7 +295,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -371,21 +383,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj": {
+    "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj",
+        "projectUniqueName": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj",
         "projectName": "ArtemisBanking.Infraestructure.Persistence",
-        "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj",
-        "packagesPath": "C:\\Users\\la\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\obj\\",
+        "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj",
+        "packagesPath": "C:\\Users\\darie\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\la\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\darie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -393,18 +409,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj": {
-                "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj"
+              "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj": {
+                "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Application\\ArtemisBanking.Application.csproj"
               },
-              "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
-                "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
+              "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
+                "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
               }
             }
           }
@@ -418,7 +433,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -505,7 +521,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

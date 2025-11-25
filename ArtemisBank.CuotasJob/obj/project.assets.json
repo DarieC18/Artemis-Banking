@@ -6661,19 +6661,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\la\\.nuget\\packages\\": {}
+    "C:\\Users\\darie\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
+      "projectUniqueName": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
       "projectName": "ArtemisBank.CuotasJob",
-      "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
-      "packagesPath": "C:\\Users\\la\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBank.CuotasJob\\obj\\",
+      "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\ArtemisBank.CuotasJob.csproj",
+      "packagesPath": "C:\\Users\\darie\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBank.CuotasJob\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\la\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\darie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6681,18 +6686,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
-              "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
+            "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj": {
+              "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Domain\\ArtemisBanking.Domain.csproj"
             },
-            "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj": {
-              "projectPath": "C:\\Users\\la\\Desktop\\Programacion\\Itla\\Programacion 3\\ArtemisBanking\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj"
+            "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj": {
+              "projectPath": "C:\\Users\\darie\\OneDrive\\Desktop\\VS2022\\Artemis-BankingCopy\\ArtemisBanking.Infraestructure.Persistence\\ArtemisBanking.Infraestructure.Persistence.csproj"
             }
           }
         }
@@ -6706,7 +6710,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -6772,7 +6777,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
